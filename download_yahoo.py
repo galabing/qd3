@@ -9,8 +9,7 @@ BASE_URL = 'http://real-chart.finance.yahoo.com/table.csv?s='
 RETRIES = 3
 
 def download(ticker_file, download_dir, overwrite):
-  with open(ticker_file, 'r') as fp:
-    tickers = fp.read().splitlines()
+  tickers = util.readTickers(ticker_file)
   for ticker in tickers:
     download_file = '%s/%s.csv' % (download_dir, ticker)
     if os.path.isfile(download_file) and not overwrite:

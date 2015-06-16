@@ -36,8 +36,8 @@ RUN_ID = '20150530'
 DRY_RUN = False
 
 CODE_DIR = '/Users/lnyang/lab/qd2/qd2'
-BASE_DIR = '/Users/lnyang/lab/qd2/data/runs'
 
+BASE_DIR = '/Users/lnyang/lab/qd2/data/runs'
 RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
 
 RAW_DIR = '%s/raw' % RUN_DIR
@@ -60,17 +60,34 @@ SF1_DIR = '%s/sf1' % RUN_DIR
 SF1_RAW_DIR = '%s/raw' % SF1_DIR
 SF1_PROCESSED_DIR = '%s/processed' % SF1_DIR
 
-PRICE_DATA = 'eod'  # 'eod' or 'yahoo'
+EOD_DIR = '%s/eod' % RUN_DIR
+EOD_RAW_DIR = '%s/raw' % EOD_DIR
+EOD_PROCESSED_DIR = '%s/processed' % EOD_DIR
+
+YAHOO_PROCESSED_DIR = '%s/yahoo/processed' % RUN_DIR
+
+FEATURE_DIR = '%s/features' % RUN_DIR
+FEATURE_INFO_DIR = '%s/feature_info' % RUN_DIR
+
+MISC_DIR = '%s/misc' % RUN_DIR
+FEATURE_STATS_FILE = '%s/feature_stats.tsv' % MISC_DIR
 
 LOG_LEVEL = logging.INFO
 
 # Steps to execute, set to False to skip steps.
+DO_EVERYTHING = False  # if True, overwrites DO map
 DO = {
     'get_sf1_tickers': False,
     'get_eod_tickers': False,
     'download_yahoo': False,
     'convert_sf1_raw': False,
-    'process_sf1_raw': True,
+    'process_sf1_raw': False,
+    'convert_eod_raw': False,
+    'process_eod_raw': False,
+    'process_yahoo': False,
+    'compute_basic_features': False,
+    'compute_log_features': False,
+    'get_feature_stats': True,
 }
 
 ####################
@@ -84,6 +101,8 @@ def maybeMakeDir(dir):
 
 # Checks to run or skip specified step, logs and returns decision.
 def logDo(step):
+  if DO_EVERYTHING:
+    return True
   if DO[step]:
     logging.info('running step: %s' % step)
     return True
@@ -100,11 +119,17 @@ def run(cmd):
 
 util.configLogging(LOG_LEVEL)
 
-# Make dirs.
+# Prepare dirs.
 maybeMakeDir(TICKER_DIR)
 maybeMakeDir(YAHOO_SF1_DIR)
 maybeMakeDir(SF1_RAW_DIR)
 maybeMakeDir(SF1_PROCESSED_DIR)
+maybeMakeDir(EOD_RAW_DIR)
+maybeMakeDir(EOD_PROCESSED_DIR)
+maybeMakeDir(YAHOO_PROCESSED_DIR)
+maybeMakeDir(FEATURE_DIR)
+maybeMakeDir(FEATURE_INFO_DIR)
+maybeMakeDir(MISC_DIR)
 
 if logDo('get_sf1_tickers'):
   cmd = '%s/get_sf1_tickers.py --sf1_file=%s --ticker_file=%s' % (
@@ -130,5 +155,40 @@ if logDo('convert_sf1_raw'):
 if logDo('process_sf1_raw'):
   cmd = '%s/process_sf1_raw.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, SF1_RAW_DIR, SF1_PROCESSED_DIR)
+  run(cmd)
+
+if logDo('convert_eod_raw'):
+  cmd = '%s/convert_eod_raw.py --eod_file=%s --raw_dir=%s' % (
+      CODE_DIR, RAW_EOD_FILE, EOD_RAW_DIR)
+  run(cmd)
+
+if logDo('process_eod_raw'):
+  cmd = ('%s/process_eod_raw.py --raw_dir=%s --ticker_file=%s '
+         '--processed_dir=%s' % (
+             CODE_DIR, EOD_RAW_DIR, SF1_TICKER_FILE, EOD_PROCESSED_DIR))
+  run(cmd)
+
+if logDo('process_yahoo'):
+  cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
+      CODE_DIR, YAHOO_SF1_DIR, YAHOO_PROCESSED_DIR)
+  run(cmd)
+
+if logDo('compute_basic_features'):
+  cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '
+         '--feature_base_dir=%s --info_dir=%s') % (
+      CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
+      FEATURE_DIR, FEATURE_INFO_DIR)
+  run(cmd)
+
+if logDo('compute_log_features'):
+  cmd = ('%s/compute_log_features.py --processed_dir=%s --ticker_file=%s '
+         '--feature_base_dir=%s --info_dir=%s') % (
+      CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
+      FEATURE_DIR, FEATURE_INFO_DIR)
+  run(cmd)
+
+if logDo('get_feature_stats'):
+  cmd = '%s/get_feature_stats.py --info_dir=%s --stats_file=%s' % (
+      CODE_DIR, FEATURE_INFO_DIR, FEATURE_STATS_FILE)
   run(cmd)
 
