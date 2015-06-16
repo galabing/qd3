@@ -28,6 +28,18 @@ def ymdToYm(ymd):
   y, m, d = ymd.split('-')
   return '%s-%s' % (y, m)
 
+def getNextYm(ym, k=1):
+  assert k >= 0
+  y, m = ym.split('-')
+  y = int(y)
+  m = int(m)
+  y += int(k/12)
+  m += k % 12
+  if m > 12:
+    m -= 12
+    y += 1
+  return '%02d-%02d' % (y, m)
+
 ##############
 ## IO utils ##
 ##############
@@ -139,4 +151,16 @@ def writeFeatureInfo(args, feature_info, info_file):
                               f2s(avg), f2s(min_), f2s(p1), f2s(p10),
                               f2s(p25), f2s(p50), f2s(p75), f2s(p90),
                               f2s(p99), f2s(max_)])
+
+def readKeyValueList(kv_file):
+  """ Reads features or gains file with each line being <key>\t<value>,
+      into a list of [[key, value], ...]
+  """
+  with open(kv_file, 'r') as fp:
+    lines = fp.read().splitlines()
+  kv = []
+  for line in lines:
+    k, v = line.split('\t')
+    kv.append([k, float(v)])
+  return kv
 
