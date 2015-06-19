@@ -23,100 +23,23 @@
       http://real-chart.finance.yahoo.com/table.csv?s=%5EGSPC (^GSPC for sp 500)
     - rename to R3000.csv, SP500.csv etc
 
-    - modify this script to update:
+    - prepare feature lists under feature_lists dir
+    - prepare experiment configs under configs dir
+
+    - modify config.py to update:
       - RUN_ID
-      - MARKETS
+      - CONFIGS
+      - etc
 
     TODOs:
     - add volume features -- need to modify eod/yahoo processing to collect avg volume
       of the month instead of that of the first day
 """
 
+from config import *
 import logging
 import os
 import util
-
-###############
-## Constants ##
-###############
-
-RUN_ID = '20150530'
-DRY_RUN = False
-
-CODE_DIR = '/Users/lnyang/lab/qd2/qd2'
-
-BASE_DIR = '/Users/lnyang/lab/qd2/data/runs'
-RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
-
-RAW_DIR = '%s/raw' % RUN_DIR
-RAW_SF1_DIR = '%s/sf1' % RAW_DIR
-RAW_EOD_DIR = '%s/eod' % RAW_DIR
-RAW_YAHOO_DIR = '%s/yahoo' % RAW_DIR
-
-RAW_SF1_FILE = '%s/sf1.csv' % RAW_SF1_DIR
-SF1_INDICATOR_FILE = '%s/indicators.txt' % RAW_SF1_DIR
-SF1_SECIND_FILE = '%s/tickers.txt' % RAW_SF1_DIR
-RAW_EOD_FILE = '%s/eod.csv' % RAW_EOD_DIR
-
-TICKER_DIR = '%s/tickers' % RUN_DIR
-SF1_TICKER_FILE = '%s/sf1_tickers' % TICKER_DIR
-EOD_TICKER_FILE = '%s/eod_tickers' % TICKER_DIR
-YAHOO_TICKER_FILE = '%s/yahoo_tickers' % TICKER_DIR
-
-YAHOO_SF1_DIR = '%s/sf1' % RAW_YAHOO_DIR
-YAHOO_MARKET_DIR = '%s/market' % RAW_YAHOO_DIR
-MARKETS = ['R3000', 'SP500']
-
-SF1_DIR = '%s/sf1' % RUN_DIR
-SF1_RAW_DIR = '%s/raw' % SF1_DIR
-SF1_PROCESSED_DIR = '%s/processed' % SF1_DIR
-
-EOD_DIR = '%s/eod' % RUN_DIR
-EOD_RAW_DIR = '%s/raw' % EOD_DIR
-EOD_PROCESSED_DIR = '%s/processed' % EOD_DIR
-EOD_PRICE_DIR = '%s/price' % EOD_DIR
-EOD_ADJPRICE_DIR = '%s/adjprice' % EOD_DIR
-EOD_LOGADJPRICE_DIR = '%s/logadjprice' % EOD_DIR
-EOD_GAIN_DIR = '%s/gain' % EOD_DIR
-EOD_EGAIN_DIR = '%s/egain' % EOD_DIR
-
-YAHOO_DIR = '%s/yahoo' % RUN_DIR
-YAHOO_PROCESSED_DIR = '%s/processed' % YAHOO_DIR
-YAHOO_PRICE_DIR = '%s/price' % YAHOO_DIR
-YAHOO_ADJPRICE_DIR = '%s/adjprice' % YAHOO_DIR
-YAHOO_LOGADJPRICE_DIR = '%s/logadjprice' % YAHOO_DIR
-YAHOO_GAIN_DIR = '%s/gain' % YAHOO_DIR
-YAHOO_EGAIN_DIR = '%s/egain' % YAHOO_DIR
-
-MARKET_DIR = '%s/market' % RUN_DIR
-MARKET_PROCESSED_DIR = '%s/processed' % MARKET_DIR
-MARKET_ADJPRICE_DIR = '%s/adjprice' % MARKET_DIR
-MARKET_GAIN_DIR = '%s/gain' % MARKET_DIR
-
-FEATURE_DIR = '%s/features' % RUN_DIR
-FEATURE_INFO_DIR = '%s/feature_info' % RUN_DIR
-
-MISC_DIR = '%s/misc' % RUN_DIR
-FEATURE_STATS_FILE = '%s/feature_stats.tsv' % MISC_DIR
-SECTOR_STATS_FILE = '%s/sector_stats' % MISC_DIR
-INDUSTRY_STATS_FILE = '%s/industry_stats' % MISC_DIR
-
-# For features, we look at many time windows, and we do not
-# enforce any minimum raw price.
-GAIN_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
-               27, 30, 33, 36, 39, 42, 45, 48]
-# For labels, we only predict a 12-month window, and we enforce
-# a minimum raw price for all transactions.
-PREDICTION_WINDOW = 12
-MIN_RAW_PRICE = 10
-EOD_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
-    EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
-YAHOO_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
-    YAHOO_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
-EOD_EGAIN_LABEL_DIR = '%s/egain%d/%d' % (
-    EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
-YAHOO_EGAIN_LABEL_DIR = '%s/egain%d/%d' % (
-    YAHOO_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
 
 LOG_LEVEL = logging.INFO
 
@@ -151,18 +74,20 @@ DO = {
     'get_market_gain': False,
     'get_eod_egain_feature': False,
     'get_yahoo_egain_feature': False,
-    'get_eod_egain_label': True,
-    'get_yahoo_egain_label': True,
+    'get_eod_egain_label': False,
+    'get_yahoo_egain_label': False,
+    'compute_eod_logadjprice_feature': False,
+    'compute_yahoo_logadjprice_feature': False,
+    'compute_eod_gain_feature': False,
+    'compute_yahoo_gain_feature': False,
+    'compute_eod_egain_feature': False,
+    'compute_yahoo_egain_feature': False,
+    'run_experiments': True,
 }
 
 ####################
 ## Util functions ##
 ####################
-
-# Checks and makes dir if not exist.
-def maybeMakeDir(dir):
-  if not os.path.isdir(dir):
-    os.makedirs(dir)
 
 # Checks to run or skip specified step, logs and returns decision.
 def logDo(step):
@@ -185,33 +110,35 @@ def run(cmd):
 util.configLogging(LOG_LEVEL)
 
 # Prepare dirs.
-maybeMakeDir(TICKER_DIR)
-maybeMakeDir(YAHOO_SF1_DIR)
-maybeMakeDir(SF1_RAW_DIR)
-maybeMakeDir(SF1_PROCESSED_DIR)
-maybeMakeDir(EOD_RAW_DIR)
-maybeMakeDir(EOD_PROCESSED_DIR)
-maybeMakeDir(YAHOO_PROCESSED_DIR)
-maybeMakeDir(FEATURE_DIR)
-maybeMakeDir(FEATURE_INFO_DIR)
-maybeMakeDir(MISC_DIR)
-maybeMakeDir(EOD_PRICE_DIR)
-maybeMakeDir(EOD_ADJPRICE_DIR)
-maybeMakeDir(EOD_LOGADJPRICE_DIR)
-maybeMakeDir(YAHOO_PRICE_DIR)
-maybeMakeDir(YAHOO_ADJPRICE_DIR)
-maybeMakeDir(YAHOO_LOGADJPRICE_DIR)
-maybeMakeDir(EOD_GAIN_DIR)
-maybeMakeDir(YAHOO_GAIN_DIR)
-maybeMakeDir(EOD_GAIN_LABEL_DIR)
-maybeMakeDir(YAHOO_GAIN_LABEL_DIR)
-maybeMakeDir(MARKET_PROCESSED_DIR)
-maybeMakeDir(MARKET_ADJPRICE_DIR)
-maybeMakeDir(MARKET_GAIN_DIR)
-maybeMakeDir(EOD_EGAIN_DIR)
-maybeMakeDir(YAHOO_EGAIN_DIR)
-maybeMakeDir(EOD_EGAIN_LABEL_DIR)
-maybeMakeDir(YAHOO_EGAIN_LABEL_DIR)
+util.maybeMakeDirs([
+    TICKER_DIR,
+    YAHOO_SF1_DIR,
+    SF1_RAW_DIR,
+    SF1_PROCESSED_DIR,
+    EOD_RAW_DIR,
+    EOD_PROCESSED_DIR,
+    YAHOO_PROCESSED_DIR,
+    FEATURE_DIR,
+    FEATURE_INFO_DIR,
+    MISC_DIR,
+    EOD_PRICE_DIR,
+    EOD_ADJPRICE_DIR,
+    EOD_LOGADJPRICE_DIR,
+    YAHOO_PRICE_DIR,
+    YAHOO_ADJPRICE_DIR,
+    YAHOO_LOGADJPRICE_DIR,
+    EOD_GAIN_DIR,
+    YAHOO_GAIN_DIR,
+    EOD_GAIN_LABEL_DIR,
+    YAHOO_GAIN_LABEL_DIR,
+    MARKET_PROCESSED_DIR,
+    MARKET_ADJPRICE_DIR,
+    MARKET_GAIN_DIR,
+    EOD_EGAIN_DIR,
+    YAHOO_EGAIN_DIR,
+    EOD_EGAIN_LABEL_DIR,
+    YAHOO_EGAIN_LABEL_DIR,
+])
 
 if logDo('get_sf1_tickers'):
   cmd = '%s/get_sf1_tickers.py --sf1_file=%s --ticker_file=%s' % (
@@ -327,7 +254,7 @@ if logDo('get_yahoo_logadjprice'):
 if logDo('get_eod_gain_feature'):
   for k in GAIN_K_LIST:
     gain_dir = '%s/%d' % (EOD_GAIN_DIR, k)
-    maybeMakeDir(gain_dir)
+    util.maybeMakeDir(gain_dir)
     cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
         CODE_DIR, EOD_ADJPRICE_DIR, k, gain_dir)
     run(cmd)
@@ -335,7 +262,7 @@ if logDo('get_eod_gain_feature'):
 if logDo('get_yahoo_gain_feature'):
   for k in GAIN_K_LIST:
     gain_dir = '%s/%d' % (YAHOO_GAIN_DIR, k)
-    maybeMakeDir(gain_dir)
+    util.maybeMakeDir(gain_dir)
     cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
         CODE_DIR, YAHOO_ADJPRICE_DIR, k, gain_dir) 
     run(cmd)
@@ -374,7 +301,7 @@ if logDo('get_market_gain'):
   k_list = set(GAIN_K_LIST + [PREDICTION_WINDOW])
   for k in sorted(k_list):
     gain_dir = '%s/%d' % (MARKET_GAIN_DIR, k)
-    maybeMakeDir(gain_dir)
+    util.maybeMakeDir(gain_dir)
     cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
         CODE_DIR, MARKET_ADJPRICE_DIR, k, gain_dir)
     run(cmd)
@@ -385,7 +312,7 @@ if logDo('get_eod_egain_feature'):
     for market in MARKETS:
       market_file = '%s/%d/%s' % (MARKET_GAIN_DIR, k, market)
       egain_dir = '%s/%d/%s' % (EOD_EGAIN_DIR, k, market)
-      maybeMakeDir(egain_dir)
+      util.maybeMakeDir(egain_dir)
       cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
              '--egain_dir=%s' % (CODE_DIR, gain_dir, market_file, egain_dir))
       run(cmd)
@@ -396,7 +323,7 @@ if logDo('get_yahoo_egain_feature'):
     for market in MARKETS:
       market_file = '%s/%d/%s' % (MARKET_GAIN_DIR, k, market)
       egain_dir = '%s/%d/%s' % (YAHOO_EGAIN_DIR, k, market)
-      maybeMakeDir(egain_dir)
+      util.maybeMakeDir(egain_dir)
       cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
              '--egain_dir=%s' % (CODE_DIR, gain_dir, market_file, egain_dir))
       run(cmd)
@@ -405,7 +332,7 @@ if logDo('get_eod_egain_label'):
   for market in MARKETS:
     market_file = '%s/%d/%s' % (MARKET_GAIN_DIR, PREDICTION_WINDOW, market)
     egain_dir = '%s/%s' % (EOD_EGAIN_LABEL_DIR, market)
-    maybeMakeDir(egain_dir)
+    util.maybeMakeDir(egain_dir)
     cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
            '--egain_dir=%s' % (
         CODE_DIR, EOD_GAIN_LABEL_DIR, market_file, egain_dir))
@@ -415,9 +342,75 @@ if logDo('get_yahoo_egain_label'):
   for market in MARKETS:
     market_file = '%s/%d/%s' % (MARKET_GAIN_DIR, PREDICTION_WINDOW, market)
     egain_dir = '%s/%s' % (YAHOO_EGAIN_LABEL_DIR, market)
-    maybeMakeDir(egain_dir)
+    util.maybeMakeDir(egain_dir)
     cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
            '--egain_dir=%s' % (
         CODE_DIR, YAHOO_GAIN_LABEL_DIR, market_file, egain_dir))
+    run(cmd)
+
+if logDo('compute_eod_logadjprice_feature'):
+  for k in LOGADJPRICE_K_LIST:
+    output_dir = '%s/eod-logadjprice-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, EOD_LOGADJPRICE_DIR, k, output_dir))
+    run(cmd)
+
+if logDo('compute_yahoo_logadjprice_feature'):
+  for k in LOGADJPRICE_K_LIST:
+    output_dir = '%s/yahoo-logadjprice-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, YAHOO_LOGADJPRICE_DIR, k, output_dir))
+    run(cmd)
+
+if logDo('compute_eod_gain_feature'):
+  for k in GAIN_K_LIST:
+    input_dir = '%s/%d' % (EOD_GAIN_DIR, k)
+    output_dir = '%s/eod-gain-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, input_dir, k, output_dir))
+    run(cmd)
+
+if logDo('compute_yahoo_gain_feature'):
+  for k in GAIN_K_LIST:
+    input_dir = '%s/%d' % (YAHOO_GAIN_DIR, k)
+    output_dir = '%s/yahoo-gain-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, input_dir, k, output_dir))
+    run(cmd)
+
+if logDo('compute_eod_egain_feature'):
+  for k in GAIN_K_LIST:
+    for market in MARKETS:
+      input_dir = '%s/%d/%s' % (EOD_EGAIN_DIR, k, market)
+      output_dir = '%s/eod-%s-egain-%d' % (FEATURE_DIR, market, k)
+      util.maybeMakeDir(output_dir)
+      cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+             '--pfeature_dir=%s' % (
+          CODE_DIR, input_dir, k, output_dir))
+      run(cmd)
+
+if logDo('compute_yahoo_egain_feature'):
+  for k in GAIN_K_LIST:
+    for market in MARKETS:
+      input_dir = '%s/%d/%s' % (YAHOO_EGAIN_DIR, k, market)
+      output_dir = '%s/yahoo-%s-egain-%d' % (FEATURE_DIR, market, k)
+      util.maybeMakeDir(output_dir)
+      cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+             '--pfeature_dir=%s' % (
+          CODE_DIR, input_dir, k, output_dir))
+      run(cmd)
+
+if logDo('run_experiments'):
+  for experiment in EXPERIMENTS:
+    config_file = '%s/%s.json' % (CONFIG_DIR, experiment)
+    cmd = '%s/run_experiment.py --config=%s' % (CODE_DIR, config_file)
     run(cmd)
 

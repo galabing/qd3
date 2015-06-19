@@ -16,6 +16,15 @@ def run(cmd, check=True, dry_run=False):
     assert result == 0
   return result
 
+# Checks and makes dir if not exist.
+def maybeMakeDir(dir):
+  if not os.path.isdir(dir):
+    os.makedirs(dir)
+
+def maybeMakeDirs(dirs):
+  for dir in dirs:
+    maybeMakeDir(dir)
+
 ################
 ## Date utils ##
 ################
@@ -38,6 +47,18 @@ def getNextYm(ym, k=1):
   if m > 12:
     m -= 12
     y += 1
+  return '%02d-%02d' % (y, m)
+
+def getPreviousYm(ym, k=1):
+  assert k >= 0
+  y, m = ym.split('-')
+  y = int(y)
+  m = int(m)
+  y -= int(k/12)
+  m -= k % 12
+  if m < 1:
+    m += 12
+    y -= 1
   return '%02d-%02d' % (y, m)
 
 ##############
