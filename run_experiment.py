@@ -16,6 +16,8 @@
       history)
     - train_perc (default 1.0)
     - predict_window (defines prediction window in months, default 12)
+    - delay_window (defines delay in months in model training, default 0 no
+      delay)
     - max_neg (default 0)
     - min_pos (default 0)
     - min_date (default '0000-00-00')
@@ -25,6 +27,7 @@
 """
 
 from config import *
+from sklearn.metrics import *
 import argparse
 import config
 import json
@@ -49,6 +52,7 @@ DEFAULT_VALUES = {
     'train_window': -1,
     'train_perc': 1.0,
     'predict_window': 12,
+    'delay_window': 0,
     'max_neg': 0.0,
     'min_pos': 0.0,
     'min_date': '0000-00-00',
@@ -98,22 +102,33 @@ def getWeightPath(data_dir):
 def getModelDir(experiment_dir):
   return '%s/models' % experiment_dir
 
-# Path to a specific model.
-def getModelPath(model_dir, date, config_map):
+# Get model base name.
+def getModelName(config_map):
   pos = config_map['model_spec'].find('(')
   assert pos > 0
-  model = config_map['model_spec'][:pos]
+  return config_map['model_spec'][:pos]
+
+# Path to a specific model.
+def getModelPath(model_dir, date, config_map):
+  model = getModelName(config_map)
   return '%s/%s-%s-%d' % (model_dir, model, date, config_map['train_window'])
 
 # Dir of prediction results.
 def getResultDir(expeirment_dir):
   return '%s/results' % expeirment_dir
 
+# Path to the result file -- since we only support one version of models
+# the name is simply 'result'.
+def getResultPath(result_dir):
+  return '%s/result' % result_dir
+
+# Dir of analysis.
+def getAnalyzeDir(experiment_dir):
+  return '%s/analyze' % experiment_dir
+
 # Path to training stats.
 def getStatsPath(experiment_dir, config_map):
-  pos = config_map['model_spec'].find('(')
-  assert pos > 0
-  model = config_map['model_spec'][:pos]
+  model = getModelName(config_map)
   return '%s/%s-stats.tsv' % (experiment_dir, model)
 
 def makeFeatureList(experiment_dir, config_map):
@@ -148,30 +163,34 @@ def collectData(experiment_dir, config_map):
             data_file, label_file, meta_file, weight_file))
   util.run(cmd)
 
-def computeClsError(model_file, data_file, label_file):
+def evaluateModel(model_file, data_file, label_file):
   with open(model_file, 'rb') as fp:
     model = pickle.load(fp)
   X = numpy.loadtxt(data_file)
   y = numpy.loadtxt(label_file)
-
   p = model.predict(X)
-  tp, tn, fp, fn = 0.0, 0.0, 0.0, 0.0
-  for i in range(X.shape[0]):
-    positive = p[i] > 0.5
-    if positive:
-      if y[i] > 0.5:
-        tp += 1
-      else:
-        fp += 1
-    else:
-      if y[i] > 0.5:
-        fn += 1
-      else:
-        tn += 1
-  accuracy = (tp + tn) / (tp + tn + fp + fn)
-  precision = tp / (tp + fp)
-  recall = tp / (tp + fn)
-  return accuracy, precision, recall
+
+  result = dict()
+  result['f1'] = f1_score(y, p)
+  result['auc'] = roc_auc_score(y, p)
+
+  yp = [[y[i], p[i]] for i in range(X.shape[0])]
+  yp.sort(key=lambda item: item[1], reverse=True)
+
+  recall_denom = sum(y)
+  for perc in [1, 10, 100]:
+    end = int(X.shape[0] * perc / 100)
+    assert end > 0
+    num = 0.0
+    for i in range(end):
+      if yp[i][0] > 0.5:
+        num += 1
+    precision = num / end
+    recall = num / recall_denom
+    result['%dperc-precision' % perc] = precision
+    result['%dperc-recall' % perc] = recall
+
+  return result
 
 def trainModels(experiment_dir, config_map):
   dates = []
@@ -197,7 +216,18 @@ def trainModels(experiment_dir, config_map):
 
   stats_file = getStatsPath(experiment_dir, config_map)
   with open(stats_file, 'w') as fp:
-    print >> fp, '\t'.join(['date', 'accuracy', 'precision', 'recall'])
+    # Keep in sync with evaluateModel().
+    print >> fp, '\t'.join([
+        'date',
+        'f1',
+        'auc',
+        '1perc-precision',
+        '1perc-recall',
+        '10perc-precision',
+        '10perc-recall',
+        '100perc-precision',
+        '100perc-recall',
+    ])
     for date in dates:
       model_file = getModelPath(model_dir, date, config_map)
       cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s '
@@ -208,11 +238,55 @@ def trainModels(experiment_dir, config_map):
                 config_map['train_perc'], model_file,
                 TMP_DATA_FILE, TMP_LABEL_FILE))
       util.run(cmd)
-      accuracy, precision, recall = computeClsError(
-          model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
+      result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
+      # Keep in sync with evaluateModel().
       print >> fp, '\t'.join([
-          date, '%.4f' % accuracy, '%.4f' % precision, '%.4f' % recall])
+          date,
+          '%.4f' % result['f1'],
+          '%.4f' % result['auc'],
+          '%.4f' % result['1perc-precision'],
+          '%.4f' % result['1perc-recall'],
+          '%.4f' % result['10perc-precision'],
+          '%.4f' % result['10perc-recall'],
+          '%.4f' % result['100perc-precision'],
+          '%.4f' % result['100perc-recall'],
+      ])
       fp.flush()
+
+def predict(experiment_dir, config_map):
+  result_dir = getResultDir(experiment_dir)
+  util.maybeMakeDir(result_dir)
+  result_file = getResultPath(result_dir)
+
+  data_dir = getDataDir(experiment_dir)
+  data_file = getDataPath(data_dir)
+  label_file = getLabelPath(data_dir)
+  meta_file = getMetaPath(data_dir)
+  model_dir = getModelDir(experiment_dir)
+
+  model_prefix = '%s-' % getModelName(config_map)
+  model_suffix = '-%d' % config_map['train_window']
+
+  cmd = ('%s/predict_all.py --data_file=%s --label_file=%s '
+         '--meta_file=%s --model_dir=%s --model_prefix="%s" '
+         '--model_suffix="%s" --prediction_window=%d '
+         '--delay_window=%d --result_file=%s' % (
+            CODE_DIR, data_file, label_file, meta_file,
+            model_dir, model_prefix, model_suffix,
+            config_map['predict_window'],
+            config_map['delay_window'], result_file))
+  util.run(cmd)
+
+def analyze(experiment_dir, config_map):
+  analyze_dir = getAnalyzeDir(experiment_dir)
+  util.maybeMakeDir(analyze_dir)
+  result_dir = getResultDir(experiment_dir)
+  result_file = getResultPath(result_dir)
+  cmd = ('%s/analyze_all.py --result_file=%s --hold_period=%d '
+         '--analyze_dir=%s' % (
+            CODE_DIR, result_file, config_map['predict_window'],
+            analyze_dir))
+  util.run(cmd)
 
 def runExperiment(config_file):
   assert config_file.endswith(CONFIG_SUFFIX)
@@ -223,9 +297,24 @@ def runExperiment(config_file):
   util.maybeMakeDir(experiment_dir)
   config_map = getConfig(config_file)
 
-  #makeFeatureList(experiment_dir, config_map)
-  #collectData(experiment_dir, config_map)
-  trainModels(experiment_dir, config_map)
+  makeFeatureList(experiment_dir, config_map)
+
+  step = '%s_collect_data' % experiment
+  if not util.checkDone(step):
+    collectData(experiment_dir, config_map)
+    util.markDone(step)
+
+  step = '%s_train_models' % experiment
+  if not util.checkDone(step):
+    trainModels(experiment_dir, config_map)
+    util.markDone(step)
+
+  step = '%s_predict' % experiment
+  if not util.checkDone(step):
+    predict(experiment_dir, config_map)
+    util.markDone(step)
+
+  analyze(experiment_dir, config_map)
 
 def main():
   parser = argparse.ArgumentParser()

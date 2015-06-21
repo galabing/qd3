@@ -1,3 +1,4 @@
+from config import SYMBOL_DIR
 import logging
 import os
 
@@ -6,14 +7,27 @@ def configLogging(level=logging.INFO):
   logging.basicConfig(format='[%(levelname)s] %(asctime)s %(message)s',
                       level=level)
 
+# Checks whether the specified step has been done.
+def checkDone(step):
+  return os.path.isfile('%s/DONE-%s' % (SYMBOL_DIR, step))
+
+# Marks the specified step as done.
+def markDone(step):
+  with open('%s/DONE-%s' % (SYMBOL_DIR, step), 'w') as fp:
+    pass
+
 # Runs command and maybe checks success.
-def run(cmd, check=True, dry_run=False):
+def run(cmd, check=True, dry_run=False, step=None):
   logging.info('running command: %s' % cmd)
   if dry_run:
     return 0
-  result = os.system(cmd)
+  result = 0
+  if cmd:
+    result = os.system(cmd)
   if check:
     assert result == 0
+  if step:
+    markDone(step)
   return result
 
 # Checks and makes dir if not exist.

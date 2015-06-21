@@ -44,44 +44,43 @@ import util
 LOG_LEVEL = logging.INFO
 
 # Steps to execute, set to False to skip steps.
-DO_EVERYTHING = False  # if True, overwrites DO map
 DO = {
-    'get_sf1_tickers': False,
-    'get_eod_tickers': False,
-    'download_yahoo': False,
-    'convert_sf1_raw': False,
-    'process_sf1_raw': False,
-    'convert_eod_raw': False,
-    'process_eod_raw': False,
-    'process_yahoo': False,
-    'compute_basic_features': False,
-    'compute_log_features': False,
-    'get_feature_stats': False,
-    'get_sector': False,
-    'get_industry': False,
-    'get_eod_price': False,
-    'get_eod_adjprice': False,
-    'get_eod_logadjprice': False,
-    'get_yahoo_price': False,
-    'get_yahoo_adjprice': False,
-    'get_yahoo_logadjprice': False,
-    'get_eod_gain_feature': False,
-    'get_yahoo_gain_feature': False,
-    'get_eod_gain_label': False,
-    'get_yahoo_gain_label': False,
-    'process_market': False,
-    'get_market_adjprice': False,
-    'get_market_gain': False,
-    'get_eod_egain_feature': False,
-    'get_yahoo_egain_feature': False,
-    'get_eod_egain_label': False,
-    'get_yahoo_egain_label': False,
-    'compute_eod_logadjprice_feature': False,
-    'compute_yahoo_logadjprice_feature': False,
-    'compute_eod_gain_feature': False,
-    'compute_yahoo_gain_feature': False,
-    'compute_eod_egain_feature': False,
-    'compute_yahoo_egain_feature': False,
+    'get_sf1_tickers': True,
+    'get_eod_tickers': True,
+    'download_yahoo': True,
+    'convert_sf1_raw': True,
+    'process_sf1_raw': True,
+    'convert_eod_raw': True,
+    'process_eod_raw': True,
+    'process_yahoo': True,
+    'compute_basic_features': True,
+    'compute_log_features': True,
+    'get_feature_stats': True,
+    'get_sector': True,
+    'get_industry': True,
+    'get_eod_price': True,
+    'get_eod_adjprice': True,
+    'get_eod_logadjprice': True,
+    'get_yahoo_price': True,
+    'get_yahoo_adjprice': True,
+    'get_yahoo_logadjprice': True,
+    'get_eod_gain_feature': True,
+    'get_yahoo_gain_feature': True,
+    'get_eod_gain_label': True,
+    'get_yahoo_gain_label': True,
+    'process_market': True,
+    'get_market_adjprice': True,
+    'get_market_gain': True,
+    'get_eod_egain_feature': True,
+    'get_yahoo_egain_feature': True,
+    'get_eod_egain_label': True,
+    'get_yahoo_egain_label': True,
+    'compute_eod_logadjprice_feature': True,
+    'compute_yahoo_logadjprice_feature': True,
+    'compute_eod_gain_feature': True,
+    'compute_yahoo_gain_feature': True,
+    'compute_eod_egain_feature': True,
+    'compute_yahoo_egain_feature': True,
     'run_experiments': True,
 }
 
@@ -91,17 +90,19 @@ DO = {
 
 # Checks to run or skip specified step, logs and returns decision.
 def logDo(step):
-  if DO_EVERYTHING:
-    return True
-  if DO[step]:
+  if DO[step] and not util.checkDone(step):
     logging.info('running step: %s' % step)
     return True
   logging.info('skipping step: %s' % step)
   return False
 
 # Shortcut to util.run() with dry run option.
-def run(cmd):
-  util.run(cmd, dry_run=DRY_RUN)
+def run(cmd, step=None):
+  util.run(cmd, dry_run=DRY_RUN, step=step)
+
+# Shortcut to util.markDone().
+def markDone(step):
+  util.markDone(step)
 
 ############
 ## Script ##
@@ -111,6 +112,7 @@ util.configLogging(LOG_LEVEL)
 
 # Prepare dirs.
 util.maybeMakeDirs([
+    SYMBOL_DIR,
     TICKER_DIR,
     YAHOO_SF1_DIR,
     SF1_RAW_DIR,
@@ -143,113 +145,113 @@ util.maybeMakeDirs([
 if logDo('get_sf1_tickers'):
   cmd = '%s/get_sf1_tickers.py --sf1_file=%s --ticker_file=%s' % (
       CODE_DIR, RAW_SF1_FILE, SF1_TICKER_FILE)
-  run(cmd)
+  run(cmd, 'get_sf1_tickers')
 
 if logDo('get_eod_tickers'):
   cmd = '%s/get_eod_tickers.py --eod_file=%s --ticker_file=%s' % (
       CODE_DIR, RAW_EOD_FILE, EOD_TICKER_FILE)
-  run(cmd)
+  run(cmd, 'get_eod_tickers')
 
 if logDo('download_yahoo'):
   cmd = '%s/download_yahoo.py --ticker_file=%s --download_dir=%s' % (
       CODE_DIR, SF1_TICKER_FILE, YAHOO_SF1_DIR)
-  run(cmd)
+  run(cmd, 'download_yahoo')
 
 if logDo('convert_sf1_raw'):
   cmd = ('%s/convert_sf1_raw.py --sf1_file=%s --indicator_file=%s '
          '--raw_dir=%s' % (
              CODE_DIR, RAW_SF1_FILE, SF1_INDICATOR_FILE, SF1_RAW_DIR))
-  run(cmd)
+  run(cmd, 'convert_sf1_raw')
 
 if logDo('process_sf1_raw'):
   cmd = '%s/process_sf1_raw.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, SF1_RAW_DIR, SF1_PROCESSED_DIR)
-  run(cmd)
+  run(cmd, 'process_sf1_raw')
 
 if logDo('convert_eod_raw'):
   cmd = '%s/convert_eod_raw.py --eod_file=%s --raw_dir=%s' % (
       CODE_DIR, RAW_EOD_FILE, EOD_RAW_DIR)
-  run(cmd)
+  run(cmd, 'convert_eod_raw')
 
 if logDo('process_eod_raw'):
   cmd = ('%s/process_eod_raw.py --raw_dir=%s --ticker_file=%s '
          '--processed_dir=%s' % (
              CODE_DIR, EOD_RAW_DIR, SF1_TICKER_FILE, EOD_PROCESSED_DIR))
-  run(cmd)
+  run(cmd, 'process_eod_raw')
 
 if logDo('process_yahoo'):
   cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, YAHOO_SF1_DIR, YAHOO_PROCESSED_DIR)
-  run(cmd)
+  run(cmd, 'process_yahoo')
 
 if logDo('compute_basic_features'):
   cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '
          '--feature_base_dir=%s --info_dir=%s') % (
       CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
       FEATURE_DIR, FEATURE_INFO_DIR)
-  run(cmd)
+  run(cmd, 'compute_basic_features')
 
 if logDo('compute_log_features'):
   cmd = ('%s/compute_log_features.py --processed_dir=%s --ticker_file=%s '
          '--feature_base_dir=%s --info_dir=%s') % (
       CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
       FEATURE_DIR, FEATURE_INFO_DIR)
-  run(cmd)
+  run(cmd, 'compute_log_features')
 
 if logDo('get_feature_stats'):
   cmd = '%s/get_feature_stats.py --info_dir=%s --stats_file=%s' % (
       CODE_DIR, FEATURE_INFO_DIR, FEATURE_STATS_FILE)
-  run(cmd)
+  run(cmd, 'get_feature_stats')
 
 if logDo('get_sector'):
   cmd = ('%s/get_sector_industry.py --ticker_file=%s --info_file=%s '
          '--sector --output_base_dir=%s --stats_file=%s' % (
       CODE_DIR, SF1_TICKER_FILE, SF1_SECIND_FILE, FEATURE_DIR,
       SECTOR_STATS_FILE))
-  run(cmd)
+  run(cmd, 'get_sector')
 
 if logDo('get_industry'):
   cmd = ('%s/get_sector_industry.py --ticker_file=%s --info_file=%s '
          '--industry --output_base_dir=%s --stats_file=%s' % (
       CODE_DIR, SF1_TICKER_FILE, SF1_SECIND_FILE, FEATURE_DIR,
       INDUSTRY_STATS_FILE))
-  run(cmd)
+  run(cmd, 'get_industry')
 
 if logDo('get_eod_price'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=price '
          '--output_dir=%s' % (
       CODE_DIR, EOD_PROCESSED_DIR, EOD_PRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_eod_price')
 
 if logDo('get_eod_adjprice'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjprice '
          '--output_dir=%s' % (
       CODE_DIR, EOD_PROCESSED_DIR, EOD_ADJPRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_eod_adjprice')
 
 if logDo('get_eod_logadjprice'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjprice '
          '--take_log --output_dir=%s' % (
       CODE_DIR, EOD_PROCESSED_DIR, EOD_LOGADJPRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_eod_logadjprice')
 
 if logDo('get_yahoo_price'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=price '
          '--output_dir=%s' % (
       CODE_DIR, YAHOO_PROCESSED_DIR, YAHOO_PRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_yahoo_price')
 
 if logDo('get_yahoo_adjprice'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjprice '
          '--output_dir=%s' % (
       CODE_DIR, YAHOO_PROCESSED_DIR, YAHOO_ADJPRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_yahoo_adjprice')
 
 if logDo('get_yahoo_logadjprice'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjprice '
          '--take_log --output_dir=%s' % (
       CODE_DIR, YAHOO_PROCESSED_DIR, YAHOO_LOGADJPRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_yahoo_logadjprice')
 
 if logDo('get_eod_gain_feature'):
   for k in GAIN_K_LIST:
@@ -258,6 +260,7 @@ if logDo('get_eod_gain_feature'):
     cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
         CODE_DIR, EOD_ADJPRICE_DIR, k, gain_dir)
     run(cmd)
+  markDone('get_eod_gain_feature')
 
 if logDo('get_yahoo_gain_feature'):
   for k in GAIN_K_LIST:
@@ -266,31 +269,32 @@ if logDo('get_yahoo_gain_feature'):
     cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
         CODE_DIR, YAHOO_ADJPRICE_DIR, k, gain_dir) 
     run(cmd)
+  markDone('get_yahoo_gain_feature')
 
 if logDo('get_eod_gain_label'):
   cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
          '--raw_price_dir=%s --gain_dir=%s' % (
       CODE_DIR, EOD_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
       EOD_PRICE_DIR, EOD_GAIN_LABEL_DIR))
-  run(cmd)
+  run(cmd, 'get_eod_gain_label')
 
 if logDo('get_yahoo_gain_label'):
   cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
          '--raw_price_dir=%s --gain_dir=%s' % (
       CODE_DIR, YAHOO_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
       YAHOO_PRICE_DIR, YAHOO_GAIN_LABEL_DIR))
-  run(cmd)
+  run(cmd, 'get_yahoo_gain_label')
 
 if logDo('process_market'):
   cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, YAHOO_MARKET_DIR, MARKET_PROCESSED_DIR)
-  run(cmd)
+  run(cmd, 'process_market')
 
 if logDo('get_market_adjprice'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjprice '
          '--output_dir=%s' % (
       CODE_DIR, MARKET_PROCESSED_DIR, MARKET_ADJPRICE_DIR))
-  run(cmd)
+  run(cmd, 'get_market_adjprice')
 
 if logDo('get_market_gain'):
   # For market we only do one version of gain (without mininum raw price)
@@ -305,6 +309,7 @@ if logDo('get_market_gain'):
     cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
         CODE_DIR, MARKET_ADJPRICE_DIR, k, gain_dir)
     run(cmd)
+  markDone('get_market_gain')
 
 if logDo('get_eod_egain_feature'):
   for k in GAIN_K_LIST:
@@ -316,6 +321,7 @@ if logDo('get_eod_egain_feature'):
       cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
              '--egain_dir=%s' % (CODE_DIR, gain_dir, market_file, egain_dir))
       run(cmd)
+  markDone('get_eod_egain_feature')
 
 if logDo('get_yahoo_egain_feature'):
   for k in GAIN_K_LIST:
@@ -327,6 +333,7 @@ if logDo('get_yahoo_egain_feature'):
       cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
              '--egain_dir=%s' % (CODE_DIR, gain_dir, market_file, egain_dir))
       run(cmd)
+  markDone('get_yahoo_egain_feature')
 
 if logDo('get_eod_egain_label'):
   for market in MARKETS:
@@ -337,6 +344,7 @@ if logDo('get_eod_egain_label'):
            '--egain_dir=%s' % (
         CODE_DIR, EOD_GAIN_LABEL_DIR, market_file, egain_dir))
     run(cmd)
+  markDone('get_eod_egain_label')
 
 if logDo('get_yahoo_egain_label'):
   for market in MARKETS:
@@ -347,6 +355,7 @@ if logDo('get_yahoo_egain_label'):
            '--egain_dir=%s' % (
         CODE_DIR, YAHOO_GAIN_LABEL_DIR, market_file, egain_dir))
     run(cmd)
+  markDone('get_yahoo_egain_label')
 
 if logDo('compute_eod_logadjprice_feature'):
   for k in LOGADJPRICE_K_LIST:
@@ -356,6 +365,7 @@ if logDo('compute_eod_logadjprice_feature'):
            '--pfeature_dir=%s' % (
         CODE_DIR, EOD_LOGADJPRICE_DIR, k, output_dir))
     run(cmd)
+  markDone('compute_eod_logadjprice_feature')
 
 if logDo('compute_yahoo_logadjprice_feature'):
   for k in LOGADJPRICE_K_LIST:
@@ -365,6 +375,7 @@ if logDo('compute_yahoo_logadjprice_feature'):
            '--pfeature_dir=%s' % (
         CODE_DIR, YAHOO_LOGADJPRICE_DIR, k, output_dir))
     run(cmd)
+  markDone('compute_yahoo_logadjprice_feature')
 
 if logDo('compute_eod_gain_feature'):
   for k in GAIN_K_LIST:
@@ -375,6 +386,7 @@ if logDo('compute_eod_gain_feature'):
            '--pfeature_dir=%s' % (
         CODE_DIR, input_dir, k, output_dir))
     run(cmd)
+  markDone('compute_eod_gain_feature')
 
 if logDo('compute_yahoo_gain_feature'):
   for k in GAIN_K_LIST:
@@ -385,6 +397,7 @@ if logDo('compute_yahoo_gain_feature'):
            '--pfeature_dir=%s' % (
         CODE_DIR, input_dir, k, output_dir))
     run(cmd)
+  markDone('compute_yahoo_gain_feature')
 
 if logDo('compute_eod_egain_feature'):
   for k in GAIN_K_LIST:
@@ -396,6 +409,7 @@ if logDo('compute_eod_egain_feature'):
              '--pfeature_dir=%s' % (
           CODE_DIR, input_dir, k, output_dir))
       run(cmd)
+  markDone('compute_eod_egain_feature')
 
 if logDo('compute_yahoo_egain_feature'):
   for k in GAIN_K_LIST:
@@ -407,10 +421,12 @@ if logDo('compute_yahoo_egain_feature'):
              '--pfeature_dir=%s' % (
           CODE_DIR, input_dir, k, output_dir))
       run(cmd)
+  markDone('compute_yahoo_egain_feature')
 
 if logDo('run_experiments'):
   for experiment in EXPERIMENTS:
     config_file = '%s/%s.json' % (CONFIG_DIR, experiment)
     cmd = '%s/run_experiment.py --config=%s' % (CODE_DIR, config_file)
     run(cmd)
+  markDone('run_experiments')
 

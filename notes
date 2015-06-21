@@ -1,0 +1,4 @@
+run 20150601
+- need to modify indicators.txt: EVENT => EVENTS
+- need to modify HEADERS in get_sector_industry.py: add Exchange to the end
+

@@ -2,9 +2,16 @@
 ## Constants ##
 ###############
 
-RUN_ID = '20150530'
+RUN_ID = '20150601'
 EXPERIMENTS = [
     'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
 ]
 
 MARKETS = ['R3000', 'SP500']
@@ -25,6 +32,8 @@ CODE_DIR = '/Users/lnyang/lab/qd2/qd2'
 
 BASE_DIR = '/Users/lnyang/lab/qd2/data/runs'
 RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
+
+SYMBOL_DIR = '%s/symbols' % RUN_DIR
 
 RAW_DIR = '%s/raw' % RUN_DIR
 RAW_SF1_DIR = '%s/sf1' % RAW_DIR
