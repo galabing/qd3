@@ -38,6 +38,7 @@ def readData(input_file):
     data[date].append([ticker, gain, score])
   return data
 
+"""
 def writeKs(data, ks, output_file):
   with open(output_file, 'w') as fp:
     print >> fp, 'date\t%s' % ('\t'.join(['%d' % k for k in ks]))
@@ -59,6 +60,50 @@ def writeKs(data, ks, output_file):
         gains.append(sum(items[p:q])/(q-p))
       print >> fp, '%s\t%s' % (date.replace('-', '/'),
                                '\t'.join(['%f' % g for g in gains]))
+"""
+
+def writeKs(data, ks, output_file):
+  assert len(ks) > 0
+  total_gains = [0.0 for k in ks]
+  total_months = 0
+  gains_map = dict()  # year => gains, months
+  for date, items in data.iteritems():
+    items = [item[1] for item in items]
+    year, m = date.split('-')
+    if year not in gains_map:
+      gains_map[year] = [[0.0 for k in ks], 0]
+    gains_map[year][1] += 1
+    gains = gains_map[year][0]
+    for i in range(len(ks)):
+      k = ks[i]
+      if k > 0:
+        assert len(items) >= k
+        p = 0
+        q = k
+      elif k == 0:
+        p = 0
+        q = len(items)
+      else:
+        assert len(items) >= -k
+        p = len(items) + k
+        q = len(items)
+      gain = sum(items[p:q]) / (q-p)
+      gains[i] += gain
+      total_gains[i] += gain
+    total_months += 1
+  for gains, months in gains_map.itervalues():
+    for i in range(len(gains)):
+      gains[i] /= months
+  for i in range(len(ks)):
+    total_gains[i] /= total_months
+  with open(output_file, 'w') as fp:
+    print >> fp, 'year\t%s\tmonths' % ('\t'.join(['%d' % k for k in ks]))
+    for year in sorted(gains_map.keys()):
+      gains, months = gains_map[year]
+      print >> fp, '%s\t%s\t%d' % (year, '\t'.join(['%f' % g for g in gains]),
+                                   months)
+    print >> fp, 'all\t%s\t%d' % ('\t'.join(['%f' % g for g in total_gains]),
+                                  total_months)
 
 def writeBuckets(data, buckets, output_file):
   assert buckets > 0
