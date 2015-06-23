@@ -291,14 +291,14 @@ if logDo('get_yahoo_gain_feature'):
 
 if logDo('get_eod_gain_label'):
   cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
-         '--raw_price_dir=%s --gain_dir=%s' % (
+         '--raw_price_dir=%s --fill --gain_dir=%s' % (
       CODE_DIR, EOD_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
       EOD_PRICE_DIR, EOD_GAIN_LABEL_DIR))
   run(cmd, 'get_eod_gain_label')
 
 if logDo('get_yahoo_gain_label'):
   cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
-         '--raw_price_dir=%s --gain_dir=%s' % (
+         '--raw_price_dir=%s --fill --gain_dir=%s' % (
       CODE_DIR, YAHOO_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
       YAHOO_PRICE_DIR, YAHOO_GAIN_LABEL_DIR))
   run(cmd, 'get_yahoo_gain_label')
@@ -324,7 +324,7 @@ if logDo('get_market_gain'):
   for k in sorted(k_list):
     gain_dir = '%s/%d' % (MARKET_GAIN_DIR, k)
     util.maybeMakeDir(gain_dir)
-    cmd = '%s/compute_gain.py --price_dir=%s --k=%d --gain_dir=%s' % (
+    cmd = '%s/compute_gain.py --price_dir=%s --k=%d --fill --gain_dir=%s' % (
         CODE_DIR, MARKET_ADJPRICE_DIR, k, gain_dir)
     run(cmd)
   markDone('get_market_gain')
