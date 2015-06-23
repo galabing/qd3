@@ -23,6 +23,8 @@ GAIN_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                27, 30, 33, 36, 39, 42, 45, 48]
 LOGADJPRICE_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                       27, 30, 33, 36, 39, 42, 45, 48]
+LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
+                       27, 30, 33, 36, 39, 42, 45, 48]
 # For labels, we only predict a 12-month window, and we enforce
 # a minimum raw price for all transactions.
 PREDICTION_WINDOW = 12
@@ -63,6 +65,7 @@ EOD_PROCESSED_DIR = '%s/processed' % EOD_DIR
 EOD_PRICE_DIR = '%s/price' % EOD_DIR
 EOD_ADJPRICE_DIR = '%s/adjprice' % EOD_DIR
 EOD_LOGADJPRICE_DIR = '%s/logadjprice' % EOD_DIR
+EOD_LOGADJVOLUME_DIR = '%s/logadjvolume' % EOD_DIR
 EOD_GAIN_DIR = '%s/gain' % EOD_DIR
 EOD_EGAIN_DIR = '%s/egain' % EOD_DIR
 
@@ -71,6 +74,7 @@ YAHOO_PROCESSED_DIR = '%s/processed' % YAHOO_DIR
 YAHOO_PRICE_DIR = '%s/price' % YAHOO_DIR
 YAHOO_ADJPRICE_DIR = '%s/adjprice' % YAHOO_DIR
 YAHOO_LOGADJPRICE_DIR = '%s/logadjprice' % YAHOO_DIR
+YAHOO_LOGADJVOLUME_DIR = '%s/logadjvolume' % YAHOO_DIR
 YAHOO_GAIN_DIR = '%s/gain' % YAHOO_DIR
 YAHOO_EGAIN_DIR = '%s/egain' % YAHOO_DIR
 

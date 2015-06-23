@@ -1,11 +1,19 @@
 #!/usr/bin/python
 
 """ Samples price, adjprice, vol, adjvol for first trading day of each month.
+    For price and adjprice, it's just the closing value of the day.
+    For vol and adjvol, it's the average value across the previous month.
+
+    TODO: get rid of ticker_file.
 """
 
 import argparse
 import os
 import util
+
+def getVolume(v):
+  if v == '': return 0.0
+  return float(v)
 
 def processEodRaw(raw_dir, ticker_file, processed_dir):
   tickers = util.readTickers(ticker_file)
@@ -19,6 +27,8 @@ def processEodRaw(raw_dir, ticker_file, processed_dir):
     with open(processed_file, 'w') as fp:
       previous_ymd = None
       previous_ym = None
+      previous_vo, previous_avo = 0.0, 0.0
+      previous_days = 0
       for line in lines:
         _, ymd, op, hi, lo, cl, vo, di, sp, aop, ahi, alo, acl, avo = (
             line.split(','))
@@ -27,11 +37,19 @@ def processEodRaw(raw_dir, ticker_file, processed_dir):
           assert ymd > previous_ymd
         previous_ymd = ymd
         ym = util.ymdToYm(ymd)
-        if ym == previous_ym:
-          continue
-        previous_ym = ym
-        print >> fp, '%s\t%s\t%s\t%s\t%s' % (
-            ymd, cl, acl, vo, avo)
+        if ym != previous_ym:
+          previous_ym = ym
+          if previous_days > 0:
+            previous_vo /= previous_days
+            previous_avo /= previous_days
+          print >> fp, '%s\t%s\t%s\t%f\t%f' % (
+              ymd, cl, acl, previous_vo, previous_avo)
+          previous_vo = 0.0
+          previous_avo = 0.0
+          previous_days = 0
+        previous_vo += getVolume(vo)
+        previous_avo += getVolume(avo)
+        previous_days += 1
 
 def main():
   parser = argparse.ArgumentParser()

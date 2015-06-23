@@ -24,6 +24,9 @@ MIN_RAW_PRICE = float('-Inf')
 MAX_RAW_PRICE = float('Inf')
 EPS = 0.01
 
+MIN_GAIN = -1.0
+MAX_GAIN = 10.0
+
 def readPrices(price_file):
   with open(price_file, 'r') as fp:
     lines = fp.read().splitlines()
@@ -43,6 +46,9 @@ def computeGain(price_dir, k, min_raw_price, max_raw_price, raw_price_dir,
       'raw': 0,
       'min_raw_price': 0,
       'max_raw_price': 0,
+      # min_cap and max_cap are actually not skipped.
+      'min_cap': 0,
+      'max_cap': 0,
   }
   total = 0
   for ticker in tickers:
@@ -71,6 +77,12 @@ def computeGain(price_dir, k, min_raw_price, max_raw_price, raw_price_dir,
             skip_stats['max_raw_price'] += 1
             continue
         gain = (price2 - price) / (price + EPS)
+        if gain < MIN_GAIN:
+          skip_stats['min_cap'] += 1
+          gain = MIN_GAIN
+        if gain > MAX_GAIN:
+          skip_stats['max_cap'] += 1
+          gain = MAX_GAIN
         print >> fp, '%s\t%f' % (ymd, gain)
         total += 1
   logging.info('output: %d, skip_stats: %s' % (total, skip_stats))

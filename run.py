@@ -61,9 +61,11 @@ DO = {
     'get_eod_price': True,
     'get_eod_adjprice': True,
     'get_eod_logadjprice': True,
+    'get_eod_logadjvolume': True,
     'get_yahoo_price': True,
     'get_yahoo_adjprice': True,
     'get_yahoo_logadjprice': True,
+    'get_yahoo_logadjvolume': True,
     'get_eod_gain_feature': True,
     'get_yahoo_gain_feature': True,
     'get_eod_gain_label': True,
@@ -77,6 +79,8 @@ DO = {
     'get_yahoo_egain_label': True,
     'compute_eod_logadjprice_feature': True,
     'compute_yahoo_logadjprice_feature': True,
+    'compute_eod_logadjvolume_feature': True,
+    'compute_yahoo_logadjvolume_feature': True,
     'compute_eod_gain_feature': True,
     'compute_yahoo_gain_feature': True,
     'compute_eod_egain_feature': True,
@@ -126,9 +130,11 @@ util.maybeMakeDirs([
     EOD_PRICE_DIR,
     EOD_ADJPRICE_DIR,
     EOD_LOGADJPRICE_DIR,
+    EOD_LOGADJVOLUME_DIR,
     YAHOO_PRICE_DIR,
     YAHOO_ADJPRICE_DIR,
     YAHOO_LOGADJPRICE_DIR,
+    YAHOO_LOGADJVOLUME_DIR,
     EOD_GAIN_DIR,
     YAHOO_GAIN_DIR,
     EOD_GAIN_LABEL_DIR,
@@ -235,6 +241,12 @@ if logDo('get_eod_logadjprice'):
       CODE_DIR, EOD_PROCESSED_DIR, EOD_LOGADJPRICE_DIR))
   run(cmd, 'get_eod_logadjprice')
 
+if logDo('get_eod_logadjvolume'):
+  cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjvolume '
+         '--take_log --output_dir=%s' % (
+      CODE_DIR, EOD_PROCESSED_DIR, EOD_LOGADJVOLUME_DIR))
+  run(cmd, 'get_eod_logadjvolume')
+
 if logDo('get_yahoo_price'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=price '
          '--output_dir=%s' % (
@@ -252,6 +264,12 @@ if logDo('get_yahoo_logadjprice'):
          '--take_log --output_dir=%s' % (
       CODE_DIR, YAHOO_PROCESSED_DIR, YAHOO_LOGADJPRICE_DIR))
   run(cmd, 'get_yahoo_logadjprice')
+
+if logDo('get_yahoo_logadjvolume'):
+  cmd = ('%s/get_price_volume.py --processed_dir=%s --column=adjvolume '
+         '--take_log --output_dir=%s' % (
+      CODE_DIR, YAHOO_PROCESSED_DIR, YAHOO_LOGADJVOLUME_DIR))
+  run(cmd, 'get_yahoo_logadjvolume')
 
 if logDo('get_eod_gain_feature'):
   for k in GAIN_K_LIST:
@@ -376,6 +394,26 @@ if logDo('compute_yahoo_logadjprice_feature'):
         CODE_DIR, YAHOO_LOGADJPRICE_DIR, k, output_dir))
     run(cmd)
   markDone('compute_yahoo_logadjprice_feature')
+
+if logDo('compute_eod_logadjvolume_feature'):
+  for k in LOGADJVOLUME_K_LIST:
+    output_dir = '%s/eod-logadjvolume-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, EOD_LOGADJVOLUME_DIR, k, output_dir))
+    run(cmd)
+  markDone('compute_eod_logadjvolume_feature')
+
+if logDo('compute_yahoo_logadjvolume_feature'):
+  for k in LOGADJVOLUME_K_LIST:
+    output_dir = '%s/yahoo-logadjvolume-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, YAHOO_LOGADJVOLUME_DIR, k, output_dir))
+    run(cmd)
+  markDone('compute_yahoo_logadjvolume_feature')
 
 if logDo('compute_eod_gain_feature'):
   for k in GAIN_K_LIST:
