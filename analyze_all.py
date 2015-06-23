@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 # Adapted from qd (Q-analyze.py and analyze_results.py)
 

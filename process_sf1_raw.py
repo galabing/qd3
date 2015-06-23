@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 # Adapted from qd.
 """ Processes raw files into features.

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 # Adapted from qd/scripts/log_features.py
 # TODO: combine this with compute_basic_features.py;

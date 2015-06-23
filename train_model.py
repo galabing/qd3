@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 # Adapted from qd/train_model2.py
 """ Trains a model based on training data, labels and model def.

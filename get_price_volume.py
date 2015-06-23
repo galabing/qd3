@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 # Adapted from qd.
 """ Collects price or volume data.  Each input file should have five columns:

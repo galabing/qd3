@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 """ Samples price, adjprice, vol, adjvol for first trading day of each month.
     For price and adjprice, it's just the closing value of the day.

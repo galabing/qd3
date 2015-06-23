@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 """ Samples price, adjprice, vol, vol for first trading day of each month.
     (The last column is supposed to be adjvol, but we don't have that for

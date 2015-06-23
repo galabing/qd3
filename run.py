@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 """ Runs data collection, training, analysis and prediction.
 

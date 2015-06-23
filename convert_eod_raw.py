@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 # Adapted from qd.
 """ Converts unzipped file of entire EOD database into a set of raw files.
