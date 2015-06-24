@@ -36,6 +36,18 @@ def readData(input_file):
     if len(data[date]) > 0:
       assert score <= data[date][-1][2]
     data[date].append([ticker, gain, score])
+  # get rid of all 0 gains (available in the future)
+  future_dates = []
+  for date, items in data.iteritems():
+    all_zero = True
+    for item in items:
+      if item[1] != 0.0:
+        all_zero = False
+        break
+    if all_zero:
+      future_dates.append(date)
+  for date in future_dates:
+    del data[date]
   return data
 
 """
