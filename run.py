@@ -47,7 +47,8 @@ LOG_LEVEL = logging.INFO
 DO = {
     'get_sf1_tickers': True,
     'get_eod_tickers': True,
-    'download_yahoo': True,
+    # Only download files from local machine.
+    'download_yahoo': HOST == 'lnyang-mn1',
     'convert_sf1_raw': True,
     'process_sf1_raw': True,
     'convert_eod_raw': True,

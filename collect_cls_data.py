@@ -72,6 +72,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
       assert (feature.find('-gain-') > 0 or
               feature.find('-egain-') > 0 or
               feature.find('-logadjprice-') > 0 or
+              feature.find('-logadjvolume-') > 0 or
               feature.startswith('sector') or
               feature.startswith('industry')), (
           'no range info for feature %s' % feature)

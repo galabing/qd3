@@ -1,3 +1,14 @@
+import socket
+
+# Local or remote.
+HOST = socket.gethostname()
+assert HOST == 'lnyang-mn1' or HOST == 'lnyang-ld1'
+if HOST == 'lnyang-mn1':
+  HOST_DIR = '/Users/lnyang/lab/qd2'
+else:
+  assert HOST == 'lnyang-ld1'
+  HOST_DIR = '/home/lnyang/lab/qd2'
+
 ###############
 ## Constants ##
 ###############
@@ -30,9 +41,9 @@ LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
 PREDICTION_WINDOW = 12
 MIN_RAW_PRICE = 10
 
-CODE_DIR = '/Users/lnyang/lab/qd2/qd2'
+CODE_DIR = '%s/qd2' % HOST_DIR
 
-BASE_DIR = '/Users/lnyang/lab/qd2/data/runs'
+BASE_DIR = '%s/data/runs' % HOST_DIR
 RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
 
 SYMBOL_DIR = '%s/symbols' % RUN_DIR
