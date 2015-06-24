@@ -36,7 +36,7 @@ def readData(input_file):
     if len(data[date]) > 0:
       assert score <= data[date][-1][2]
     data[date].append([ticker, gain, score])
-  # get rid of all 0 gains (available in the future)
+  # hacky way to get rid of all 0 gains (available in the future)
   future_dates = []
   for date, items in data.iteritems():
     all_zero = True
@@ -50,29 +50,17 @@ def readData(input_file):
     del data[date]
   return data
 
-"""
-def writeKs(data, ks, output_file):
-  with open(output_file, 'w') as fp:
-    print >> fp, 'date\t%s' % ('\t'.join(['%d' % k for k in ks]))
-    for date in sorted(data.keys()):
-      items = [item[1] for item in data[date]]
-      gains = []
-      for k in ks:
-        if k > 0:
-          assert len(items) >= k
-          p = 0
-          q = k
-        elif k == 0:
-          p = 0
-          q = len(items)
-        else:
-          assert len(items) >= -k
-          p = len(items) + k
-          q = len(items)
-        gains.append(sum(items[p:q])/(q-p))
-      print >> fp, '%s\t%s' % (date.replace('-', '/'),
-                               '\t'.join(['%f' % g for g in gains]))
-"""
+def readMarketGains(market_gain_file):
+  with open(market_gain_file, 'r') as fp:
+    lines = fp.read().splitlines()
+  market = dict()  # yyyy-mm => gain
+  for line in lines:
+    date, gain = line.split('\t')
+    year, month, day = date.split('-')
+    date = '%s-%s' % (year, month)
+    assert date not in market
+    market[date] = float(gain)
+  return market
 
 def writeKs(data, ks, output_file):
   assert len(ks) > 0
@@ -197,15 +185,21 @@ def updateTrans(date, items, months, max_look, max_pick, max_hold, buys, record)
   assert date not in buys
   buys[date] = trans
 
-def writeTrans(data, hold_period, max_look, max_pick, max_hold, output_file):
+def writeTrans(data, hold_period, max_look, max_pick, max_hold,
+               market_gain_file, output_file):
   buys = dict()  # date => [[ticker, gain, score], ...]
   record = []  # [[ticker, buy_date, sale_date], ...]
   for date in sorted(data.keys()):
     items = data[date]
     updateTrans(date, items, hold_period, max_look, max_pick, max_hold,
                 buys, record)
+  market = None
+  if market_gain_file:
+    market = readMarketGains(market_gain_file)
   with open(output_file, 'w') as fp:
-    print >> fp, '\t'.join(['date', 'buys', 'total_hold', 'max_hold', 'mh_ticker', 'gain'])
+    print >> fp, '\t'.join([
+        'date', 'buys', 'total_hold', 'max_hold',
+        'mh_ticker', 'gain', 'market'])
     for date in sorted(buys.keys()):
       trans = buys[date]
       gain = 0.0
@@ -224,14 +218,18 @@ def writeTrans(data, hold_period, max_look, max_pick, max_hold, output_file):
         if c > max_hold:
           max_hold = c
           mh_ticker = ticker
+      market_gain = '-'
+      if market is not None:
+        market_gain = '%.2f%%' % (market[date] * 100)
       print >> fp, '\t'.join([
           date, str(len(trans)), str(len(hold)), str(max_hold), mh_ticker,
-          '%.2f%%' % (gain*100)])
+          '%.2f%%' % (gain*100), market_gain])
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--result_file', required=True)
   parser.add_argument('--hold_period', type=int, required=True)
+  parser.add_argument('--market_gain_file')
   parser.add_argument('--analyze_dir', required=True)
   args = parser.parse_args()
 
@@ -244,7 +242,7 @@ def main():
     output_file = '%s/trade-ml%d-mp%d-mh%d.tsv' % (
         args.analyze_dir, max_look, max_pick, max_hold)
     writeTrans(data, args.hold_period, max_look, max_pick, max_hold,
-               output_file)
+               args.market_gain_file, output_file)
 
 if __name__ == '__main__':
   main()

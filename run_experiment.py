@@ -78,6 +78,12 @@ def getFeatureListPath(experiment_dir):
 def getLabelDir(label_suffix):
   return '%s/%s' % (RUN_DIR, label_suffix)
 
+def getMarketGainPath(config_map):
+  suffix = config_map['label_suffix'].rstrip('/')
+  market = suffix[suffix.rfind('/')+1:]
+  assert market in MARKETS
+  return '%s/%d/%s' % (MARKET_GAIN_DIR, config_map['predict_window'], market)
+
 # Dir of training data/label/meta files.
 def getDataDir(experiment_dir):
   return '%s/data' % experiment_dir
@@ -278,14 +284,15 @@ def predict(experiment_dir, config_map):
   util.run(cmd)
 
 def analyze(experiment_dir, config_map):
+  market_gain_file = getMarketGainPath(config_map)
   analyze_dir = getAnalyzeDir(experiment_dir)
   util.maybeMakeDir(analyze_dir)
   result_dir = getResultDir(experiment_dir)
   result_file = getResultPath(result_dir)
   cmd = ('%s/analyze_all.py --result_file=%s --hold_period=%d '
-         '--analyze_dir=%s' % (
+         '--analyze_dir=%s --market_gain_file=%s' % (
             CODE_DIR, result_file, config_map['predict_window'],
-            analyze_dir))
+            analyze_dir, market_gain_file))
   util.run(cmd)
 
 def runExperiment(config_file):
