@@ -192,16 +192,18 @@ if logDo('process_yahoo'):
 
 if logDo('compute_basic_features'):
   cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '
-         '--feature_base_dir=%s --info_dir=%s') % (
+         '--feature_base_dir=%s --info_dir=%s '
+         '--computer=%s/compute_basic_feature.py') % (
       CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
-      FEATURE_DIR, FEATURE_INFO_DIR)
+      FEATURE_DIR, FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_basic_features')
 
 if logDo('compute_log_features'):
   cmd = ('%s/compute_log_features.py --processed_dir=%s --ticker_file=%s '
-         '--feature_base_dir=%s --info_dir=%s') % (
+         '--feature_base_dir=%s --info_dir=%s '
+         '--computer=%s/compute_log_feature.py') % (
       CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
-      FEATURE_DIR, FEATURE_INFO_DIR)
+      FEATURE_DIR, FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_log_features')
 
 if logDo('get_feature_stats'):
