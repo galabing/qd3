@@ -13,16 +13,8 @@ else:
 ## Constants ##
 ###############
 
-RUN_ID = '20150601'
+RUN_ID = '20150701'
 EXPERIMENTS = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
 ]
 
 MARKETS = ['R3000', 'SP500']

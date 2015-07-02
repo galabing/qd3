@@ -43,51 +43,60 @@ import util
 
 LOG_LEVEL = logging.INFO
 
-# Steps to execute, set to False to skip steps.
-DO = {
+# Steps to execute on local machine, set to False to skip steps.
+DO_LOCAL = {
     'get_sf1_tickers': True,
-    'get_eod_tickers': True,
-    # Only download files from local machine.
-    'download_yahoo': HOST == 'lnyang-mn1',
+    'download_yahoo': True,
+}
+
+# Steps to execute on remote machine, set to False to skip steps.
+DO_EOD = False
+DO_REMOTE = {
+    'get_eod_tickers': DO_EOD,
     'convert_sf1_raw': True,
     'process_sf1_raw': True,
-    'convert_eod_raw': True,
-    'process_eod_raw': True,
+    'convert_eod_raw': DO_EOD,
+    'process_eod_raw': DO_EOD,
     'process_yahoo': True,
     'compute_basic_features': True,
     'compute_log_features': True,
     'get_feature_stats': True,
     'get_sector': True,
     'get_industry': True,
-    'get_eod_price': True,
-    'get_eod_adjprice': True,
-    'get_eod_logadjprice': True,
-    'get_eod_logadjvolume': True,
+    'get_eod_price': DO_EOD,
+    'get_eod_adjprice': DO_EOD,
+    'get_eod_logadjprice': DO_EOD,
+    'get_eod_logadjvolume': DO_EOD,
     'get_yahoo_price': True,
     'get_yahoo_adjprice': True,
     'get_yahoo_logadjprice': True,
     'get_yahoo_logadjvolume': True,
-    'get_eod_gain_feature': True,
+    'get_eod_gain_feature': DO_EOD,
     'get_yahoo_gain_feature': True,
-    'get_eod_gain_label': True,
+    'get_eod_gain_label': DO_EOD,
     'get_yahoo_gain_label': True,
     'process_market': True,
     'get_market_adjprice': True,
     'get_market_gain': True,
-    'get_eod_egain_feature': True,
+    'get_eod_egain_feature': DO_EOD,
     'get_yahoo_egain_feature': True,
-    'get_eod_egain_label': True,
+    'get_eod_egain_label': DO_EOD,
     'get_yahoo_egain_label': True,
-    'compute_eod_logadjprice_feature': True,
+    'compute_eod_logadjprice_feature': DO_EOD,
     'compute_yahoo_logadjprice_feature': True,
-    'compute_eod_logadjvolume_feature': True,
+    'compute_eod_logadjvolume_feature': DO_EOD,
     'compute_yahoo_logadjvolume_feature': True,
-    'compute_eod_gain_feature': True,
+    'compute_eod_gain_feature': DO_EOD,
     'compute_yahoo_gain_feature': True,
-    'compute_eod_egain_feature': True,
+    'compute_eod_egain_feature': DO_EOD,
     'compute_yahoo_egain_feature': True,
     'run_experiments': True,
 }
+
+if HOST == 'lnyang-mn1':
+  DO = DO_LOCAL
+else:
+  DO = DO_REMOTE
 
 ####################
 ## Util functions ##
@@ -95,7 +104,7 @@ DO = {
 
 # Checks to run or skip specified step, logs and returns decision.
 def logDo(step):
-  if DO[step] and not util.checkDone(step):
+  if DO.get(step, False) and not util.checkDone(step):
     logging.info('running step: %s' % step)
     return True
   logging.info('skipping step: %s' % step)
