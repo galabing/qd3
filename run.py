@@ -52,6 +52,7 @@ DO_LOCAL = {
 # Steps to execute on remote machine, set to False to skip steps.
 DO_EOD = False
 DO_REMOTE = {
+    'get_sf1_tickers': True,
     'get_eod_tickers': DO_EOD,
     'convert_sf1_raw': True,
     'process_sf1_raw': True,
