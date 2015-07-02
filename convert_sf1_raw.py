@@ -53,6 +53,11 @@ def processLine(line, indicator_meta):
   items = label.split('_')
   assert len(items) == 2 or len(items) == 3
   ticker, indicator = items[0], items[1]
+  # Skip EVENT or EVENTS indicators.  This one is going through some
+  # transition: https://www.quandl.com/data/SF1/documentation/indicators
+  # Since neither is used, we simply skip EVENT(S) lines for output.
+  if items[1] == 'EVENT' or items[1] == 'EVENTS':
+    return None, None
   assert indicator in indicator_meta, (
       'unsupported indicator %s for ticker %s' % (indicator, ticker))
   if len(items) == 2:
@@ -97,6 +102,8 @@ def convertSf1Raw(sf1_file, indicator_file, raw_dir, max_lines=0):
         break
       # Prepare output data.
       ticker, line = processLine(line, indicator_meta)
+      if ticker is None:
+        continue
       # Prepare output fp.
       if ticker != output_ticker:
         if output_fp is not None:
