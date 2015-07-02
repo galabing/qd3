@@ -25,6 +25,20 @@ INDICATOR_HEADER = '\t'.join(['Indicator',
                               'Description',
                               'NA Value'])
 
+# See https://www.quandl.com/data/SF1/documentation/indicators
+# These indicators are either going through transitions or being
+# populated.  None of them are used for training/prediction so
+# we simply skip them here.
+SKIPPED_INDICATORS = {
+    'EVENT',
+    'EVENTS',
+    'RETEARN',
+    'INVENTORY',
+    'NCFCOMMON',
+    'NCFDEBT',
+    'NCFDIV',
+}
+
 def readIndicatorMeta(indicator_file):
   with open(indicator_file, 'r') as fp:
     lines = fp.read().splitlines()
@@ -53,10 +67,7 @@ def processLine(line, indicator_meta):
   items = label.split('_')
   assert len(items) == 2 or len(items) == 3
   ticker, indicator = items[0], items[1]
-  # Skip EVENT or EVENTS indicators.  This one is going through some
-  # transition: https://www.quandl.com/data/SF1/documentation/indicators
-  # Since neither is used, we simply skip EVENT(S) lines for output.
-  if items[1] == 'EVENT' or items[1] == 'EVENTS':
+  if items[1] in SKIPPED_INDICATORS:
     return None, None
   assert indicator in indicator_meta, (
       'unsupported indicator %s for ticker %s' % (indicator, ticker))
