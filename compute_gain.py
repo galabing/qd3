@@ -13,6 +13,12 @@
     gains whose current raw price is in range.  In this case --raw_price_dir
     is also required.
 
+    Can optionally provide --membership_dir to restrict ticker selection within
+    certain membership (eg, SP500).  Currently files in --membership_dir are
+    assumed to be year indexed and named by year.  TODO: change to more fine
+    grained indexing by specifying one or more ranges for each ticker during
+    which it is part of the membership.
+
     Gain = (adj_price_in_k_mon - current_adj_price) / (current_adj_price + eps)
 
     If --fill is specified, gains will be computed for all dates up to the last
@@ -45,7 +51,7 @@ def readPrices(price_file):
   return prices
 
 def computeGain(price_dir, k, min_raw_price, max_raw_price, raw_price_dir,
-                fill, gain_dir):
+                membership_dir, fill, gain_dir):
   tickers = sorted(os.listdir(price_dir))
   skip_stats = {
       # ym2 is not skipped if --fill is specified.
@@ -56,14 +62,29 @@ def computeGain(price_dir, k, min_raw_price, max_raw_price, raw_price_dir,
       # min_cap and max_cap are actually not skipped.
       'min_cap': 0,
       'max_cap': 0,
+      # not in membership.
+      'member': 0,
   }
   total = 0
+
+  membership = None
+  if membership_dir is not None:
+    years = os.listdir(membership_dir)
+    membership = dict()
+    for year in years:
+      with open('%s/%s' % (membership_dir, year), 'r') as fp:
+        membership[year] = set(fp.read().splitlines())
+
   for ticker in tickers:
     prices = readPrices('%s/%s' % (price_dir, ticker))
     if raw_price_dir:
       raw_prices = readPrices('%s/%s' % (raw_price_dir, ticker))
     with open('%s/%s' % (gain_dir, ticker), 'w') as fp:
       for ym in sorted(prices.keys()):
+        year, month = ym.split('-')
+        if membership is not None and ticker not in membership[year]:
+          skip_stats['member'] += 1
+          continue
         ymd, price = prices[ym]
         assert price >= 0
         ym2 = util.getNextYm(ym, k)
@@ -110,6 +131,8 @@ def main():
   parser.add_argument('--raw_price_dir',
                       help='raw price dir, required if min_raw_price or '
                            'max_raw_price is specified')
+  parser.add_argument('--membership_dir',
+                      help='dir to year indexed membership files')
   parser.add_argument('--fill', action='store_true')
   parser.add_argument('--gain_dir', required=True)
   args = parser.parse_args()
@@ -123,7 +146,7 @@ def main():
   if args.min_raw_price > MIN_RAW_PRICE or args.max_raw_price < MAX_RAW_PRICE:
     assert args.raw_price_dir, 'must specify --raw_price_dir'
   computeGain(args.price_dir, args.k, args.min_raw_price, args.max_raw_price,
-              args.raw_price_dir, args.fill, args.gain_dir)
+              args.raw_price_dir, args.membership_dir, args.fill, args.gain_dir)
 
 if __name__ == '__main__':
   main()

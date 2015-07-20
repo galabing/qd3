@@ -29,14 +29,20 @@ LOGADJPRICE_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
 LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                        27, 30, 33, 36, 39, 42, 45, 48]
 # For labels, we only predict a 12-month window, and we enforce
-# a minimum raw price for all transactions.
+# a minimum raw price and/or membership for all transactions.
 PREDICTION_WINDOW = 12
-MIN_RAW_PRICE = 10
+MIN_RAW_PRICE = 0
+MEMBERSHIP = 'SP500'
 
 CODE_DIR = '%s/qd2' % HOST_DIR
 
 BASE_DIR = '%s/data/runs' % HOST_DIR
 RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
+
+# This dir is for convenience purpose only (eg, MEMBERSHIP_DIR
+# is assigned to it if MEMBERSHIP is None).  No input/output files
+# should exist there.
+NOT_USED_DIR = '%s/not_used' % RUN_DIR
 
 SYMBOL_DIR = '%s/symbols' % RUN_DIR
 
@@ -44,6 +50,7 @@ RAW_DIR = '%s/raw' % RUN_DIR
 RAW_SF1_DIR = '%s/sf1' % RAW_DIR
 RAW_EOD_DIR = '%s/eod' % RAW_DIR
 RAW_YAHOO_DIR = '%s/yahoo' % RAW_DIR
+RAW_MISC_DIR = '%s/misc' % RAW_DIR
 
 RAW_SF1_FILE = '%s/sf1.csv' % RAW_SF1_DIR
 SF1_INDICATOR_FILE = '%s/indicators.txt' % RAW_SF1_DIR
@@ -94,6 +101,10 @@ MISC_DIR = '%s/misc' % RUN_DIR
 FEATURE_STATS_FILE = '%s/feature_stats.tsv' % MISC_DIR
 SECTOR_STATS_FILE = '%s/sector_stats' % MISC_DIR
 INDUSTRY_STATS_FILE = '%s/industry_stats' % MISC_DIR
+if MEMBERSHIP is not None:
+  MEMBERSHIP_DIR = '%s/%s-membership' % (MISC_DIR, MEMBERSHIP)
+else:
+  MEMBERSHIP_DIR = NOT_USED_DIR
 
 EOD_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
     EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)

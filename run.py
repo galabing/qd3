@@ -25,15 +25,12 @@
 
     - prepare feature lists under feature_lists dir
     - prepare experiment configs under configs dir
+    - prepare membership file under raw/misc dir
 
     - modify config.py to update:
       - RUN_ID
       - CONFIGS
       - etc
-
-    TODOs:
-    - add volume features -- need to modify eod/yahoo processing to collect avg volume
-      of the month instead of that of the first day
 """
 
 from config import *
@@ -74,6 +71,7 @@ DO_REMOTE = {
     'get_yahoo_logadjvolume': True,
     'get_eod_gain_feature': DO_EOD,
     'get_yahoo_gain_feature': True,
+    'get_membership': MEMBERSHIP is not None,
     'get_eod_gain_label': DO_EOD,
     'get_yahoo_gain_label': True,
     'process_market': True,
@@ -157,6 +155,7 @@ util.maybeMakeDirs([
     YAHOO_EGAIN_DIR,
     EOD_EGAIN_LABEL_DIR,
     YAHOO_EGAIN_LABEL_DIR,
+    MEMBERSHIP_DIR,
 ])
 
 if logDo('get_sf1_tickers'):
@@ -302,18 +301,31 @@ if logDo('get_yahoo_gain_feature'):
     run(cmd)
   markDone('get_yahoo_gain_feature')
 
+if logDo('get_membership'):
+  cmd = ('%s/get_membership.py --input_file=%s/%s-membership.tsv '
+         '--output_dir=%s' % (
+      CODE_DIR, RAW_MISC_DIR, MEMBERSHIP, MEMBERSHIP_DIR))
+  run(cmd)
+  markDone('get_membership')
+
 if logDo('get_eod_gain_label'):
+  membership_flag = ''
+  if MEMBERSHIP is not None:
+    membership_flag = '--membership_dir=%s' % MEMBERSHIP_DIR
   cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
-         '--raw_price_dir=%s --fill --gain_dir=%s' % (
+         '--raw_price_dir=%s %s --fill --gain_dir=%s' % (
       CODE_DIR, EOD_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
-      EOD_PRICE_DIR, EOD_GAIN_LABEL_DIR))
+      EOD_PRICE_DIR, membership_flag, EOD_GAIN_LABEL_DIR))
   run(cmd, 'get_eod_gain_label')
 
 if logDo('get_yahoo_gain_label'):
+  membership_flag = ''
+  if MEMBERSHIP is not None:
+    membership_flag = '--membership_dir=%s' % MEMBERSHIP_DIR
   cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
-         '--raw_price_dir=%s --fill --gain_dir=%s' % (
+         '--raw_price_dir=%s %s --fill --gain_dir=%s' % (
       CODE_DIR, YAHOO_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
-      YAHOO_PRICE_DIR, YAHOO_GAIN_LABEL_DIR))
+      YAHOO_PRICE_DIR, membership_flag, YAHOO_GAIN_LABEL_DIR))
   run(cmd, 'get_yahoo_gain_label')
 
 if logDo('process_market'):
