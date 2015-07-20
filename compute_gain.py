@@ -82,7 +82,9 @@ def computeGain(price_dir, k, min_raw_price, max_raw_price, raw_price_dir,
     with open('%s/%s' % (gain_dir, ticker), 'w') as fp:
       for ym in sorted(prices.keys()):
         year, month = ym.split('-')
-        if membership is not None and ticker not in membership[year]:
+        if (membership is not None and
+            year in membership and
+            ticker not in membership[year]):
           skip_stats['member'] += 1
           continue
         ymd, price = prices[ym]
