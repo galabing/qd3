@@ -31,7 +31,7 @@ LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
 # For labels, we only predict a 12-month window, and we enforce
 # a minimum raw price and/or membership for all transactions.
 PREDICTION_WINDOW = 12
-MIN_RAW_PRICE = 0
+#MIN_RAW_PRICE = 0
 MEMBERSHIP = 'SP500'
 
 CODE_DIR = '%s/qd2' % HOST_DIR
@@ -42,7 +42,7 @@ RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
 # This dir is for convenience purpose only (eg, MEMBERSHIP_DIR
 # is assigned to it if MEMBERSHIP is None).  No input/output files
 # should exist there.
-NOT_USED_DIR = '%s/not_used' % RUN_DIR
+#NOT_USED_DIR = '%s/not_used' % RUN_DIR
 
 SYMBOL_DIR = '%s/symbols' % RUN_DIR
 
@@ -101,19 +101,20 @@ MISC_DIR = '%s/misc' % RUN_DIR
 FEATURE_STATS_FILE = '%s/feature_stats.tsv' % MISC_DIR
 SECTOR_STATS_FILE = '%s/sector_stats' % MISC_DIR
 INDUSTRY_STATS_FILE = '%s/industry_stats' % MISC_DIR
-if MEMBERSHIP is not None:
-  MEMBERSHIP_DIR = '%s/%s-membership' % (MISC_DIR, MEMBERSHIP)
-else:
-  MEMBERSHIP_DIR = NOT_USED_DIR
+MEMBERSHIP_FILE = '%s/%s-membership' % (MISC_DIR, MEMBERSHIP)
+#if MEMBERSHIP is not None:
+#  MEMBERSHIP_DIR = '%s/%s-membership' % (MISC_DIR, MEMBERSHIP)
+#else:
+#  MEMBERSHIP_DIR = NOT_USED_DIR
 
-EOD_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
-    EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
-YAHOO_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
-    YAHOO_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
-EOD_EGAIN_LABEL_DIR = '%s/egain%d/%d' % (
-    EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
-YAHOO_EGAIN_LABEL_DIR = '%s/egain%d/%d' % (
-    YAHOO_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
+#EOD_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
+#    EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
+#YAHOO_GAIN_LABEL_DIR = '%s/gain%d/%d' % (
+#    YAHOO_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
+#EOD_EGAIN_LABEL_DIR = '%s/egain%d/%d' % (
+#    EOD_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
+#YAHOO_EGAIN_LABEL_DIR = '%s/egain%d/%d' % (
+#    YAHOO_DIR, MIN_RAW_PRICE, PREDICTION_WINDOW)
 
 CONFIG_DIR = '%s/configs' % RUN_DIR
 EXPERIMENT_BASE_DIR = '%s/experiments' % RUN_DIR

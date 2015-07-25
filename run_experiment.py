@@ -22,6 +22,8 @@
     - min_pos (default 0)
     - min_date (default '0000-00-00')
     - max_date (default '9999-99-99')
+    - train_filter (default '')
+    - predict_filter (default 'membership=SP500')
 
     TODO: start_date and end_date are hand picked for now but can be automated.
 """
@@ -58,6 +60,8 @@ DEFAULT_VALUES = {
     'min_date': '0000-00-00',
     'max_date': '9999-99-99',
     'min_feature_perc': 0.8,
+    'train_filter': '',
+    'predict_filter': 'membership=SP500',
 }
 
 def getConfig(config_file):
@@ -309,6 +313,16 @@ def runExperiment(config_file):
   step = '%s_collect_data' % experiment
   if not util.checkDone(step):
     collectData(experiment_dir, config_map)
+    util.markDone(step)
+
+  step = '%s_filter_train' % experiment
+  if not util.checkDone(step):
+    filterMetadata()
+    util.markDone(step)
+
+  step = '%s_filter_predict' % experiment
+  if not util.checkDone(step):
+    filterMetadata()
     util.markDone(step)
 
   step = '%s_train_models' % experiment
