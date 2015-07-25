@@ -24,8 +24,8 @@ import os
 import pickle
 import util
 
-def selectData(data_file, label_file, meta_file, yyyymm, months,
-               tmp_data_file, tmp_label_file):
+def selectData(data_file, label_file, meta_file, train_meta_file,
+               yyyymm, months, tmp_data_file, tmp_label_file):
   assert len(yyyymm) == 6
   y = yyyymm[:4]
   m = yyyymm[4:]
@@ -42,6 +42,12 @@ def selectData(data_file, label_file, meta_file, yyyymm, months,
   label_ifp = open(label_file, 'r')
   label_ofp = open(tmp_label_file, 'w')
   meta_fp = open(meta_file, 'r')
+  if train_meta_file is None:
+    train_meta_fp = None
+    train_meta = None
+  else:
+    train_meta_fp = open(train_meta_file, 'r')
+    train_meta = train_meta_fp.readline()
 
   count = 0
   while True:
@@ -52,6 +58,14 @@ def selectData(data_file, label_file, meta_file, yyyymm, months,
       break
     data = data_ifp.readline()
     label = label_ifp.readline()
+    assert data != ''
+    assert label != ''
+
+    if train_meta is not None:
+      if meta != train_meta:
+        continue
+      train_meta = train_meta_fp.readline()
+
     assert meta[-1] == '\n'
     ticker, date, tmp1, tmp2 = meta[:-1].split('\t')
     ym = util.ymdToYm(date)
@@ -69,6 +83,8 @@ def selectData(data_file, label_file, meta_file, yyyymm, months,
   label_ifp.close()
   label_ofp.close()
   meta_fp.close()
+  if train_meta_fp is not None:
+    train_meta_fp.close()
 
 def trainModel(data_file, label_file, model_def, perc, model_file):
   X = numpy.loadtxt(data_file)
@@ -98,6 +114,14 @@ def main():
   parser.add_argument('--data_file', required=True)
   parser.add_argument('--label_file', required=True)
   parser.add_argument('--meta_file', required=True)
+  # If specified, will be used to filter --meta_file.
+  # Eg, --meta_file may contain metadata for all available data
+  # while --train_meta_file may contain metadata for all data
+  # with min_raw_price >= 10 and part of SP500 membership.
+  # In this case, only data within --train_meta_file will be
+  # collected for training, but --meta_file is still needed
+  # for joining with --data_file and --label_file.
+  parser.add_argument('--train_meta_file')
   parser.add_argument('--yyyymm', required=True,
                       help='last date of training period')
   parser.add_argument('--months', type=int, required=True,
@@ -123,7 +147,8 @@ def main():
   args = parser.parse_args()
   util.configLogging()
   selectData(args.data_file, args.label_file, args.meta_file,
-             args.yyyymm, args.months, args.tmp_data_file, args.tmp_label_file)
+             args.train_meta_file, args.yyyymm, args.months,
+             args.tmp_data_file, args.tmp_label_file)
   trainModel(args.tmp_data_file, args.tmp_label_file, args.model_def,
              args.perc, args.model_file)
   if args.delete_tmp_files:

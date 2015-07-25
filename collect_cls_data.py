@@ -24,12 +24,13 @@
     For each dated gain, features are joined by looking back a specified max
     window and using the most recent value (or 0 if not found).
 
-    Three files are written:
+    These files are written:
     data_file: matrix of features delimited by space.  Features are in the
                same order as specified by feature_list.
     label_file: list of labels corresponding to each row in data_file.
     meta_file: ticker, gain date and feature count, and actual gain
                corresponding to each row in data_file.
+    (optional) weight_file: weight of each data point.
 """
 
 import argparse

@@ -28,11 +28,18 @@ def getModelName(ym, model_prefix, model_suffix):
   y, m = ym.split('-')
   return '%s%s%s%s' % (model_prefix, y, m, model_suffix)
 
-def prepareData(ym, data_file, label_file, meta_file, tmp_data_file):
+def prepareData(ym, data_file, label_file, meta_file, predict_meta_file,
+                tmp_data_file):
   data_ifp = open(data_file, 'r')
   label_ifp = open(label_file, 'r')
   meta_ifp = open(meta_file, 'r')
   data_ofp = open(tmp_data_file, 'w')
+  if predict_meta_file is None:
+    predict_meta_ifp = None
+    predict_meta = None
+  else:
+    predict_meta_ifp = open(predict_meta_file, 'r')
+    predict_meta = predict_meta_ifp.readline()
 
   meta = []
   while True:
@@ -46,6 +53,12 @@ def prepareData(ym, data_file, label_file, meta_file, tmp_data_file):
     label_line = label_ifp.readline()
     assert data_line != ''
     assert label_line != ''
+
+    if predict_meta is not None:
+      if line != predict_meta:
+        continue
+      predict_meta = predict_meta_ifp.readline()
+
     ticker, date, tmp, gain = line[:-1].split('\t')
     if util.ymdToYm(date) != ym:
       continue
@@ -62,6 +75,8 @@ def prepareData(ym, data_file, label_file, meta_file, tmp_data_file):
   label_ifp.close()
   meta_ifp.close()
   data_ofp.close()
+  if predict_meta_ifp is not None:
+    predict_meta_ifp.close()
   return meta
 
 def main():
@@ -69,6 +84,8 @@ def main():
   parser.add_argument('--data_file', required=True)
   parser.add_argument('--label_file', required=True)
   parser.add_argument('--meta_file', required=True)
+  # Similar to --train_meta_file in train_model.py
+  parser.add_argument('--predict_meta_file')
   parser.add_argument('--model_dir', required=True)
   parser.add_argument('--model_prefix', required=True)
   parser.add_argument('--model_suffix', required=True)
@@ -100,7 +117,7 @@ def main():
     started = True
 
     meta = prepareData(date, args.data_file, args.label_file, args.meta_file,
-                       TMP_DATA_FILE)
+                       args.predict_meta_file, TMP_DATA_FILE)
     data = numpy.loadtxt(TMP_DATA_FILE)
     assert data.shape[0] == len(meta)
 
