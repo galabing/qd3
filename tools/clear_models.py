@@ -5,7 +5,7 @@ import os
 RUN_DIR = '/home/lnyang/lab/qd2/history/20150601/data/runs/20150601'
 
 experiment_dir = '%s/experiments' % RUN_DIR
-experiments = os.listdir(EXPERIMENT_DIR)
+experiments = os.listdir(experiment_dir)
 
 for experiment in experiments:
   model_dir = '%s/%s/models' % (experiment_dir, experiment)
