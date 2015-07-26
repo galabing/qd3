@@ -93,7 +93,7 @@ def getLabelDir(label):
 
 # Dir of market gains.
 def getMarketGainPath(config_map):
-  _, market = getSourceAndMarket(label)
+  _, market = getSourceAndMarket(config_map['label'])
   return '%s/%d/%s' % (MARKET_GAIN_DIR, config_map['predict_window'], market)
 
 # Dir of training data/label/meta files.
@@ -365,14 +365,14 @@ def runExperiment(config_file):
 
   step = '%s_filter_train' % experiment
   if not util.checkDone(step):
-    filterMetadata(experiment_dir, config_map['train_filter'],
-                   train_meta_file)
+    filterMetadata(experiment_dir, config_map,
+                   config_map['train_filter'], train_meta_file)
     util.markDone(step)
 
   step = '%s_filter_predict' % experiment
   if not util.checkDone(step):
-    filterMetadata(experiment_dir, config_map['predict_filter'],
-                   predict_meta_file)
+    filterMetadata(experiment_dir, config_map,
+                   config_map['predict_filter'], predict_meta_file)
     util.markDone(step)
 
   step = '%s_train_models' % experiment

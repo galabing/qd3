@@ -57,6 +57,15 @@ def readPrice(price_file):
     price[date] = float(value)
   return price
 
+def isMember(membership, ticker, date):
+  if ticker not in membership:
+    return False
+  periods = membership[ticker]
+  for start, end in periods:
+    if date >= start and date < end:
+      return True
+  return False
+
 def filterMetadata(input_file, min_raw_price, raw_price_dir,
                    membership_file, output_file):
   stats = {
@@ -91,7 +100,7 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
         stats['min_raw_price'] += 1
         continue
     # Maybe check membership.
-    if membership is None:
+    if membership is not None:
       if not isMember(membership, ticker, date):
         stats['membership'] += 1
         continue

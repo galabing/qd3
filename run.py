@@ -155,7 +155,6 @@ util.maybeMakeDirs([
     YAHOO_EGAIN_DIR,
     EOD_EGAIN_LABEL_DIR,
     YAHOO_EGAIN_LABEL_DIR,
-    MEMBERSHIP_DIR,
 ])
 
 if logDo('get_sf1_tickers'):
