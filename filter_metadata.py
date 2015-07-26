@@ -39,6 +39,8 @@ def readMembership(membership_file):
     assert ticker not in membership
     value = []  # [[start, end] ...]
     for period in periods:
+      if period == '':
+        continue
       start, end = period.split(',')
       assert start < end
       if len(value) > 0:
