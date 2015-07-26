@@ -6,7 +6,7 @@
 
     The config specifies:
     - features (eg, 'sf1 + eod + eod-R3000 + sector')
-    - label_suffix (eg, 'yahoo/egain10/12/R3000')
+    - label (eg, 'yahoo + R3000')
     - start_date (eg, '200412')
     - end_date (eg, '201305')
     - model_spec (default
@@ -44,7 +44,7 @@ TMP_LABEL_FILE = '/tmp/qd2_tmp_label'
 
 REQUIRED_FIELDS = [
     'features',
-    'label_suffix',
+    'label',
     'start_date',
     'end_date',
 ]
@@ -77,32 +77,48 @@ def getConfig(config_file):
 def getFeatureListPath(experiment_dir):
   return '%s/feature_list' % experiment_dir
 
+def getSourceAndMarket(label):
+  source, market = [item.strip() for item in label.split('+')]
+  assert source in ['eod', 'yahoo'], 'unknown label in config: %s' % label
+  assert market in MARKETS, 'unknown label in config: %s' % label
+  return source, market
+
 # Dir of label SOURCE data (egain dir).
 # This is not the dir to training labels (getLabelPath()).
-def getLabelDir(label_suffix):
-  return '%s/%s' % (RUN_DIR, label_suffix)
+def getLabelDir(label):
+  source, market = getSourceAndMarket(label)
+  if source == 'eod':
+    return '%s/%s' % (EOD_EGAIN_LABEL_DIR, market)
+  return '%s/%s' % (YAHOO_EGAIN_LABEL_DIR, market)
 
+# Dir of market gains.
 def getMarketGainPath(config_map):
-  suffix = config_map['label_suffix'].rstrip('/')
-  market = suffix[suffix.rfind('/')+1:]
-  assert market in MARKETS
+  _, market = getSourceAndMarket(label)
   return '%s/%d/%s' % (MARKET_GAIN_DIR, config_map['predict_window'], market)
 
 # Dir of training data/label/meta files.
 def getDataDir(experiment_dir):
   return '%s/data' % experiment_dir
 
-# Path to training data.
+# Path to all data.
 def getDataPath(data_dir):
   return '%s/data' % data_dir
 
-# Path to training labels.
+# Path to all labels.
 def getLabelPath(data_dir):
   return '%s/label' % data_dir
 
-# Path to training metadata.
+# Path to all metadata.
 def getMetaPath(data_dir):
   return '%s/meta' % data_dir
+
+# Path to training metadata.
+def getTrainingMetaPath(data_dir):
+  return '%s/train_meta' % data_dir
+
+# Path to prediction metadata.
+def getPredictionMetaPath(data_dir):
+  return '%s/predict_meta' % data_dir
 
 # Path to training weights.
 def getWeightPath(data_dir):
@@ -155,7 +171,7 @@ def collectData(experiment_dir, config_map):
   data_dir = getDataDir(experiment_dir)
   util.maybeMakeDir(data_dir)
 
-  gain_dir = getLabelDir(config_map['label_suffix'])
+  gain_dir = getLabelDir(config_map['label'])
   feature_list = getFeatureListPath(experiment_dir)
   data_file = getDataPath(data_dir)
   label_file = getLabelPath(data_dir)
@@ -171,6 +187,33 @@ def collectData(experiment_dir, config_map):
             config_map['min_date'], config_map['max_date'],
             config_map['feature_window'], config_map['min_feature_perc'],
             data_file, label_file, meta_file, weight_file))
+  util.run(cmd)
+
+def filterMetadata(experiment_dir, config, filter_str, filtered_path):
+  filters = [filter.strip() for filter in filter_str.split('+')]
+  filter_args = []
+  for filter in filters:
+    if filter == '':
+      continue
+    key, value = filter.split('=')
+    if key == 'min_raw_price':
+      filter_args.append('--min_raw_price=%s' % value)
+      _, market = getSourceAndMarket(config['label'])
+      if market == 'eod':
+        filter_args.append('--raw_price_dir=%s' % EOD_PRICE_DIR)
+      else:
+        filter_args.append('--raw_price_dir=%s' % YAHOO_PRICE_DIR)
+      continue
+    if key == 'membership':
+      assert value == MEMBERSHIP
+      filter_args.append('--membership_file=%s' % MEMBERSHIP_FILE)
+      continue
+    assert False, 'unrecognized filter arg: %s' % filter
+
+  data_dir = getDataDir(experiment_dir)
+  meta_file = getMetaPath(data_dir)
+  cmd = ('%s/filter_metadata.py --input_file=%s --output_file=%s %s' % (
+      CODE_DIR, meta_file, filtered_path, ' '.join(filter_args)))
   util.run(cmd)
 
 def evaluateModel(model_file, data_file, label_file):
@@ -202,7 +245,7 @@ def evaluateModel(model_file, data_file, label_file):
 
   return result
 
-def trainModels(experiment_dir, config_map):
+def trainModels(experiment_dir, config_map, train_meta_file):
   dates = []
   date = config_map['start_date']
   while date <= config_map['end_date']:
@@ -242,10 +285,10 @@ def trainModels(experiment_dir, config_map):
       model_file = getModelPath(model_dir, date, config_map)
       cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s '
              '--yyyymm=%s --months=%d --model_def="%s" --perc=%f --model_file=%s '
-             '--tmp_data_file=%s --tmp_label_file=%s' % (
+             '--train_meta_file=%s --tmp_data_file=%s --tmp_label_file=%s' % (
                 CODE_DIR, data_file, label_file, meta_file, date,
                 config_map['train_window'], config_map['model_spec'],
-                config_map['train_perc'], model_file,
+                config_map['train_perc'], model_file, train_meta_file,
                 TMP_DATA_FILE, TMP_LABEL_FILE))
       util.run(cmd)
       result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
@@ -263,7 +306,7 @@ def trainModels(experiment_dir, config_map):
       ])
       fp.flush()
 
-def predict(experiment_dir, config_map):
+def predict(experiment_dir, config_map, predict_meta_file):
   result_dir = getResultDir(experiment_dir)
   util.maybeMakeDir(result_dir)
   result_file = getResultPath(result_dir)
@@ -280,11 +323,12 @@ def predict(experiment_dir, config_map):
   cmd = ('%s/predict_all.py --data_file=%s --label_file=%s '
          '--meta_file=%s --model_dir=%s --model_prefix="%s" '
          '--model_suffix="%s" --prediction_window=%d '
-         '--delay_window=%d --result_file=%s' % (
+         '--delay_window=%d --predict_meta_file=%s --result_file=%s' % (
             CODE_DIR, data_file, label_file, meta_file,
             model_dir, model_prefix, model_suffix,
             config_map['predict_window'],
-            config_map['delay_window'], result_file))
+            config_map['delay_window'], predict_meta_file,
+            result_file))
   util.run(cmd)
 
 def analyze(experiment_dir, config_map):
@@ -315,24 +359,30 @@ def runExperiment(config_file):
     collectData(experiment_dir, config_map)
     util.markDone(step)
 
+  data_dir = getDataDir(experiment_dir)
+  train_meta_file = getTrainingMetaPath(data_dir)
+  predict_meta_file = getPredictionMetaPath(data_dir)
+
   step = '%s_filter_train' % experiment
   if not util.checkDone(step):
-    filterMetadata()
+    filterMetadata(experiment_dir, config_map['train_filter'],
+                   train_meta_file)
     util.markDone(step)
 
   step = '%s_filter_predict' % experiment
   if not util.checkDone(step):
-    filterMetadata()
+    filterMetadata(experiment_dir, config_map['predict_filter'],
+                   predict_meta_file)
     util.markDone(step)
 
   step = '%s_train_models' % experiment
   if not util.checkDone(step):
-    trainModels(experiment_dir, config_map)
+    trainModels(experiment_dir, config_map, train_meta_file)
     util.markDone(step)
 
   step = '%s_predict' % experiment
   if not util.checkDone(step):
-    predict(experiment_dir, config_map)
+    predict(experiment_dir, config_map, predict_meta_file)
     util.markDone(step)
 
   analyze(experiment_dir, config_map)

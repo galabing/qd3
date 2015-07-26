@@ -310,25 +310,11 @@ if logDo('get_membership'):
   markDone('get_membership')
 
 if logDo('get_eod_gain_label'):
-  membership_flag = ''
-  if MEMBERSHIP is not None:
-    membership_flag = '--membership_dir=%s' % MEMBERSHIP_DIR
-#  cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
-#         '--raw_price_dir=%s %s --fill --gain_dir=%s' % (
-#      CODE_DIR, EOD_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
-#      EOD_PRICE_DIR, membership_flag, EOD_GAIN_LABEL_DIR))
   cmd = '%s/compute_gain.py --price_dir=%s --k=%d --fill --gain_dir=%s' % (
       CODE_DIR, EOD_ADJPRICE_DIR, PREDICTION_WINDOW, EOD_GAIN_LABEL_DIR)
   run(cmd, 'get_eod_gain_label')
 
 if logDo('get_yahoo_gain_label'):
-  membership_flag = ''
-  if MEMBERSHIP is not None:
-    membership_flag = '--membership_dir=%s' % MEMBERSHIP_DIR
-#  cmd = ('%s/compute_gain.py --price_dir=%s --k=%d --min_raw_price=%f '
-#         '--raw_price_dir=%s %s --fill --gain_dir=%s' % (
-#      CODE_DIR, YAHOO_ADJPRICE_DIR, PREDICTION_WINDOW, MIN_RAW_PRICE,
-#      YAHOO_PRICE_DIR, membership_flag, YAHOO_GAIN_LABEL_DIR))
   cmd = '%s/compute_gain.py --price_dir=%s --k=%d --fill --gain_dir=%s' % (
       CODE_DIR, YAHOO_ADJPRICE_DIR, PREDICTION_WINDOW, YAHOO_GAIN_LABEL_DIR)
   run(cmd, 'get_yahoo_gain_label')
