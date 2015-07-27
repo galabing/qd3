@@ -1,0 +1,851 @@
+Ticker	Company	2015	2014	2013	2012	2011	2010	2009	2008	2007	2006	2005	2004	2003	2002	2001	2000
+A	Agilent Technologies Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+AA	Alcoa Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AAPL	Apple Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ABBV	AbbVie Inc.	X	X	X													
+ABC	AmerisourceBergen Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+ABI	Applied Biosystems Inc.								X	X	X	X	X	X	X	X	X
+ABK	Ambac Financial Group Inc.								X	X	X	X	X	X	X	X	
+ABS	Albertson's Inc.										X	X	X	X	X	X	X
+ABT	Abbott Laboratories	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ABX	Barrick Gold Corp.														X	X	X
+ACAS	American Capital Ltd.							X	X								
+ACE	ACE Limited	X	X	X	X	X			X	X	X	X	X	X			
+ACK	Armstrong Holdings Inc.																X
+ACN	Accenture plc	X	X	X	X												
+ACS	ACS Inc.						X	X	X	X	X	X					
+ACT	Actavis plc	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ACV	Alberto-Culver Co.										X	X	X	X	X	X	X
+ADBE	Adobe Systems Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ADCT	ADC Telecomm. Inc.									X	X	X	X	X	X	X	X
+ADI	Analog Devices Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ADM	Archer-Daniels-Midland Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ADP	ADP, LLC.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ADPT	Adaptec Inc.															X	X
+ADS	Alliance Data Systems Corp.	X	X														
+ADSK	Autodesk Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ADT	ADT Corp.	X	X	X													
+AEE	Ameren Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AEP	American Electric Power	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AES	AES Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AET	Aetna Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AFL	AFLAC Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AFS	Associates First Capital																X
+AGC	American General															X	X
+AGN	Allergan Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AIG	AIG, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AIV	Aimco	X	X	X	X	X	X	X	X	X	X	X	X				
+AIZ	Assurant Inc.	X	X	X	X	X	X	X	X								
+AKAM	Akamai Technologies Inc.	X	X	X	X	X	X	X	X								
+AKS	AK Steel Holding Corp.					X	X	X									
+AL	Alcan Inc.														X	X	X
+ALL	Allstate Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ALLE	Allegion	X	X														
+ALTR	Altera Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+ALXN	Alexion Pharmaceuticals	X	X	X													
+AM	American Greetings												X	X	X	X	X
+AMAT	Applied Materials Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AMCC	Applied Micro Circuits Corp.										X	X	X	X	X	X	
+AMD	Advanced Micro Devices			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AME	Ametek	X	X														
+AMG	Affiliated Managers Group	X															
+AMGN	Amgen Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AMP	Ameriprise Financial	X	X	X	X	X	X	X	X	X	X						
+AMR	AMR Corp.													X	X	X	X
+AMT	American Tower Corp.	X	X	X	X	X	X	X	X								
+AMZN	Amazon.com Inc.	X	X	X	X	X	X	X	X	X	X						
+AN	AutoNation Inc.	X	X	X	X	X	X	X	X	X	X	X	X				
+ANDW	Andrew Corp.										X	X	X	X	X	X	X
+ANF	Abercrombie & Fitch			X	X	X	X	X	X								
+ANR	Alpha Natural Resources				X												
+ANTM	Anthem Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+AOL	American Online															X	X
+AON	Aon plc	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+APA	Apache Corporation	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+APC	Anadarko Petroleum Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+APCC	American Power Conversion									X	X	X	X	X	X	X	
+APD	Air Products & Chemicals	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+APH	Amphenol Corp.	X	X	X	X	X	X	X									
+APOL	Apollo Group Inc.			X	X	X	X	X	X	X	X	X	X	X			
+ARC	Atlantic Richfield																X
+ARG	Airgas Inc.	X	X	X	X	X	X										
+ASH	Ashland Inc.								X	X	X	X	X	X	X	X	X
+ASN	Archstone-Smith Trust									X	X	X					
+ASO	AmSouth Bancorp										X	X	X	X	X	X	X
+AT	Alltel Wireless									X	X	X	X	X	X	X	X
+ATI	Allegheny Technologies Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AV	Avaya Inc.									X	X	X	X	X	X	X	
+AVB	AvalonBay Communities	X	X	X	X	X	X	X	X								
+AVGO	Avago Technologies	X															
+AVP	Avon Products	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AVY	Avery Dennison Corp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AW	Allied Waste Industries Inc.								X	X	X	X	X	X	X	X	X
+AWE	AT&T Wireless												X	X	X		
+AXP	American Express Co	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+AYE	Allegheny Energy Inc.					X	X	X	X	X	X	X	X	X	X	X	
+AZA	ALZA Corp.															X	X
+AZO	AutoZone Inc	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BA	Boeing Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BAC	Bank of America Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BAX	Baxter International Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BBBY	Bed Bath & Beyond	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BBT	BB&T Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BBY	Best Buy Co. Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BC	Brunswick Corp.								X	X	X	X	X	X	X	X	X
+BCR	C. R. Bard, Inc	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BDK	Black & Decker						X	X	X	X	X	X	X	X	X	X	X
+BDX	Becton Dickinson	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BEAM	Beam Inc.		X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BEN	Franklin Resources	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BF.B	Brown-Forman Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BFO	BestFoods																X
+BGEN	Biogen Inc.													X	X	X	
+BGG	Briggs & Stratton															X	X
+BHI	Baker Hughes Inc	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BIG	Big Lots Inc.			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BIIB	Biogen Idec, Inc.	X	X	X	X	X	X	X	X	X	X	X	X				
+BJS	BJ Services Co.						X	X	X	X	X	X	X	X			
+BK	BNY Mellon	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BLK	BlackRock	X	X	X	X												
+BLL	Ball Corp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BLS	BellSouth Corp.									X	X	X	X	X	X	X	X
+BMC	BMC Software			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BMET	Biomet Inc.									X	X	X	X	X	X	X	X
+BMS	Bemis		X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BMY	Bristol-Myers Squibb	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BNI	Burlington Northern						X	X	X	X	X	X	X	X	X	X	X
+BOL	Bausch & Lomb Inc.									X	X	X	X	X	X	X	X
+BR	Burlington Resources Inc.										X	X	X	X	X	X	X
+BRCM	Broadcom Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+BRK.B	Berkshire Hathaway	X	X	X	X	X											
+BRL	Barr Pharmaceuticals Inc.								X	X							
+BS	Bethlehem Steel																X
+BSC	Bear Stearns Inc.								X	X	X	X	X	X	X	X	X
+BSX	Boston Scientific	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+BTU	Peabody Energy		X	X	X	X	X	X	X	X							
+BUD	Anheuser-Busch								X	X	X	X	X	X	X	X	X
+BVSN	BroadVision Inc.															X	
+BWA	BorgWarner	X	X	X	X												
+BXP	Boston Properties	X	X	X	X	X	X	X	X	X							
+C	Citigroup Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CA	CA, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CAG	ConAgra Foods Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CAH	Cardinal Health Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CAM	Cameron Int'l Corp.	X	X	X	X	X	X	X									
+CAT	Caterpillar Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CB	Chubb Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CBE	Cooper Industries				X			X	X	X	X	X	X	X	X	X	X
+CBG	CBRE Group	X	X	X	X	X	X	X	X	X							
+CBH	Commerce Bancorp								X	X							
+CBS	CBS Corp.	X	X	X	X	X	X	X	X	X	X						X
+CBSS	Compass Bancshares									X	X	X					
+CC	Circuit City Stores Inc.								X	X	X	X	X	X	X	X	X
+CCE	Coca-Cola Enterprises	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CCI	Crown Castle Int'l Corp.	X	X	X													
+CCK	Crown Cork & Seal																X
+CCL	Carnival Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CCU	Clear Channel Comm's Inc.								X	X	X	X	X	X	X	X	X
+CD	Cendant Corp.										X	X	X	X	X	X	X
+CE	Concord EFS Inc.												X	X	X		
+CEG	Constellation Energy Group				X	X	X	X	X	X	X	X	X	X	X	X	X
+CELG	Celgene Corp.	X	X	X	X	X	X	X	X	X							
+CEN	Ceridian Corp.															X	X
+CEPH	Cephalon Inc.					X	X	X									
+CERN	Cerner	X	X	X	X	X											
+CF	CF Industries Holdings Inc.	X	X	X	X	X	X	X									
+CF (C. O.)	Charter One Financial												X	X	X	X	
+CFC	Countrywide Financial Corp.								X	X	X	X	X	X	X	X	X
+CFN	Carefusion	X	X	X	X	X	X										
+CG	Columbia Energy Group																X
+CGP	Coastal Corp.															X	X
+CHA	Champion International																X
+CHIR	Chiron Corp.										X	X	X	X	X	X	
+CHK	Chesapeake Energy	X	X	X	X	X	X	X	X	X							
+CHRW	C. H. Robinson Worldwide	X	X	X	X	X	X	X	X								
+CI	Cigna Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CIEN	Ciena Corp.							X	X	X	X	X	X	X	X		
+CIN	Cinergy Corp.										X	X	X	X	X	X	X
+CINF	Cincinnati Financial	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CIT	CIT Group Inc.							X	X	X	X	X				X	
+CL	Colgate-Palmolive	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CLF	Cliffs Natural Resources		X	X	X	X	X										
+CLX	The Clorox Company	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CMA	Comerica Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CMB	Chase Manhattan																X
+CMCSA	Comcast Class A Comm.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+CMCSK	Comcast Class A Spec.														X	X	X
+CME	CME Group Inc.	X	X	X	X	X	X	X	X	X							
+CMG	Chipotle Mexican Grill	X	X	X	X												
+CMI	Cummins Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CMS	CMS Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CMVT	Comverse Technology									X	X	X	X	X	X	X	X
+CMX	Caremark Rx Inc.									X	X	X					
+CNC	Conseco Inc.														X	X	X
+CNG	Consolidated Natural Gas																X
+CNP	CenterPoint Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CNX	Consol Energy Inc.	X	X	X	X	X	X	X	X	X							
+CNXT	Conexant Systems														X	X	
+COC	Conoco Inc.														X	X	X
+COF	Capital One Financial	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+COG	Cabot Oil & Gas	X	X	X	X	X	X	X									
+COH	Coach Inc.	X	X	X	X	X	X	X	X	X	X	X					
+COL	Rockwell Collins	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+COMS	3Com Corp.																X
+COP	ConocoPhillips	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+COST	Costco Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+COV	Covidien	X	X	X	X			X	X								
+CPB	Campbell Soup	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CPN	Calpine Corp.											X	X	X	X	X	
+CPQ	COMPAQ Computer														X	X	X
+CPWR	Compuware					X	X	X	X	X	X	X	X	X	X	X	X
+CR	Crane Co.												X	X	X	X	X
+CRM	Salesforce.com	X	X	X	X	X	X	X									
+CS	Cabletron Systems															X	X
+CSC	Computer Sciences Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CSCO	Cisco Systems	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CSR	Central & South West																X
+CSX	CSX Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CTAS	Cintas Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+CTB	Cooper Tire & Rubber Co.										X	X	X	X	X	X	X
+CTL	CenturyLink Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CTSH	Cognizant Technology Sol.	X	X	X	X	X	X	X	X	X							
+CTX	Centex Corp.							X	X	X	X	X	X	X	X	X	X
+CTXS	Citrix Systems	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CVC	Cablevision Systems Corp.	X	X	X	X	X											
+CVG	Convergys Corp.							X	X	X	X	X	X	X	X	X	
+CVH	Coventry Health Care			X	X	X	X	X	X	X	X						
+CVS	CVS Caremark Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+CVX	Chevron Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+D	Dominion Resources	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DAL	Delta Air Lines	X	X									X	X	X	X	X	X
+DCN	Dana Corp.										X	X	X	X	X	X	X
+DD	DuPont	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DDR	DDR Corp.							X	X								
+DDS	Dillard's Inc.								X	X	X	X	X	X	X	X	X
+DE	Deere & Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DELL	Dell, Inc.			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DF	Dean Foods			X	X	X	X	X	X	X							
+DFS	Discover Financial Services	X	X	X	X	X	X	X	X								
+DG	Dollar General	X	X	X						X	X	X	X	X	X	X	X
+DGX	Quest Diagnostics	X	X	X	X	X	X	X	X	X	X	X	X	X			
+DHI	D. R. Horton	X	X	X	X	X	X	X	X	X	X						
+DHR	Danaher Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DIS	The Walt Disney Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DISCA	Discovery Com Class A	X	X	X	X	X											
+DISCK	Discovery Com Class C	X															
+DJ	Dow Jones & Co. Inc.									X	X	X	X	X	X	X	X
+DLPH	Delphi Automotive	X	X	X													
+DLTR	Dollar Tree	X	X	X	X												
+DLX	Deluxe Corp.												X	X	X	X	X
+DNB	Dun & Bradstreet	X	X	X	X	X	X	X									X
+DNR	Denbury Resources Inc.	X	X	X	X	X	X										
+DO	Diamond Offshore Drilling	X	X	X	X	X	X										
+DOV	Dover Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DOW	Dow Chemical	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DPH	Delphi Corp.											X	X	X	X	X	X
+DPS	Dr Pepper Snapple Group	X	X	X	X	X	X	X									
+DRI	Darden Restaurants	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DTE	DTE Energy Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DTV	DirecTV	X	X	X	X	X	X	X	X	X							
+DUK	Duke Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+DV	DeVry, Inc.				X	X	X										
+DVA	DaVita Inc.	X	X	X	X	X	X	X									
+DVN	Devon Energy Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+DYN	Dynegy Inc.							X	X	X	X	X	X	X	X	X	
+EA	Electronic Arts	X	X	X	X	X	X	X	X	X	X	X	X	X			
+EBAY	eBay Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+EC	Engelhard Corp.										X	X	X	X	X	X	X
+ECL	Ecolab Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ED	Consolidated Edison	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EDS	Electronics Data Systems								X	X	X	X	X	X	X	X	X
+EFU	Eastern Enterprises																X
+EFX	Equifax Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EIX	Edison Int'l	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EK	Eastman Kodak Co.						X	X	X	X	X	X	X	X	X	X	X
+EL	Estee Lauder Cos.	X	X	X	X	X	X	X	X	X							
+EMC	EMC Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EMN	Eastman Chemical	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EMR	Emerson Electric	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ENE	Enron Corp.															X	X
+EOG	EOG Resources	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+EOP	Equity Office Properties									X	X	X	X	X	X		
+EP	El Paso Corp.				X	X	X	X	X	X	X	X	X	X	X	X	X
+EQ	Embarq Corp.							X	X	X							
+EQR	Equity Residential	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+EQT	EQT Corporation	X	X	X	X	X	X	X									
+ES	Eversource Energy	X	X	X	X	X	X										
+ESRX	Express Scripts	X	X	X	X	X	X	X	X	X	X	X	X				
+ESS	Essex Property Trust Inc	X															
+ESV	Ensco plc	X	X	X				X	X								
+ETFC	E*Trade Financial Corp.	X	X	X	X	X	X	X	X	X	X	X					
+ETN	Eaton Corporation	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ETR	Entergy Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EW	Edwards Lifesciences	X	X	X	X												
+EXC	Exelon Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+EXPD	Expeditors Int'l	X	X	X	X	X	X	X	X								
+EXPE	Expedia Inc.	X	X	X	X	X	X	X	X								
+F	Ford Motor	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+FAST	Fastenal Co.	X	X	X	X	X	X	X									
+FB	Facebook, Inc.	X	X														
+FBF	FleetBoston Financial												X	X	X	X	X
+FCX	Freeport-McMoRan Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+FDC	First Data Corp.									X	X	X	X	X	X	X	X
+FDO	Family Dollar Stores	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+FDX	FedEx Corporation	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+FE	FirstEnergy Corp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+FFIV	F5 Networks	X	X	X	X	X											
+FHN	First Horizon			X	X	X	X	X	X	X	X	X	X	X			
+FII	Federated Investors				X	X	X	X	X	X	X	X	X				
+FIS	Fidelity Nat. Info. Services	X	X	X	X	X	X	X	X	X							
+FISV	Fiserv Inc	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+FITB	Fifth Third Bancorp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+FJ	Fort James Corp.																X
+FLE	Fleetwood Enterprises																X
+FLIR	FLIR Systems	X	X	X	X	X	X	X									
+FLR	Fluor Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+FLS	Flowserve Corporation	X	X	X	X	X	X	X									
+FMC	FMC Corporation	X	X	X	X	X	X									X	X
+FNM	Fannie Mae (FNMA)								X	X	X	X	X	X	X	X	X
+FOSL	Fossil, Inc.	X	X	X													
+FOXA	Twenty-First Century Fox	X	X	X	X	X	X	X	X	X	X	X					
+FPC	Florida Progress																X
+FRE	Freddie Mac (FHLMC)								X	X	X	X	X	X	X	X	X
+FRX	Forest Laboratories		X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+FSH	Fisher Scientific										X	X					
+FSL.B	Freescale Semiconductor										X	X					
+FSLR	First Solar Inc	X	X	X	X	X	X										
+FSR	Firstar Corporation															X	X
+FTI	FMC Technologies Inc.	X	X	X	X	X	X										
+FTR	Frontier Communications	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+FTU	First Union															X	X
+FWC	Foster Wheeler																X
+G	Gillette Co.											X	X	X	X	X	X
+GAP	Great A&P																X
+GAS	AGL Resources Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GCI	Gannett Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GD	General Dynamics	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GDT	Guidant Co.										X	X	X	X	X	X	X
+GDW	Golden West Financial										X	X	X	X	X	X	X
+GE	General Electric	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GENZ	Genzyme Corp.					X	X	X	X	X	X	X	X	X	X		
+GGP	General Growth Properties	X	X						X								
+GHC	Graham Holdings		X	X	X	X	X	X	X								
+GIC	General Instrument																X
+GILD	Gilead Sciences	X	X	X	X	X	X	X	X	X	X	X					
+GIS	General Mills	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GLK	Great Lakes Chemical											X	X	X	X	X	X
+GLW	Corning Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GM	General Motors	X	X					X	X	X	X	X	X	X	X	X	X
+GMCR	Keurig Green Mountain	X															
+GME	GameStop Corp.	X	X	X	X	X	X	X	X								
+GNW	Genworth Financial Inc.	X	X	X	X	X	X	X	X	X	X						
+GOOG	Google Inc. Class C	X															
+GOOGL	Google Inc. Class A	X	X	X	X	X	X	X	X	X							
+GP	Georgia-Pacific Group											X	X	X	X	X	X
+GPC	Genuine Parts	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GPS	Gap Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GPU	GPU Inc.															X	X
+GR	Goodrich Corp.				X	X	X	X	X	X	X	X	X	X	X	X	X
+GRA	W. R. Grace and Co.																X
+GRMN	Garmin Ltd.	X	X	X													
+GS	Goldman Sachs Group	X	X	X	X	X	X	X	X	X	X	X	X	X			
+GT	Goodyear Tire & Rubber	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GTE	GTE Corp.																X
+GTW	Gateway Inc.										X	X	X	X	X	X	X
+GWW	W. W. Grainger, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+GX	Global Crossing Ltd.															X	X
+H	Harcourt General Inc.															X	X
+HAL	Halliburton Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HAR	Harman Int'l Industries	X	X	X	X	X	X	X	X	X							
+HAS	Hasbro Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HBAN	Huntington Bancshares	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HCA	HCA Inc.										X	X	X	X	X	X	X
+HCBK	Hudson City Bancorp	X	X	X	X	X	X	X	X								
+HCN	Health Care REIT, Inc.	X	X	X	X	X	X										
+HCP	HCP Inc.	X	X	X	X	X	X	X									
+HCR	Manor Care Inc.									X	X	X	X	X	X	X	X
+HD	Home Depot	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HES	Hess Corporation	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HET	Harrah's Entertainment								X	X	X	X	X	X	X	X	X
+HI	Household Int'l													X	X	X	X
+HIG	Hartford Financial Services	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HLT	Hilton Hotels									X	X	X	X	X	X	X	X
+HM	Homestake Mining															X	X
+HMA	Health Management Assoc.									X	X	X	X	X	X		
+HNZ	H. J. Heinz Company			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HOG	Harley-Davidson	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+HON	Honeywell Int'l Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HOT	Starwood Hotels & Res	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+HP	Helmerich & Payne	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HPC	Hercules Inc.								X	X	X	X	X	X	X	X	X
+HPQ	Hewlett-Packard	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HRB	H&R Block, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HRC	HealthSouth Corp.													X	X	X	X
+HRL	Hormel Foods Corp.	X	X	X	X	X	X										
+HRS	Harris Corp.	X	X	X	X	X	X	X									
+HSP	Hospira Inc.	X	X	X	X	X	X	X	X	X	X	X					
+HST	Host Hotels & Resorts	X	X	X	X	X	X	X	X								
+HSY	The Hershey Company	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+HUM	Humana Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+IACI	IAC/InterActiveCorp								X	X							
+IBM	IBM Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ICE	Intercontinental Exchange	X	X	X	X	X	X	X	X								
+IFF	Intl Flavors & Fragrances	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+IGT	International Game Tech.		X	X	X	X	X	X	X	X	X	X	X	X	X		
+IKN	IKON Office Solutions, Inc.																X
+IMNX	Immunex Corp.														X		
+INTC	Intel Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+INTU	Intuit Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+IP	International Paper Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+IPG	Interpublic Group	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+IR	Ingersoll-Rand PLC	X	X	X	X	X		X	X	X	X	X	X	X	X	X	X
+IRM	Iron Mountain Inc.	X	X	X	X	X	X										
+ISRG	Intuitive Surgical Inc.	X	X	X	X	X	X	X									
+ITT	ITT Corp.					X	X	X	X	X	X	X	X	X	X	X	X
+ITW	Illinois Tool Works	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+IVZ	Invesco Ltd.	X	X	X	X	X	X	X									
+JBL	Jabil Circuit		X	X	X	X	X	X	X	X	X	X	X	X	X		
+JCI	Johnson Controls	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+JCP	J.C. Penney			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+JDSU	JDS Uniphase			X	X	X	X	X	X	X	X	X	X	X	X	X	
+JEC	Jacobs Engineering Group	X	X	X	X	X	X	X	X								
+JHF	John Hancock Financial												X	X	X		
+JNJ	Johnson & Johnson	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+JNPR	Juniper Networks	X	X	X	X	X	X	X	X	X							
+JNS	Janus Capital Group					X	X	X	X	X	X	X	X	X	X	X	
+JNY	Jones Apparel Group Inc.							X	X	X	X	X	X	X	X		
+JOS	Jostens Inc.																X
+JOY	Joy Global Inc.	X	X	X	X												
+JP	Jefferson-PilotCorp.										X	X	X	X	X	X	X
+JPM	JPMorgan Chase & Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+JWN	Nordstrom	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+K	Kellogg Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KBH	KB Home							X	X	X	X	X	X	X	X	X	X
+KEY	KeyCorp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KG	King Pharmaceuticals Inc.						X	X	X	X	X	X	X	X	X	X	
+KIM	Kimco Realty	X	X	X	X	X	X	X	X	X							
+KLAC	KLA-Tencor Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KM	Kmart														X	X	X
+KMB	Kimberly-Clark	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KMG	Kerr-McGee Corp.										X	X	X	X	X	X	X
+KMI	Kinder Morgan	X	X	X						X	X	X	X	X	X	X	
+KMX	Carmax Inc.	X	X	X	X	X											
+KO	The Coca Cola Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KORS	Michael Kors Holdings	X	X														
+KR	Kroger Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KRB	MBNA Corp.											X	X	X	X	X	X
+KRFT	Kraft Foods Group	X	X	X													
+KRI	Knight-Ridder Inc.										X	X	X	X	X	X	X
+KSE	Keyspan Energy									X	X	X	X	X	X	X	
+KSS	Kohl's Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+KSU	Kansas City Southern	X	X														X
+L	Loews Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LB	L Brands Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LDG	Longs Drug Stores															X	X
+LEG	Leggett & Platt	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LEH	Lehman Brothers Holdings								X	X	X	X	X	X	X	X	X
+LEN	Lennar Corp.	X	X	X	X	X	X	X	X	X	X						
+LH	LabCorp	X	X	X	X	X	X	X	X	X	X	X					
+LIFE	Life Technologies		X	X	X	X	X	X									
+LIZ	Liz Claiborne Inc.								X	X	X	X	X	X	X	X	X
+LLL	L-3 Comm's Holdings	X	X	X	X	X	X	X	X	X	X	X					
+LLTC	Linear Technology Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+LLY	Eli Lilly and Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LM	Legg Mason	X	X	X	X	X	X	X	X	X							
+LMT	Lockheed Martin Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LNC	Lincoln National	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LO	Lorillard Inc.	X	X	X	X	X	X	X									
+LOW	Lowe's Cos.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LPX	Louisiana-Pacific Corp.										X	X	X	X	X	X	X
+LRCX	Lam Research	X	X	X													
+LSI	LSI Corporation		X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LU	Lucent Technologies										X	X	X	X	X	X	X
+LUK	Leucadia National Corp.	X	X	X	X	X	X	X	X								
+LUV	Southwest Airlines	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+LVLT	Level 3 Comm's	X															
+LXK	Lexmark Int'l Inc				X	X	X	X	X	X	X	X	X	X	X	X	X
+LYB	LyondellBasell	X	X	X													
+M	Macy's Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MA	Mastercard Inc.	X	X	X	X	X	X	X									
+MAC	Macerich	X	X														
+MAR	Marriott Int'l.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MAS	Masco Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MAT	Mattel Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MAY	May Dept. Stores											X	X	X	X	X	X
+MBI	MBIA Corp.							X	X	X	X	X	X	X	X	X	X
+MCD	McDonald's Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MCHP	Microchip Technology	X	X	X	X	X	X	X	X								
+MCK	McKesson Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MCO	Moody's Corp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+MDLZ	Mondelez Int'l	X	X	X	X	X	X	X	X								
+MDR	McDermott Int'l													X	X	X	X
+MDT	Medtronic Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MEA	Mead Corp.														X	X	X
+MEDI	MedImmune Inc.									X	X	X	X	X	X	X	
+MEE	Massey Energy Co.					X	X	X									X
+MEL	Mellon Financial									X	X	X	X	X	X	X	X
+MER	Merrill Lynch								X	X	X	X	X	X	X	X	X
+MERQE	Mercury Interactive										X	X	X	X	X	X	
+MET	MetLife Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+MFE	McAfee Inc.					X	X	X									
+MHFI	McGraw Hill Financial	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MHK	Mohawk Industries	X	X														
+MHS	Medco Health Solutions				X	X	X	X	X	X	X	X	X				
+MI	Marshall & Iisley Corp.					X	X	X	X	X	X	X	X	X			
+MIL	Millipore Inc.						X	X	X	X	X	X	X	X	X	X	X
+MIR	Mirant Corp													X	X		
+MIR (M. R.)	Mirage Resorts																X
+MJN	Mead Johnson	X	X	X	X	X	X										
+MKC	McCormick & Co.	X	X	X	X	X	X	X	X	X	X	X	X				
+MKG	Mallinckrodt Inc.																X
+MLM	Martin Marietta	X															
+MMC	Marsh & McLennan	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MMI	Motorola Mobility				X	X	X	X	X	X	X	X	X	X	X	X	X
+MMM	3M Company	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MNK	Mallinckrodt plc	X															
+MNST	Monster Beverage	X	X	X													
+MO	Altria Group Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MOLX	Molex Inc.			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MON	Monsanto Co.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+MOS	The Mosaic Co.	X	X	X	X												
+MPC	Marathon Petroleum	X	X	X	X												
+MRK	Merck & Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MRO	Marathon Oil Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MS	Morgan Stanley	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MSFT	Microsoft Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MSI	Motorola Solutions Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MTB	M&T Bank Corp.	X	X	X	X	X	X	X	X	X	X	X					
+MTC	Monsanto Co.																X
+MTG	MGIC Investment								X	X	X	X	X	X	X	X	X
+MTW	The Manitowoc Company							X	X								
+MU	Micron Technology	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+MUR	Murphy Oil	X	X	X	X	X	X	X	X	X	X						
+MWV	MeadWestvaco Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+MWW	Monster Worldwide Inc.					X	X	X	X	X	X	X	X	X	X		
+MXIM	Maxim Integrated									X	X	X	X	X	X	X	
+MYG	Maytag Corp.										X	X	X	X	X	X	X
+MYL	Mylan Inc.	X	X	X	X	X	X	X	X	X	X	X					
+MZ	Milacron Inc.																X
+N	Inco Ltd.														X	X	X
+NAV	Navistar Int'l										X	X	X	X	X	X	X
+NAVI	Navient	X															
+NBL	Noble Energy Inc.	X	X	X	X	X	X	X	X								
+NBR	Nabors Industries Ltd.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+NC	NACCO Industries																X
+NCC	National City Corp.								X	X	X	X	X	X	X	X	X
+NCE	New Century Energies																X
+NCR	NCR Corp.									X	X	X	X	X	X	X	X
+NDAQ	NASDAQ OMX Group	X	X	X	X	X	X	X									
+NE	Noble Corp.	X	X	X	X			X	X	X	X	X	X	X	X		
+NEE	NextEra Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NEM	Newmont Mining Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NFB	North Fork Bancorp. Inc.										X	X	X	X			
+NFLX	Netflix Inc.	X	X	X	X	X											
+NFX	Newfield Exploration Co.	X	X	X	X	X											
+NGH	Nabisco Group Hldgs.																X
+NI	NiSource Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+NKE	Nike, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NLSN	Nielsen Holdings	X	X														
+NMK	Niagara Mohawk Hldgs. Inc.														X	X	X
+NOC	Northrop Grumman Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NOV	National Oilwell Varco Inc.	X	X	X	X	X	X	X	X	X	X						
+NOVL	Novell, Inc.					X	X	X	X	X	X	X	X	X	X	X	X
+NRG	NRG Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NSC	Norfolk Southern Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NSI	National Service Ind.															X	X
+NSM	National Semiconductor					X	X	X	X	X	X	X	X	X	X	X	X
+NT	Nortel Networks														X	X	X
+NTAP	NetApp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NTRS	Northern Trust Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NUE	Nucor Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NVDA	Nvidia Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+NVLS	Novellus Systems				X	X	X	X	X	X	X	X	X	X	X	X	
+NWL	Newell Rubbermaid Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+NWSA	News Corporation	X	X														
+NXTL	Nextel Communications											X	X	X	X	X	X
+NYT	The New York Times Co.						X	X	X	X	X	X	X	X	X	X	X
+NYX	NYSE Euronext			X	X	X	X	X	X								
+OAT	Quaker Oats															X	X
+ODP	Office Depot Inc.						X	X	X	X	X	X	X	X	X	X	X
+OI	Owens-Illinois Inc.	X	X	X	X	X	X	X									X
+OK	Old Kent Financial															X	X
+OKE	ONEOK, Inc.	X	X	X	X	X										X	X
+OMC	Omnicom Group	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+OMX	OfficeMax Inc.								X	X	X	X	X	X	X	X	X
+ONE	Bank One Corp.												X	X	X	X	X
+ORCL	Oracle Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ORLY	O'Reilly Automotive	X	X	X	X	X	X										
+OWC	Owens Corning																X
+OXY	Occidental Petroleum	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PALM	Palm Inc.														X	X	
+PAYX	Paychex Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PBCT	People's United Bank	X	X	X	X	X	X	X									
+PBG	Pepsi Bottling Group Inc.						X	X	X	X	X	X	X	X	X		
+PBI	Pitney-Bowes	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PBY	Pep Boys																X
+PCAR	PACCAR Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PCG	PG&E Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PCH	Potlatch Corp.															X	X
+PCL	Plum Creek Timber Co.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+PCLN	Priceline.com Inc	X	X	X	X	X	X										
+PCP	Precision Castparts	X	X	X	X	X	X	X	X								
+PCS	MetroPCS			X	X	X	X										
+PCS (Sprint)	Sprint PCS												X	X	X	X	X
+PD	Phelps Dodge									X	X	X	X	X	X	X	X
+PDCO	Patterson Companies	X	X	X	X	X	X	X	X	X	X						
+PDG	Placer Dome Inc.														X	X	X
+PEG	Public Serv. Enterprise Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PEP	PepsiCo Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PETM	PetSmart, Inc.	X	X	X													
+PFE	Pfizer Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PFG	Principal Financial Group	X	X	X	X	X	X	X	X	X	X	X	X	X			
+PG	Procter & Gamble	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PGL	Peoples Energy									X	X	X	X	X	X	X	X
+PGN	Progress Energy Inc.				X	X	X	X	X	X	X	X	X	X	X	X	X
+PGR	Progressive Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PH	Parker-Hannifin	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PHA	Pharmacia Corp.													X	X	X	
+PHM	Pulte Homes Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PKI	PerkinElmer	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PLD	Prologis	X	X	X	X	X	X	X	X	X	X	X	X				
+PLL	Pall Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PM	Philip Morris Int'l	X	X	X	X	X	X	X									
+PMCS	PMC-Sierra									X	X	X	X	X	X		
+PMTC	Parametric Technology										X	X	X	X	X	X	X
+PNC	PNC Financial Services	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PNR	Pentair Ltd.	X	X	X													
+PNU	Pharmacia & Upjohn Inc.																X
+PNW	Pinnacle West Capital	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+POM	Pepco Holdings Inc.	X	X	X	X	X	X	X	X								
+PPG	PPG Industries	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PPL	PPL Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PRD	Polaroid Corp.																X
+PRGO	Perrigo	X	X	X	X												
+PRU	Prudential Financial	X	X	X	X	X	X	X	X	X	X	X	X	X			
+PSA	Public Storage	X	X	X	X	X	X	X	X	X	X						
+PSFT	PeopleSoft Inc.												X	X	X	X	X
+PSX	Phillips 66	X	X	X													
+PTV	Pactiv LLC						X	X	X	X	X	X	X	X	X	X	X
+PVH	PVH Corp.	X	X														
+PVN	Providian Financial											X	X	X	X	X	X
+PWER	Power-One, Inc.											X	X	X	X	X	
+PWJ	PainWebber Group																X
+PWR	Quanta Services Inc.	X	X	X	X	X	X										
+PX	Praxair Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+PXD	Pioneer Natural Resources	X	X	X	X	X	X	X									
+Q	Qwest Communications					X	X	X	X	X	X	X	X	X	X	X	
+QCOM	Qualcomm, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+QEP	QEP Resources	X	X	X	X	X											
+QLGC	QLogic Corp.					X	X	X	X	X	X	X	X	X	X	X	
+QTRN	Quintiles Transnational													X	X	X	X
+R	Ryder System	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+RAD	Rite Aid Corp.																X
+RAI	Reynolds American Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+RAL	Ralston Purina Co.															X	X
+RATL	Rational Software													X			
+RBK	Reebok Int'l										X	X	X	X	X	X	X
+RCL	Royal Caribbean Cruises	X															
+RD	Royal Dutch Petroleum														X	X	X
+RDC	Rowan Companies plc		X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+REGN	Regeneron	X	X														
+RF	Regions Financial Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+RHI	Robert Half International	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+RHT	Red Hat Inc.	X	X	X	X	X	X										
+RIG	Transocean	X	X						X	X	X	X	X	X	X	X	X
+RKY	Adolph Coors											X	X	X	X	X	X
+RL	Polo Ralph Lauren Corp.	X	X	X	X	X	X	X	X								
+RLGY	Realogy Corp.									X							
+RLM	Reynolds Metals																X
+RML	Russell Corp.																X
+ROH	Rohm and Haas Co.							X	X	X	X	X	X	X	X	X	X
+ROK	Rockwell Automation Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ROP	Roper Industries	X	X	X	X	X	X										
+ROST	Ross Stores	X	X	X	X	X	X										
+RRC	Range Resources Corp.	X	X	X	X	X	X	X	X								
+RRD	R.R. Donnelley				X	X	X	X	X	X	X	X	X	X	X	X	X
+RSG	Republic Services Inc.	X	X	X	X	X	X	X									
+RSH	RadioShack Corp.					X	X	X	X	X	X	X	X	X	X	X	X
+RTN	Raytheon Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+S	Sprint Nextel Corp.			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+S (Sears)	Sears, Roebuck & Co.											X	X	X	X	X	X
+SAF	Safeco Corp.								X	X	X	X	X	X	X	X	X
+SAIC	SAIC			X	X	X	X										
+SANM	Sanmina Corp.									X	X	X	X	X	X	X	
+SAPE	Sapient Corp.														X	X	
+SBL	Symbol Technologies									X	X	X	X	X	X	X	
+SBUX	Starbucks Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+SCG	SCANA Corp.	X	X	X	X	X	X	X									
+SCHW	Charles Schwab Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SDS	SunGard Data Systems											X	X	X			
+SE	Spectra Energy Corp.	X	X	X	X	X	X	X	X	X							
+SEBL	Siebel Systems Inc.										X	X	X	X	X	X	
+SEE	Sealed Air Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SEG	Seagate Technology																X
+SFA	Scientific Atlanta Inc.										X	X	X	X	X	X	X
+SGI	Silicon Graphics																X
+SGP	Schering-Plough Corp.							X	X	X	X	X	X	X	X	X	X
+SHLD	Sears Holding Corporation				X	X	X	X	X	X	X						
+SHW	Sherwin-Williams Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SIAL	Sigma-Aldrich Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SII	Smith International Inc.						X	X	X	X							
+SJM	J.M. Smucker Co.	X	X	X	X	X	X	X									
+SLB	Schlumberger Ltd.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SLE	Sara Lee Corp.				X	X	X	X	X	X	X	X	X	X	X	X	X
+SLM	SLM Corp.		X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SLR	Solectron Corp.									X	X	X	X	X	X	X	X
+SMI	Springs Industries Inc.																X
+SMS	Shared Medical Systems																X
+SNA	Snap-On Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SNDK	SanDisk Corporation	X	X	X	X	X	X	X	X	X							
+SNI	Scripps Networks Int.	X	X	X	X	X	X	X									
+SNV	Synovus Financial Corp.									X	X	X	X	X	X	X	X
+SO	Southern Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SOTR	South Trust Corp.												X	X	X	X	X
+SOV	Sovereign Bancorp.							X	X	X	X	X					
+SPG	Simon Property Group Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X			
+SPLS	Staples Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SRCL	Stericycle Inc.	X	X	X	X	X	X	X									
+SRE	Sempra Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SRV	Service Corp. Int'l																X
+SSP	E.W. Scripps Co.								X	X	X						
+STI	SunTrust Banks	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+STJ	St. Jude Medical, Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+STR	Questar Corp.						X	X	X	X							
+STT	State Street Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+STX	Seagate Technology	X	X	X													
+STZ	Constellation Brands	X	X	X	X	X	X	X	X	X	X						
+SUB	Summit Bancorp															X	X
+SUN	Sunoco Inc.				X	X	X	X	X	X	X	X	X	X	X	X	X
+SVU	Supervalu Inc.				X	X	X	X	X	X	X	X	X	X	X	X	X
+SWK	Stanley Black & Decker	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SWN	Southwestern Energy	X	X	X	X	X	X	X									
+SWY	Safeway Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+SYK	Stryker Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+SYMC	Symantec Corp.	X	X	X	X	X	X	X	X	X	X	X	X				
+SYY	Sysco Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+T	AT&T Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+T (Old)	AT&T Corp. (Old)											X	X	X	X	X	X
+TAP	Molson Coors Brewing Co.	X	X	X	X	X	X	X	X	X	X						
+TAP.B	Travelers Property Casualty												X	X			
+TDC	Teradata Corp.	X	X	X	X	X	X	X	X								
+TE	TECO Energy	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+TEG	Integrys Energy Group Inc.	X	X	X	X	X	X	X	X								
+TEK	Tektronix Inc.									X	X	X	X	X	X	X	X
+TEL	TE Connectivity Ltd.	X	X	X	X			X	X								
+TER	Teradyne			X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TEX	Terex Corp.								X	X							
+TGT	Target Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+THC	Tenet Healthcare Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TIE	Titanium Metals				X	X	X	X	X								
+TIF	Tiffany & Co.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	
+TIN	Temple-Inland Inc.									X	X	X	X	X	X	X	X
+TJX	TJX Companies Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TKR	Timken Co.															X	X
+TLAB	Tellabs Inc.					X	X	X	X	X	X	X	X	X	X	X	X
+TMC	Times Mirror																X
+TMK	Torchmark Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TMO	Thermo Fisher Scientific	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TNB	Thomas & Betts												X	X	X	X	X
+TOS	Tosco Corp.															X	X
+TOY	Toys "R" Us, Inc.											X	X	X	X	X	X
+TRB	Tribune Co.									X	X	X	X	X	X	X	X
+TRIP	TripAdvisor	X	X	X	X												
+TROW	T. Rowe Price Group	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TRV	The Travelers Companies	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TRW	TRW Inc.														X	X	X
+TSCO	Tractor Supply Co.	X															
+TSG	Sabre Holding Corp.									X	X	X	X	X	X	X	
+TSN	Tyson Foods	X	X	X	X	X	X	X	X	X	X						
+TSO	Tesoro Petroleum Co.	X	X	X	X	X	X	X	X								
+TSS	Total System Services	X	X	X	X	X	X	X	X								
+TT	Trane Inc.								X	X	X	X	X	X			
+TUP	Tupperware Corp.												X	X	X	X	X
+TWC	Time Warner Cable Inc.	X	X	X	X	X	X										
+TWX	Time Warner Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TX	Texaco Inc.															X	X
+TXN	Texas Instruments	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TXT	Textron Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+TXU	TXU Corp.									X	X	X	X	X	X	X	X
+TYC	Tyco Int'l	X	X	X	X	X		X	X	X	X	X	X	X	X	X	X
+U	USAirways Group Inc.														X	X	X
+UA	Under Armour	X															
+UCL	Unocal Corp.											X	X	X	X	X	X
+UCM	Unicom Corp.																X
+UHS	Universal Health Services	X															
+UIS	Unisys Corp.								X	X	X	X	X	X	X	X	X
+UK	Union Carbide															X	X
+UMG	MediaOne Group Inc.																X
+UN	Unilevr N.V.														X	X	X
+UNH	United Health Group Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+UNM	Unum Group	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+UNP	Union Pacific	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+UPC	Union Planters Corp.												X	X	X	X	X
+UPR	Union Pacific Resources																X
+UPS	United Parcel Service	X	X	X	X	X	X	X	X	X	X	X	X	X			
+URBN	Urban Outfitters	X	X	X	X	X											
+URI	United Rentals, Inc.	X															
+USB	U.S. Bancorp	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+UST	UST Inc.							X	X	X	X	X	X	X	X	X	X
+USW	US West																X
+UTX	United Technologies	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+UVN	Univision Communications									X	X	X	X	X	X		
+V	Visa Inc.	X	X	X	X	X	X										
+VAR	Varian Medical Systems	X	X	X	X	X	X	X	X								
+VC	Visteon Corp.											X	X	X	X	X	
+VFC	V.F. Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+VIAB	Viacom Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+VLO	Valero Energy	X	X	X	X	X	X	X	X	X	X	X					
+VMC	Vulcan Materials	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+VNO	Vornado Realty Trust	X	X	X	X	X	X	X	X	X	X						
+VO	Seagram Co. Ltd.																X
+VRSN	Verisign Inc.	X	X	X	X	X	X	X	X	X							
+VRTS	Veritas Software											X	X	X	X	X	
+VRTX	Vertex Pharmaceuticals Inc.	X	X														
+VTR	Ventas Inc.	X	X	X	X	X	X										
+VTSS	Vitesse Semiconductor														X	X	
+VZ	Verizon Communications	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+W	Westvaco Corp.														X	X	X
+WAMUQ	Washington Mutual Inc.								X	X	X	X	X	X	X	X	X
+WAT	Waters Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+WB	Wachovia Corp.								X	X	X	X	X	X	X	X	X
+WBA	Walgreens Boots Alliance	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WCOM	WorldCom														X	X	X
+WDC	Western Digital	X	X	X	X	X	X										
+WEC	Wisconsin Energy Corp.	X	X	X	X	X	X	X									
+WEN	Wendy's International Inc.								X	X	X	X	X	X	X	X	X
+WFC	Wells Fargo	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WFM	Whole Foods Market	X	X	X	X	X	X	X	X	X	X						
+WFR	MEMC Electronic Materials					X	X	X	X								
+WFT	Weatherford Int'l Ltd.							X	X	X	X						
+WHR	Whirlpool Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WIN	Windstream Comm's	X	X	X	X	X	X	X	X	X							
+WIN (W-D)	Winn-Dixie												X	X	X	X	X
+WLA	Warner-Lambert																X
+WLL	Willamette Industries														X	X	X
+WLP	WellPoint Health Networks												X	X	X	X	X
+WM	Waste Management Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WMB	Williams Cos.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WMT	Wal-Mart Stores	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WOR	Worthington Industries												X	X	X	X	X
+WPX	WPX Energy Inc		X	X	X												
+WU	Western Union Co.	X	X	X	X	X	X	X	X	X							
+WWY	Wrigley Co.								X	X	X	X	X	X	X	X	X
+WY	Weyerhaeuser Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+WYE	Wyeth Corp.							X	X	X	X	X	X	X	X	X	X
+WYN	Wyndham Worldwide	X	X	X	X	X	X	X	X	X							
+WYNN	Wynn Resorts Ltd.	X	X	X	X	X	X	X									
+X	U.S. Steel Corp.		X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+XEC	Cimarex Energy	X															
+XEL	Xcel Energy Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+XL	XL Capital	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+XLNX	Xilinx Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+XOM	Exxon Mobil Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+XRAY	Dentsply Int'l	X	X	X	X	X	X	X									
+XRX	Xerox Corp.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+XTO	XTO Energy Inc.						X	X	X	X	X	X					
+XYL	Xylem Inc.	X	X	X	X												
+YHOO	Yahoo Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+YUM	Yum! Brands Inc.	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X	X
+ZION	Zions Bancorp	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+ZMH	Zimmer Holdings	X	X	X	X	X	X	X	X	X	X	X	X	X	X		
+ZTS	Zoetis, Inc.	X	X														

@@ -92,7 +92,9 @@ DO_REMOTE = {
     'run_experiments': True,
 }
 
-if HOST == 'lnyang-mn1':
+if TEST:
+  DO = DO_REMOTE
+elif HOST == 'lnyang-mn1':
   DO = DO_LOCAL
 else:
   DO = DO_REMOTE

@@ -15,9 +15,20 @@ else:
 
 RUN_ID = '20150701'
 EXPERIMENTS = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
 ]
 
 MARKETS = ['R3000', 'SP500']
+
+TEST = True
 DRY_RUN = False
 
 # For features, we look at many time windows, and we do not
@@ -35,8 +46,10 @@ MEMBERSHIP = 'SP500'
 
 CODE_DIR = '%s/qd2' % HOST_DIR
 
-BASE_DIR = '%s/data/runs' % HOST_DIR
-RUN_DIR = '%s/%s' % (BASE_DIR, RUN_ID)
+if TEST:
+  RUN_DIR = '%s/testdata' % HOST_DIR
+else:
+  RUN_DIR = '%s/data/runs/%s' % (HOST_DIR, RUN_ID)
 
 SYMBOL_DIR = '%s/symbols' % RUN_DIR
 

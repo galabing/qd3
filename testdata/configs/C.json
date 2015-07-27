@@ -1,0 +1,8 @@
+{
+  "features": "sf1 + yahoo + yahoo-volume + yahoo-SP500 + sector + industry",
+  "label": "yahoo + SP500",
+  "train_filter": "",
+  "predict_filter": "",
+  "start_date": "200412",
+  "end_date": "201407"
+}

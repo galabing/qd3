@@ -1,0 +1,8 @@
+{
+  "features": "sf1 + yahoo + yahoo-R3000 + sector",
+  "label": "yahoo + R3000",
+  "train_filter": "",
+  "predict_filter": "",
+  "start_date": "200412",
+  "end_date": "201407"
+}

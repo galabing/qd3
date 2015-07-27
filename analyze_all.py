@@ -90,15 +90,13 @@ def writeKs(data, ks, output_file):
     for i in range(len(ks)):
       k = ks[i]
       if k > 0:
-        assert len(items) >= k
         p = 0
-        q = k
+        q = min(len(items), k)
       elif k == 0:
         p = 0
         q = len(items)
       else:
-        assert len(items) >= -k
-        p = len(items) + k
+        p = max(0, len(items) + k)
         q = len(items)
       gain = sum(items[p:q]) / (q-p)
       gains[i] += gain

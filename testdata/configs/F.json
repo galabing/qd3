@@ -1,0 +1,8 @@
+{
+  "features": "sf1 + yahoo + yahoo-SP500 + sector",
+  "label": "yahoo + SP500",
+  "train_filter": "",
+  "predict_filter": "min_raw_price=50",
+  "start_date": "200412",
+  "end_date": "201407"
+}

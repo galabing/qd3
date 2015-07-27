@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 """ Checks downloaded yahoo files, count by:
     - invalid status (eg, 'empty', 'bad_header', etc)
