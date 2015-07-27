@@ -119,7 +119,8 @@ def main():
     meta = prepareData(date, args.data_file, args.label_file, args.meta_file,
                        args.predict_meta_file, TMP_DATA_FILE)
     data = numpy.loadtxt(TMP_DATA_FILE)
-    assert data.shape[0] == len(meta)
+    assert data.shape[0] == len(meta), 'inconsistent data size: %d vs %d' % (
+        data.shape[0], len(meta))
 
     with open(model_file, 'rb') as fp:
       model = pickle.load(fp)

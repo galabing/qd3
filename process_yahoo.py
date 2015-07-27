@@ -7,7 +7,8 @@
     adjvol).  We don't rely on (adj)vol much so this is okay for now.
 
     For price and adjprice, it's just the closing value of the day.
-    For vol and adjvol, it's the average value across the previous month.
+    For vol and adjvol, it's the average value across the previous
+    trading month.
 """
 
 import argparse
