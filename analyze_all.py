@@ -2,34 +2,8 @@
 
 # Adapted from qd (Q-analyze.py and analyze_results.py)
 
+from config import *
 import argparse
-
-KS = [1, 3, 5, 10, 30, 50, 100, 0, -100, -50, -30, -10, -5, -3, -1]
-BUCKETS_LIST = [10, 30, 100]
-# [[max_look, max_pick, max_hold] ...]
-# if max_look < 0: no limit
-# if max_hold < 0: no limit
-# if max_pick < 0: pick bottom-ranked stocks (to simulate short)
-TRADE_CONFIGS = [
-    # long
-    [-1, 5, 1],
-    [-1, 5, 3],
-    [-1, 5, 10],
-    [-1, 5, -1],
-    [10, 5, 1],
-    [10, 5, 3],
-    [10, 5, 10],
-    [10, 5, -1],
-    # short
-    [-1, -5, 1],
-    [-1, -5, 3],
-    [-1, -5, 10],
-    [-1, -5, -1],
-    [10, -5, 1],
-    [10, -5, 3],
-    [10, -5, 10],
-    [10, -5, -1],
-]
 
 def readData(input_file):
   # date => [[ticker, gain, score] ...]
@@ -184,7 +158,7 @@ def updateTrans(date, items, months, max_look, max_pick, max_hold, buys, record)
       holds[ticker] += 1
   i, j = 0, 0
   trans = []
-  while i < abs(max_pick) and (max_look < 0 or j < max_look):
+  while i < abs(max_pick) and (max_look < 0 or j < max_look) and j < len(items):
     if max_pick > 0:
       ticker, gain, score = items[j]
     else:

@@ -231,7 +231,7 @@ def evaluateModel(model_file, data_file, label_file):
   yp.sort(key=lambda item: item[1], reverse=True)
 
   recall_denom = sum(y)
-  for perc in [1, 10, 100]:
+  for perc in EVAL_PERCS:
     end = int(X.shape[0] * perc / 100)
     assert end > 0
     num = 0.0
@@ -293,17 +293,11 @@ def trainModels(experiment_dir, config_map, train_meta_file):
       util.run(cmd)
       result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
       # Keep in sync with evaluateModel().
-      print >> fp, '\t'.join([
-          date,
-          '%.4f' % result['f1'],
-          '%.4f' % result['auc'],
-          '%.4f' % result['1perc-precision'],
-          '%.4f' % result['1perc-recall'],
-          '%.4f' % result['10perc-precision'],
-          '%.4f' % result['10perc-recall'],
-          '%.4f' % result['100perc-precision'],
-          '%.4f' % result['100perc-recall'],
-      ])
+      values = [date, '%.4f' % result['f1'], '%.4f' % result['auc']]
+      for perc in EVAL_PERCS:
+        values.append('%.4f' % result['%dperc-precision' % perc])
+        values.append('%.4f' % result['%dperc-recall' % perc])
+      print >> fp, '\t'.join(values)
       fp.flush()
 
 def predict(experiment_dir, config_map, predict_meta_file):

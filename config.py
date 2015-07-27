@@ -44,12 +44,43 @@ LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
 PREDICTION_WINDOW = 12
 MEMBERSHIP = 'SP500'
 
+# [[max_look, max_pick, max_hold] ...]
+# if max_look < 0: no limit
+# if max_hold < 0: no limit
+# if max_pick < 0: pick bottom-ranked stocks (to simulate short)
+TRADE_CONFIGS = [
+    # long
+    [-1, 5, 1],
+    [-1, 5, 3],
+    [-1, 5, 10],
+    [-1, 5, -1],
+    [10, 5, 1],
+    [10, 5, 3],
+    [10, 5, 10],
+    [10, 5, -1],
+    # short
+    [-1, -5, 1],
+    [-1, -5, 3],
+    [-1, -5, 10],
+    [-1, -5, -1],
+    [10, -5, 1],
+    [10, -5, 3],
+    [10, -5, 10],
+    [10, -5, -1],
+]
+
 CODE_DIR = '%s/qd2' % HOST_DIR
 
 if TEST:
-  RUN_DIR = '%s/testdata' % HOST_DIR
+  RUN_DIR = '%s/testdata' % CODE_DIR
+  EVAL_PERCS = [10, 100]
+  KS = [1, 3, 5, -5, -3, -1]
+  BUCKETS_LIST = [2]
 else:
   RUN_DIR = '%s/data/runs/%s' % (HOST_DIR, RUN_ID)
+  EVAL_PERCS = [1, 10, 100]
+  KS = [1, 3, 5, 10, 30, 50, 100, 0, -100, -50, -30, -10, -5, -3, -1]
+  BUCKETS_LIST = [10, 30, 100]
 
 SYMBOL_DIR = '%s/symbols' % RUN_DIR
 
