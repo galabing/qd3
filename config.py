@@ -74,7 +74,7 @@ CODE_DIR = '%s/qd2' % HOST_DIR
 if TEST:
   RUN_DIR = '%s/testdata' % CODE_DIR
   EVAL_PERCS = [10, 100]
-  KS = [1, 3, 5, -5, -3, -1]
+  KS = [1, 3, 5, 0, -5, -3, -1]
   BUCKETS_LIST = [2]
 else:
   RUN_DIR = '%s/data/runs/%s' % (HOST_DIR, RUN_ID)
