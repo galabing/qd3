@@ -29,7 +29,7 @@ import util
 
 HEADERS = ['Ticker', 'Name', 'CUSIP', 'ISIN', 'Currency', 'Sector', 'Industry',
            'Last Updated', 'Prior Tickers', 'Ticker Change Date',
-           'Related Tickers', 'Exchange']
+           'Related Tickers', 'Exchange', 'SIC']
 TICKER_INDEX = HEADERS.index('Ticker')
 SECTOR_INDEX = HEADERS.index('Sector')
 INDUSTRY_INDEX = HEADERS.index('Industry')

@@ -13,7 +13,7 @@ else:
 ## Constants ##
 ###############
 
-RUN_ID = '20150701'
+RUN_ID = '20150801'
 EXPERIMENTS = [
     'A',
     'B',
@@ -28,7 +28,7 @@ EXPERIMENTS = [
 
 MARKETS = ['R3000', 'SP500']
 
-TEST = True
+TEST = False
 DRY_RUN = False
 
 # For features, we look at many time windows, and we do not
