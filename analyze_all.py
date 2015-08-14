@@ -174,16 +174,13 @@ def updateTrans(date, items, months, max_look, max_pick, max_hold, buys, record)
   buys[date] = trans
 
 def writeTrans(data, hold_period, max_look, max_pick, max_hold,
-               market_gain_file, output_file):
+               market, output_file):
   buys = dict()  # date => [[ticker, gain, score], ...]
   record = []  # [[ticker, buy_date, sale_date], ...]
   for date in sorted(data.keys()):
     items = data[date]
     updateTrans(date, items, hold_period, max_look, max_pick, max_hold,
                 buys, record)
-  market = None
-  if market_gain_file:
-    market = readMarketGains(market_gain_file)
   with open(output_file, 'w') as fp:
     print >> fp, '\t'.join([
         'date', 'buys', 'total_hold', 'max_hold',
@@ -213,6 +210,21 @@ def writeTrans(data, hold_period, max_look, max_pick, max_hold,
           date, str(len(trans)), str(len(hold)), str(max_hold), mh_ticker,
           '%.2f%%' % (gain*100), market_gain])
 
+def writeTopK(data, market, topk, output_file):
+  with open(output_file, 'w') as fp:
+    print >> fp, '\t'.join([
+        'date', 'ticker', 'score', 'gain', 'market'])
+    for date in sorted(data.keys()):
+      items = data[date]
+      assert len(items) >= topk
+      market_gain = '-'
+      if market is not None:
+        market_gain = '%.2f%%' % (market[date] * 100)
+      for i in range(topk):
+        ticker, gain, score = items[i]
+        print >> fp, '\t'.join([
+            date, ticker, '%.4f' % score, '%.2f%%' % (gain*100), market_gain])
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--result_file', required=True)
@@ -222,15 +234,23 @@ def main():
   args = parser.parse_args()
 
   data = readData(args.result_file)
+  market = None
+  if args.market_gain_file:
+    market = readMarketGains(args.market_gain_file)
+
   writeKs(data, KS, '%s/topbot.tsv' % args.analyze_dir)
+
   for buckets in BUCKETS_LIST:
     writeBuckets(data, buckets,
                  '%s/bucket-%d.tsv' % (args.analyze_dir, buckets))
+
   for max_look, max_pick, max_hold in TRADE_CONFIGS:
     output_file = '%s/trade-ml%d-mp%d-mh%d.tsv' % (
         args.analyze_dir, max_look, max_pick, max_hold)
     writeTrans(data, args.hold_period, max_look, max_pick, max_hold,
-               args.market_gain_file, output_file)
+               market, output_file)
+
+  writeTopK(data, market, TOPK, '%s/top%d.tsv' % (args.analyze_dir, TOPK))
 
 if __name__ == '__main__':
   main()

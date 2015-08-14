@@ -15,20 +15,11 @@ else:
 
 RUN_ID = '20150801'
 EXPERIMENTS = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
 ]
 
 MARKETS = ['R3000', 'SP500']
 
-TEST = False
+TEST = True
 DRY_RUN = False
 
 # For features, we look at many time windows, and we do not
@@ -48,27 +39,17 @@ MEMBERSHIP = 'SP500'
 
 # [[max_look, max_pick, max_hold] ...]
 # if max_look < 0: no limit
-# if max_hold < 0: no limit
 # if max_pick < 0: pick bottom-ranked stocks (to simulate short)
+# if max_hold < 0: no limit
 TRADE_CONFIGS = [
     # long
     [-1, 5, 1],
+    [-1, 5, 2],
     [-1, 5, 3],
+    [-1, 5, 4],
+    [-1, 5, 5],
     [-1, 5, 10],
     [-1, 5, -1],
-    [10, 5, 1],
-    [10, 5, 3],
-    [10, 5, 10],
-    [10, 5, -1],
-    # short
-    [-1, -5, 1],
-    [-1, -5, 3],
-    [-1, -5, 10],
-    [-1, -5, -1],
-    [10, -5, 1],
-    [10, -5, 3],
-    [10, -5, 10],
-    [10, -5, -1],
 ]
 
 CODE_DIR = '%s/qd2' % HOST_DIR
@@ -78,11 +59,13 @@ if TEST:
   EVAL_PERCS = [10, 100]
   KS = [1, 3, 5, 0, -5, -3, -1]
   BUCKETS_LIST = [2]
+  TOPK = 3
 else:
   RUN_DIR = '%s/data/runs/%s' % (HOST_DIR, RUN_ID)
   EVAL_PERCS = [1, 10, 100]
   KS = [1, 3, 5, 10, 30, 50, 100, 0, -100, -50, -30, -10, -5, -3, -1]
   BUCKETS_LIST = [10, 30, 100]
+  TOPK = 5
 
 SYMBOL_DIR = '%s/symbols' % RUN_DIR
 
