@@ -16,13 +16,12 @@ import datetime
 CHANGE_HEADERS = [
     'Company',
     'Ticker',
-    'Old Name & Ticker',
+    'Old Company Name & Ticker',
     'Company',
     'Ticker',
-    'Old Name & Ticker',
+    'Old Company Name & Ticker',
     'Date',
     'Year',
-    '', '', '', '', '', '', '', '', '',
 ]
 
 FROM_FORMAT = '%B %d, %Y'
@@ -71,8 +70,7 @@ def getChanges(change_file):
       'unexpected header: %s' % lines[1].split('\t'))
   changes = dict()  # date => [added list, dropped list]
   for i in range(2, len(lines)):
-    (_, added_ticker, _, _, dropped_ticker, _, date, year,
-     _, _, _, _, _, _, _, _, _) = lines[i].split('\t')
+    _, added_ticker, _, _, dropped_ticker, _, date, year = lines[i].split('\t')
     date = datetime.datetime.strptime(date, FROM_FORMAT).strftime(TO_FORMAT)
     assert date.startswith(year)
     if added_ticker == dropped_ticker:

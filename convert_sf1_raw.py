@@ -15,7 +15,9 @@
 
 import argparse
 import datetime
+import logging
 import os
+import util
 
 # If this is modified readIndicatorMeta() also needs to be modified!
 INDICATOR_HEADER = '\t'.join(['Indicator',
@@ -57,7 +59,7 @@ def readIndicatorMeta(indicator_file):
 
 def processLine(line, indicator_meta):
   """ Processes one line from sf1_file, sanity-checks data, and returns
-      ticker and line of output.
+      ticker and line of output.  If skipped, returns ticker and reason.
   """
   # Eg, AA_ACCOCI_ARQ,2004-02-27,-569000000.0
   assert line[-1] == '\n'
@@ -68,17 +70,13 @@ def processLine(line, indicator_meta):
   assert len(items) == 2 or len(items) == 3
   ticker, indicator = items[0], items[1]
   if items[1] in SKIPPED_INDICATORS:
-    return None, None
-  assert indicator in indicator_meta, (
-      'unsupported indicator %s for ticker %s' % (indicator, ticker))
-  if len(items) == 2:
-    assert len(indicator_meta[indicator]) == 0, (
-        'unsupported dimension for (%s, %s): None (supported: %s)' % (
-            ticker, indicator, indicator_meta[indicator]))
-  else:
-    assert items[2] in indicator_meta[indicator], (
-        'unsupported dimension for (%s, %s): %s (supported: %s)' % (
-            ticker, indicator, items[2], indicator_meta[indicator]))
+    return None, 'known_skipped'
+  if indicator not in indicator_meta:
+    return None, 'unknown_indicator'
+  if len(items) == 2 and len(indicator_meta[indicator]) != 0:
+    return None, 'expect_ND'
+  if len(items) == 3 and items[2] not in indicator_meta[indicator]:
+    return None, 'unknown_dimension'
   # Check date.
   try:
     tmp_date = datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -106,6 +104,14 @@ def convertSf1Raw(sf1_file, indicator_file, raw_dir, max_lines=0):
   output_ticker = None
   output_fp = None
 
+  stats = {
+    'known_skipped': 0,
+    'unknown_indicator': 0,
+    'expect_ND': 0,
+    'unknown_dimension': 0,
+    'processed': 0,
+  }
+
   with open(sf1_file, 'r') as fp:
     while True:
       line = fp.readline()
@@ -114,7 +120,9 @@ def convertSf1Raw(sf1_file, indicator_file, raw_dir, max_lines=0):
       # Prepare output data.
       ticker, line = processLine(line, indicator_meta)
       if ticker is None:
+        stats[line] += 1
         continue
+      stats['processed'] += 1
       # Prepare output fp.
       if ticker != output_ticker:
         if output_fp is not None:
@@ -129,6 +137,8 @@ def convertSf1Raw(sf1_file, indicator_file, raw_dir, max_lines=0):
   if output_fp is not None:
     output_fp.close()
 
+  logging.info('stats: %s' % stats)
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--sf1_file', required=True,
@@ -141,6 +151,7 @@ def main():
                       help='max number of lines to process from sf1_file; '
                            'only use this for debugging')
   args = parser.parse_args()
+  util.configLogging()
   convertSf1Raw(args.sf1_file, args.indicator_file, args.raw_dir,
                 args.max_lines)
 

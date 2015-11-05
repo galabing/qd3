@@ -73,7 +73,7 @@ DO_REMOTE = {
     'get_yahoo_logadjvolume': True,
     'get_eod_gain_feature': DO_EOD,
     'get_yahoo_gain_feature': True,
-    'get_membership': True,
+    'get_membership': False,  # Files changed on 2015-10-01. Need to be fixed.
     'get_eod_gain_label': DO_EOD,
     'get_yahoo_gain_label': True,
     'process_market': True,
