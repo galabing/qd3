@@ -77,7 +77,7 @@ RAW_MISC_DIR = '%s/misc' % RAW_DIR
 
 RAW_SF1_FILE = '%s/sf1.csv' % RAW_SF1_DIR
 SF1_INDICATOR_FILE = '%s/indicators.txt' % RAW_SF1_DIR
-SF1_SECIND_FILE = '%s/tickers.txt' % RAW_SF1_DIR
+SF1_INFO_FILE = '%s/tickers.txt' % RAW_SF1_DIR
 RAW_EOD_FILE = '%s/eod.csv' % RAW_EOD_DIR
 
 TICKER_DIR = '%s/tickers' % RUN_DIR

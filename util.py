@@ -85,6 +85,29 @@ def readTickers(ticker_file):
 
 ## Sf1
 
+SF1_INFO_HEADERS = [
+    'Ticker', 'Name', 'CUSIP', 'ISIN', 'Currency', 'Sector', 'Industry',
+    'Last Updated', 'Prior Tickers', 'Ticker Change Date', 'Related Tickers',
+    'Exchange', 'SIC', 'Perma Ticker'
+]
+
+def readSf1Info(info_file, header):
+  ticker_index = SF1_INFO_HEADERS.index('Ticker')
+  value_index = SF1_INFO_HEADERS.index(header)
+  with open(info_file, 'r') as fp:
+    lines = fp.read().splitlines()
+  assert len(lines) > 0
+  assert lines[0] == '\t'.join(SF1_INFO_HEADERS)
+  info_dict = dict()  # ticker => name
+  for i in range(1, len(lines)):
+    items = lines[i].split('\t')
+    assert len(items) == len(SF1_INFO_HEADERS)
+    ticker = items[ticker_index]
+    value = items[value_index]
+    assert ticker not in info_dict
+    info_dict[ticker] = value
+  return info_dict
+
 def parseSf1(lines):
   """ Parses processed sf1 lines into a dict: date => {indicator: value}.
   """

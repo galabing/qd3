@@ -166,8 +166,8 @@ util.maybeMakeDirs([
 ])
 
 if logDo('get_sf1_tickers'):
-  cmd = '%s/get_sf1_tickers.py --sf1_file=%s --ticker_file=%s' % (
-      CODE_DIR, RAW_SF1_FILE, SF1_TICKER_FILE)
+  cmd = '%s/get_sf1_tickers.py --sf1_file=%s --info_file=%s --ticker_file=%s' % (
+      CODE_DIR, RAW_SF1_FILE, SF1_INFO_FILE, SF1_TICKER_FILE)
   run(cmd, 'get_sf1_tickers')
 
 if logDo('get_eod_tickers'):
@@ -231,14 +231,14 @@ if logDo('get_feature_stats'):
 if logDo('get_sector'):
   cmd = ('%s/get_sector_industry.py --ticker_file=%s --info_file=%s '
          '--sector --output_base_dir=%s --stats_file=%s' % (
-      CODE_DIR, SF1_TICKER_FILE, SF1_SECIND_FILE, FEATURE_DIR,
+      CODE_DIR, SF1_TICKER_FILE, SF1_INFO_FILE, FEATURE_DIR,
       SECTOR_STATS_FILE))
   run(cmd, 'get_sector')
 
 if logDo('get_industry'):
   cmd = ('%s/get_sector_industry.py --ticker_file=%s --info_file=%s '
          '--industry --output_base_dir=%s --stats_file=%s' % (
-      CODE_DIR, SF1_TICKER_FILE, SF1_SECIND_FILE, FEATURE_DIR,
+      CODE_DIR, SF1_TICKER_FILE, SF1_INFO_FILE, FEATURE_DIR,
       INDUSTRY_STATS_FILE))
   run(cmd, 'get_industry')
 

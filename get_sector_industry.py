@@ -27,13 +27,6 @@ import argparse
 import os
 import util
 
-HEADERS = ['Ticker', 'Name', 'CUSIP', 'ISIN', 'Currency', 'Sector', 'Industry',
-           'Last Updated', 'Prior Tickers', 'Ticker Change Date',
-           'Related Tickers', 'Exchange', 'SIC', 'Perma Ticker']
-TICKER_INDEX = HEADERS.index('Ticker')
-SECTOR_INDEX = HEADERS.index('Sector')
-INDUSTRY_INDEX = HEADERS.index('Industry')
-
 SECTOR_PREFIX = 'sector_'
 INDUSTRY_PREFIX = 'industry_'
 
@@ -44,20 +37,13 @@ def normalizeName(name):
     name = 'Unknown'
   return name
 
-def readInfo(info_file, tickers, index):
-  with open(info_file, 'r') as fp:
-    lines = fp.read().splitlines()
-  assert len(lines) > 0
-  assert lines[0] == '\t'.join(HEADERS)
-  info_dict = dict()  # ticker => name
+def readInfo(info_file, tickers, header):
+  raw_dict = util.readSf1Info(info_file, header)
+  info_dict = dict()
   names = set()
-  for i in range(1, len(lines)):
-    items = lines[i].split('\t')
-    assert len(items) == len(HEADERS)
-    ticker = items[TICKER_INDEX]
+  for ticker, name in raw_dict.iteritems():
     if ticker not in tickers:
       continue
-    name = items[index]
     info_dict[ticker] = name
     names.add(name)
   for ticker, name in info_dict.iteritems():
@@ -71,9 +57,9 @@ def readInfo(info_file, tickers, index):
 def getNameDir(output_base_dir, prefix, name):
   return '%s/%s%s' % (output_base_dir, prefix, name)
 
-def getColumn(ticker_file, info_file, prefix, index, output_base_dir, stats_file):
+def getColumn(ticker_file, info_file, prefix, header, output_base_dir, stats_file):
   tickers = set(util.readTickers(ticker_file))
-  info_dict = readInfo(info_file, tickers, index)
+  info_dict = readInfo(info_file, tickers, header)
   count_dict = {name: 0 for name in info_dict.values()}
   for name in count_dict.iterkeys():
     name_dir = getNameDir(output_base_dir, prefix, name)
@@ -109,11 +95,11 @@ def main():
 
   if args.sector:
     prefix = SECTOR_PREFIX
-    index = SECTOR_INDEX
+    header = 'Sector'
   else:
     prefix = INDUSTRY_PREFIX
-    index = INDUSTRY_INDEX
-  getColumn(args.ticker_file, args.info_file, prefix, index,
+    header = 'Industry'
+  getColumn(args.ticker_file, args.info_file, prefix, header,
             args.output_base_dir, args.stats_file)
 
 if __name__ == '__main__':
