@@ -6,7 +6,7 @@ import util
 ALLOWED_EXCHANGES = {'NYSE', 'NASDAQ'}
 
 def getSf1Tickers(sf1_file, info_file, ticker_file):
-  exchanges = readSf1Info(info_file, 'Exchange')
+  exchanges = util.readSf1Info(info_file, 'Exchange')
   tickers = set()
   with open(sf1_file, 'r') as fp:
     while True:

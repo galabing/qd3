@@ -23,7 +23,7 @@
     - min_date (default '0000-00-00')
     - max_date (default '9999-99-99')
     - train_filter (default '')
-    - predict_filter (default 'membership=SP500')
+    - predict_filter (default '')
 
     TODO: start_date and end_date are hand picked for now but can be automated.
 """
@@ -61,7 +61,7 @@ DEFAULT_VALUES = {
     'max_date': '9999-99-99',
     'min_feature_perc': 0.8,
     'train_filter': '',
-    'predict_filter': 'membership=SP500',
+    'predict_filter': '',
 }
 
 def getConfig(config_file):
@@ -189,7 +189,7 @@ def collectData(experiment_dir, config_map):
             data_file, label_file, meta_file, weight_file))
   util.run(cmd)
 
-def filterMetadata(experiment_dir, config, filter_str, filtered_path):
+def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path):
   filters = [filter.strip() for filter in filter_str.split('+')]
   filter_args = []
   for filter in filters:
@@ -212,8 +212,12 @@ def filterMetadata(experiment_dir, config, filter_str, filtered_path):
 
   data_dir = getDataDir(experiment_dir)
   meta_file = getMetaPath(data_dir)
-  cmd = ('%s/filter_metadata.py --input_file=%s --output_file=%s %s' % (
-      CODE_DIR, meta_file, filtered_path, ' '.join(filter_args)))
+  label_args = ''
+  if label_file is not None:
+    label_args = '--remove_neg_labels --label_file=%s' % label_file
+
+  cmd = ('%s/filter_metadata.py --input_file=%s --output_file=%s %s %s' % (
+      CODE_DIR, meta_file, filtered_path, ' '.join(filter_args), label_args))
   util.run(cmd)
 
 def evaluateModel(model_file, data_file, label_file):
@@ -354,19 +358,20 @@ def runExperiment(config_file):
     util.markDone(step)
 
   data_dir = getDataDir(experiment_dir)
+  label_file = getLabelFile(data_dir)
   train_meta_file = getTrainingMetaPath(data_dir)
   predict_meta_file = getPredictionMetaPath(data_dir)
 
   step = '%s_filter_train' % experiment
   if not util.checkDone(step):
     filterMetadata(experiment_dir, config_map,
-                   config_map['train_filter'], train_meta_file)
+                   config_map['train_filter'], label_file, train_meta_file)
     util.markDone(step)
 
   step = '%s_filter_predict' % experiment
   if not util.checkDone(step):
     filterMetadata(experiment_dir, config_map,
-                   config_map['predict_filter'], predict_meta_file)
+                   config_map['predict_filter'], None, predict_meta_file)
     util.markDone(step)
 
   step = '%s_train_models' % experiment

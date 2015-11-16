@@ -10,6 +10,7 @@
                            --min_raw_price=10
                            --raw_price_dir=./price
                            --membership_file=./membership
+                           --remove_neg_labels
                            --output_file=./filtered_meta
 
     Only metadata (ticker-date pairs) that pass through all filters
@@ -19,7 +20,11 @@
                      price on the trading day (requires --raw_price_dir).
     --membership_file: only keep tickers that are part of some membership
                        on the trading day.
-    Both flags are optional.  If not set, the corresponding filter will
+    --remove_neg_labels: only keep zero and positive labels (for training).
+    For testing all labels should be kept, including the ones assigned with
+    negative labels (ie, gain is between max_neg and min_pos).
+
+    All flags are optional.  If not set, the corresponding filter will
     be disabled.  If none is set, --output_file should contain identical
     content to --input_file.
 """
@@ -69,23 +74,33 @@ def isMember(membership, ticker, date):
   return False
 
 def filterMetadata(input_file, min_raw_price, raw_price_dir,
-                   membership_file, output_file):
+                   membership_file, remove_neg_labels, label_file,
+                   output_file):
   stats = {
     'min_raw_price': 0,
     'membership': 0,
+    'neg_label': 0,
   }
 
   ifp = open(input_file, 'r')
+  if remove_neg_labels:
+    lfp = open(label_file, 'r')
   ofp = open(output_file, 'w')
+
   prev_ticker = None
   price = None  # for prev_ticker, date => price
   if membership_file is None:
     membership = None
   else:
     membership = readMembership(membership_file)  # ticker => [[start, end] ...]
+
   while True:
     line = ifp.readline()
+    if remove_neg_labels:
+      lline = lfp.readline()
     if line == '':
+      if remove_neg_labels:
+        assert lline == '', 'inconsisten line count between meta and label files'
       break
     assert line.endswith('\n')
     items = line[:-1].split('\t')
@@ -106,6 +121,13 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
       if not isMember(membership, ticker, date):
         stats['membership'] += 1
         continue
+    # Maybe check label.
+    if remove_neg_labels:
+      assert lline.endswith('\n')
+      label = float(lline[:-1])
+      if label < 0:
+        stats['neg_label'] += 1
+        continue
     print >> ofp, line[:-1]
   logging.info('skip_stats: %s' % stats)
 
@@ -115,6 +137,8 @@ def main():
   parser.add_argument('--min_raw_price', type=float, default=MIN_RAW_PRICE)
   parser.add_argument('--raw_price_dir')
   parser.add_argument('--membership_file')
+  parser.add_argument('--remove_neg_labels', action='store_true')
+  parser.add_argument('--label_file')
   parser.add_argument('--output_file', required=True)
   args = parser.parse_args()
   if args.min_raw_price > MIN_RAW_PRICE:
@@ -122,8 +146,12 @@ def main():
         'must also specify --raw_price_dir since --min_raw_price is specified')
   else:
     assert args.raw_price_dir is None
+  if args.remove_neg_labels:
+    assert args.label_file is not None, (
+        'must also specify --label_file since --remove_neg_labels is specified')
   filterMetadata(args.input_file, args.min_raw_price, args.raw_price_dir,
-                 args.membership_file, args.output_file)
+                 args.membership_file, args.remove_neg_labels, args.label_file,
+                 args.output_file)
 
 if __name__ == '__main__':
   main()

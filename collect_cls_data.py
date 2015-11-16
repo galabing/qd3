@@ -120,7 +120,10 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
 
       if max_neg < gain and gain < min_pos:
         skip_stats['neg_pos'] += 1
-        continue
+        # Do not skip these they need to be part of testing data.
+        # Instead output negative label and postpone filtering to filter_metadata
+        # (remove negative labels for training and not for testing).
+        #continue
 
       if DEBUG:
         print 'gain: %f (%s)' % (gain, gain_date)
@@ -128,10 +131,12 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
       if gain <= max_neg:
         weight = max_neg - gain
         label = 0.0
-      else:
-        assert gain >= min_pos
+      elif gain >= min_pos:
         weight = gain - min_pos
         label = 1.0
+      else:
+        weight = 0.0
+        label = -1.0
 
       features = [0.0 for i in range(len(feature_list))]
       feature_count = 0

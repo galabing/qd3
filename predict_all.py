@@ -66,8 +66,10 @@ def prepareData(ym, data_file, label_file, meta_file, predict_meta_file,
     assert label_line[-1] == '\n'
     label = float(label_line[:-1])
     gain = float(gain)
-    if label > 0.5: assert gain >= 0
-    if label < 0.5: assert gain <= 0
+    # This is not true when labels are cut at other places than 0.
+    # TODO: --label_file is not needed; remove.
+    #if label > 0.5: assert gain >= 0
+    #if label < 0.5: assert gain <= 0
     print >> data_ofp, data_line[:-1]
     meta.append([ticker, gain])
 
