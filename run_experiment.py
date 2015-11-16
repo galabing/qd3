@@ -24,6 +24,7 @@
     - max_date (default '9999-99-99')
     - train_filter (default '')
     - predict_filter (default '')
+    - use_weight (default False)
 
     TODO: start_date and end_date are hand picked for now but can be automated.
 """
@@ -41,6 +42,7 @@ import util
 CONFIG_SUFFIX = '.json'
 TMP_DATA_FILE = '/tmp/qd2_tmp_data'
 TMP_LABEL_FILE = '/tmp/qd2_tmp_label'
+TMP_WEIGHT_FILE = '/tmp/qd2_tmp_weight'
 
 REQUIRED_FIELDS = [
     'features',
@@ -62,6 +64,7 @@ DEFAULT_VALUES = {
     'min_feature_perc': 0.8,
     'train_filter': '',
     'predict_filter': '',
+    'use_weight': False,
 }
 
 def getConfig(config_file):
@@ -272,6 +275,10 @@ def trainModels(experiment_dir, config_map, train_meta_file):
   util.maybeMakeDir(model_dir)
 
   stats_file = getStatsPath(experiment_dir, config_map)
+  weight_args = ''
+  if config_map['use_weight']:
+    weight_args = '--weight_file=%s --tmp_weight_file=%s' % (
+        getWeightPath(data_dir), TMP_WEIGHT_FILE)
   with open(stats_file, 'w') as fp:
     # Keep in sync with evaluateModel().
     print >> fp, '\t'.join([
@@ -287,10 +294,10 @@ def trainModels(experiment_dir, config_map, train_meta_file):
     ])
     for date in dates:
       model_file = getModelPath(model_dir, date, config_map)
-      cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s '
+      cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s %s'
              '--yyyymm=%s --months=%d --model_def="%s" --perc=%f --model_file=%s '
              '--train_meta_file=%s --tmp_data_file=%s --tmp_label_file=%s' % (
-                CODE_DIR, data_file, label_file, meta_file, date,
+                CODE_DIR, data_file, label_file, meta_file, weight_args, date,
                 config_map['train_window'], config_map['model_spec'],
                 config_map['train_perc'], model_file, train_meta_file,
                 TMP_DATA_FILE, TMP_LABEL_FILE))

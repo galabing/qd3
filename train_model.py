@@ -25,7 +25,7 @@ import pickle
 import util
 
 def selectData(data_file, label_file, meta_file, train_meta_file,
-               yyyymm, months, tmp_data_file, tmp_label_file):
+               yyyymm, months, tmp_data_file, tmp_label_file, tmp_weight_file):
   assert len(yyyymm) == 6
   y = yyyymm[:4]
   m = yyyymm[4:]
@@ -41,6 +41,11 @@ def selectData(data_file, label_file, meta_file, train_meta_file,
   data_ofp = open(tmp_data_file, 'w')
   label_ifp = open(label_file, 'r')
   label_ofp = open(tmp_label_file, 'w')
+  if weight_file:
+    weight_ifp = open(weight_file, 'r')
+  if tmp_weight_file:
+    weight_ofp = open(tmp_weight_file, 'w')
+
   meta_fp = open(meta_file, 'r')
   if train_meta_file is None:
     train_meta_fp = None
@@ -55,11 +60,16 @@ def selectData(data_file, label_file, meta_file, train_meta_file,
     if meta == '':
       assert data_ifp.readline() == ''
       assert label_ifp.readline() == ''
+      if weight_file:
+        assert weight_ifp.readline() == ''
       break
     data = data_ifp.readline()
     label = label_ifp.readline()
     assert data != ''
     assert label != ''
+    if weight_file:
+      weight = weight_ifp.readline()
+      assert weight != ''
 
     if train_meta is not None:
       if meta != train_meta:
@@ -75,6 +85,9 @@ def selectData(data_file, label_file, meta_file, train_meta_file,
     assert label[-1] == '\n'
     print >> data_ofp, data[:-1]
     print >> label_ofp, label[:-1]
+    if tmp_weight_file:
+      assert weight[-1] == '\n'
+      print >> weight_ofp, weight[:-1]
     count += 1
     
   logging.info('selected %d training samples' % count)
@@ -82,13 +95,19 @@ def selectData(data_file, label_file, meta_file, train_meta_file,
   data_ofp.close()
   label_ifp.close()
   label_ofp.close()
+  if weight_file:
+    weight_ifp.close()
+  if tmp_weight_file:
+    weight_ofp.close()
   meta_fp.close()
   if train_meta_fp is not None:
     train_meta_fp.close()
 
-def trainModel(data_file, label_file, model_def, perc, model_file):
+def trainModel(data_file, label_file, weight_file, model_def, perc, model_file):
   X = numpy.loadtxt(data_file)
   y = numpy.loadtxt(label_file)
+  if weight_file:
+    w = numpy.loadtxt(weight_file)
 
   if perc < 1:
     logging.info('sampling %f data for training' % perc)
@@ -96,9 +115,14 @@ def trainModel(data_file, label_file, model_def, perc, model_file):
     index = numpy.random.permutation(X.shape[0])[:m]
     X = X[index, :]
     y = y[index]
+    if weight_file:
+      w = w[index]
 
   model = eval(model_def)
-  model.fit(X, y)
+  if weight_file:
+    model.fit(X, y, w)
+  else:
+    model.fit(X, y)
 
   with open(model_file, 'wb') as fp:
     pickle.dump(model, fp)
@@ -114,6 +138,8 @@ def main():
   parser.add_argument('--data_file', required=True)
   parser.add_argument('--label_file', required=True)
   parser.add_argument('--meta_file', required=True)
+  # If specified, will be used in the fit function.
+  parser.add_argument('--weight_file')
   # If specified, will be used to filter --meta_file.
   # Eg, --meta_file may contain metadata for all available data
   # while --train_meta_file may contain metadata for all data
@@ -143,16 +169,23 @@ def main():
                            'training period; this can be used later for '
                            'evaluation, or specify --delete_tmp_files '
                            'to delete it upon finish')
+  parser.add_argument('--tmp_weight_file')
   parser.add_argument('--delete_tmp_files', action='store_true')
   args = parser.parse_args()
   util.configLogging()
-  selectData(args.data_file, args.label_file, args.meta_file,
+  if args.weight_file:
+    assert args.tmp_weight_file, 'must specify --tmp_weight_file since --weight_file is specified'
+  selectData(args.data_file, args.label_file, args.meta_file, args.weight_file,
              args.train_meta_file, args.yyyymm, args.months,
-             args.tmp_data_file, args.tmp_label_file)
-  trainModel(args.tmp_data_file, args.tmp_label_file, args.model_def,
-             args.perc, args.model_file)
+             args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file)
+  trainModel(args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file,
+             args.model_def, args.perc, args.model_file)
   if args.delete_tmp_files:
     deleteTmpFiles(args.tmp_data_file, args.tmp_label_file)
+  # tmp_weight_file will not be used after this step so is not guarded by
+  # --delete_tmp_files.
+  if args.tmp_weight_file:
+    os.remove(args.tmp_weight_file)
 
 if __name__ == '__main__':
   main()

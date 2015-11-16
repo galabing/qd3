@@ -15,9 +15,8 @@ else:
 
 RUN_ID = '20151101'
 EXPERIMENTS = [
-    'A', 'B', 'C', 'D', 'E', 'F', 'G',
-    'H', 'I', 'J', 'K', 'L', 'M', 'N',
-    'O', 'P', 'Q', 'R', 'S',
+    'A',
+    'B',
 ]
 
 MARKETS = ['R3000', 'SP500']
