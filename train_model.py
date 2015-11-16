@@ -24,7 +24,7 @@ import os
 import pickle
 import util
 
-def selectData(data_file, label_file, meta_file, train_meta_file,
+def selectData(data_file, label_file, meta_file, weight_file, train_meta_file,
                yyyymm, months, tmp_data_file, tmp_label_file, tmp_weight_file):
   assert len(yyyymm) == 6
   y = yyyymm[:4]
