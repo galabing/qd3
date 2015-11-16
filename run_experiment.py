@@ -358,7 +358,7 @@ def runExperiment(config_file):
     util.markDone(step)
 
   data_dir = getDataDir(experiment_dir)
-  label_file = getLabelFile(data_dir)
+  label_file = getLabelPath(data_dir)
   train_meta_file = getTrainingMetaPath(data_dir)
   predict_meta_file = getPredictionMetaPath(data_dir)
 
