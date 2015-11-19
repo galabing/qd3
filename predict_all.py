@@ -128,9 +128,9 @@ def main():
       model = pickle.load(fp)
     if 'predict_proba' in dir(model):
       prob = model.predict_proba(data)
+      prob = [item[1] for item in prob]
     else:
       prob = model.predict(data)
-    prob = [item[1] for item in prob]
 
     assert len(prob) == len(meta)
     items = [[meta[i][0], meta[i][1], prob[i]]
