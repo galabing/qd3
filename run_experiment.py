@@ -312,14 +312,15 @@ def trainModels(experiment_dir, config_map, train_meta_file):
                 config_map['train_perc'], model_file, train_meta_file,
                 TMP_DATA_FILE, TMP_LABEL_FILE))
       util.run(cmd)
-      result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
-      # Keep in sync with evaluateModel().
-      values = [date, '%.4f' % result['f1'], '%.4f' % result['auc']]
-      for perc in EVAL_PERCS:
-        values.append('%.4f' % result['%dperc-precision' % perc])
-        values.append('%.4f' % result['%dperc-recall' % perc])
-      print >> fp, '\t'.join(values)
-      fp.flush()
+      if config_map['use_classification']:
+        result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
+        # Keep in sync with evaluateModel().
+        values = [date, '%.4f' % result['f1'], '%.4f' % result['auc']]
+        for perc in EVAL_PERCS:
+          values.append('%.4f' % result['%dperc-precision' % perc])
+          values.append('%.4f' % result['%dperc-recall' % perc])
+        print >> fp, '\t'.join(values)
+        fp.flush()
 
 def predict(experiment_dir, config_map, predict_meta_file):
   result_dir = getResultDir(experiment_dir)

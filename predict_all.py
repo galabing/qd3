@@ -126,7 +126,10 @@ def main():
 
     with open(model_file, 'rb') as fp:
       model = pickle.load(fp)
-    prob = model.predict_proba(data)
+    if 'predict_proba' in dir(model):
+      prob = model.predict_proba(data)
+    else:
+      prob = model.predict(data)
     prob = [item[1] for item in prob]
 
     assert len(prob) == len(meta)
