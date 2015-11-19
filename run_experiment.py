@@ -18,13 +18,14 @@
     - predict_window (defines prediction window in months, default 12)
     - delay_window (defines delay in months in model training, default 0 no
       delay)
-    - max_neg (default 0)
-    - min_pos (default 0)
     - min_date (default '0000-00-00')
     - max_date (default '9999-99-99')
     - train_filter (default '')
     - predict_filter (default '')
+    - max_neg (default 0)
+    - min_pos (default 0)
     - use_weight (default False)
+    - use_classification (default True), set to False to use regression
 
     TODO: start_date and end_date are hand picked for now but can be automated.
 """
@@ -65,6 +66,7 @@ DEFAULT_VALUES = {
     'train_filter': '',
     'predict_filter': '',
     'use_weight': False,
+    'use_classification': True,
 }
 
 def getConfig(config_file):
@@ -110,6 +112,10 @@ def getDataPath(data_dir):
 # Path to all labels.
 def getLabelPath(data_dir):
   return '%s/label' % data_dir
+
+# Path to all regression labels.
+def getRlabelPath(data_dir):
+  return '%s/rlabel' % data_dir
 
 # Path to all metadata.
 def getMetaPath(data_dir):
@@ -178,18 +184,19 @@ def collectData(experiment_dir, config_map):
   feature_list = getFeatureListPath(experiment_dir)
   data_file = getDataPath(data_dir)
   label_file = getLabelPath(data_dir)
+  rlabel_file = getRlabelPath(data_dir)
   meta_file = getMetaPath(data_dir)
   weight_file = getWeightPath(data_dir)
 
-  cmd = ('%s/collect_cls_data.py --gain_dir=%s --max_neg=%f --min_pos=%f '
+  cmd = ('%s/collect_data.py --gain_dir=%s --max_neg=%f --min_pos=%f '
          '--feature_base_dir=%s --feature_list=%s --feature_stats=%s '
          '--min_date=%s --max_date=%s --window=%d --min_feature_perc=%f '
-         '--data_file=%s --label_file=%s --meta_file=%s --weight_file=%s' % (
+         '--data_file=%s --label_file=%s --rlabel_file=%s --meta_file=%s --weight_file=%s' % (
             CODE_DIR, gain_dir, config_map['max_neg'], config_map['min_pos'],
             FEATURE_DIR, feature_list, FEATURE_STATS_FILE,
             config_map['min_date'], config_map['max_date'],
             config_map['feature_window'], config_map['min_feature_perc'],
-            data_file, label_file, meta_file, weight_file))
+            data_file, label_file, rlabel_file, meta_file, weight_file))
   util.run(cmd)
 
 def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path):
@@ -268,7 +275,10 @@ def trainModels(experiment_dir, config_map, train_meta_file):
 
   data_dir = getDataDir(experiment_dir)
   data_file = getDataPath(data_dir)
-  label_file = getLabelPath(data_dir)
+  if config_map['use_classification']:
+    label_file = getLabelPath(data_dir)
+  else:
+    label_file = getRlabelPath(data_dir)
   meta_file = getMetaPath(data_dir)
 
   model_dir = getModelDir(experiment_dir)
@@ -294,7 +304,7 @@ def trainModels(experiment_dir, config_map, train_meta_file):
     ])
     for date in dates:
       model_file = getModelPath(model_dir, date, config_map)
-      cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s %s'
+      cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s %s '
              '--yyyymm=%s --months=%d --model_def="%s" --perc=%f --model_file=%s '
              '--train_meta_file=%s --tmp_data_file=%s --tmp_label_file=%s' % (
                 CODE_DIR, data_file, label_file, meta_file, weight_args, date,
@@ -318,7 +328,10 @@ def predict(experiment_dir, config_map, predict_meta_file):
 
   data_dir = getDataDir(experiment_dir)
   data_file = getDataPath(data_dir)
-  label_file = getLabelPath(data_dir)
+  if config_map['use_classification']:
+    label_file = getLabelPath(data_dir)
+  else:
+    label_file = getRlabelPath(data_dir)
   meta_file = getMetaPath(data_dir)
   model_dir = getModelDir(experiment_dir)
 
@@ -365,7 +378,14 @@ def runExperiment(config_file):
     util.markDone(step)
 
   data_dir = getDataDir(experiment_dir)
-  label_file = getLabelPath(data_dir)
+  if config_map['use_classification']:
+    # For classification, negative labels indicate gain between
+    # max_neg and min_pos and should be removed from training
+    # (but not prediction).
+    label_file = getLabelPath(data_dir)
+  else:
+    # Do not filter out negative regression labels.
+    label_file = None
   train_meta_file = getTrainingMetaPath(data_dir)
   predict_meta_file = getPredictionMetaPath(data_dir)
 

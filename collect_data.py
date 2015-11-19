@@ -1,23 +1,24 @@
 #!/usr/bin/python2.7
 
 # Adapted from qd.
-""" Collects data for classification experiments.
+""" Collects data for classification/regression experiments.
 
     Example usage:
-      ./collect_cls_data.py --gain_dir=./gains/1
-                            --max_neg=0.01
-                            --min_pos=0.01
-                            --use_weights
-                            --feature_base_dir=./features
-                            --feature_list=./feature_list
-                            --feature_stats=./feature_stats
-                            --min_date=2005-01-01
-                            --max_date=2006-12-31
-                            --window=120
-                            --min_feature_perc=0.8
-                            --data_file=./data
-                            --label_file=./label
-                            --meta_file=./meta
+      ./collect_data.py --gain_dir=./gains/1
+                        --max_neg=0.01
+                        --min_pos=0.01
+                        --use_weights
+                        --feature_base_dir=./features
+                        --feature_list=./feature_list
+                        --feature_stats=./feature_stats
+                        --min_date=2005-01-01
+                        --max_date=2006-12-31
+                        --window=120
+                        --min_feature_perc=0.8
+                        --data_file=./data
+                        --label_file=./label
+                        --rlabel_file=./rlabel
+                        --meta_file=./meta
 
     For each ticker, gains within specified min/max date are collected, and
     classified into positive/negative according to the thresholds.
@@ -28,6 +29,7 @@
     data_file: matrix of features delimited by space.  Features are in the
                same order as specified by feature_list.
     label_file: list of labels corresponding to each row in data_file.
+    rlabel_file: list of regression labels corresponding to each row in data_file.
     meta_file: ticker, gain date and feature count, and actual gain
                corresponding to each row in data_file.
     (optional) weight_file: weight of each data point.
@@ -62,8 +64,8 @@ def readFeatureRanges(feature_stats_file):
 
 def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
                 feature_list_file, feature_stats_file, min_date, max_date,
-                window, min_feature_perc, data_file, label_file, meta_file,
-                weight_file):
+                window, min_feature_perc, data_file, label_file, rlabel_file,
+                meta_file, weight_file):
   tickers = sorted(os.listdir(gain_dir))
   feature_list = readFeatureList(feature_list_file)
   min_feature_count = int(len(feature_list) * min_feature_perc)
@@ -83,6 +85,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
 
   data_fp = open(data_file, 'w')
   label_fp = open(label_file, 'w')
+  rlabel_fp = open(rlabel_file, 'w')
   meta_fp = open(meta_file, 'w')
   weight_fp = None
   if weight_file:
@@ -182,6 +185,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
 
       print >> data_fp, ' '.join(['%f' % feature for feature in features])
       print >> label_fp, '%f' % label
+      print >> rlabel_fp, '%f' % gain
       print >> meta_fp, '%s\t%s\t%d\t%f' % (
           ticker, gain_date, feature_count, gain)
       if weight_fp:
@@ -191,6 +195,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
 
   data_fp.close()
   label_fp.close()
+  rlabel_fp.close()
   meta_fp.close()
   if weight_fp:
     weight_fp.close()
@@ -215,6 +220,7 @@ def main():
                            'perc of features are populated')
   parser.add_argument('--data_file', required=True)
   parser.add_argument('--label_file', required=True)
+  parser.add_argument('--rlabel_file', required=True)
   parser.add_argument('--meta_file', required=True)
   parser.add_argument('--weight_file',
                       help='if specified, will assign a weight to each '
@@ -227,7 +233,8 @@ def main():
   collectData(args.gain_dir, args.max_neg, args.min_pos,
               args.feature_base_dir, args.feature_list, args.feature_stats,
               args.min_date, args.max_date, args.window, args.min_feature_perc,
-              args.data_file, args.label_file, args.meta_file, args.weight_file)
+              args.data_file, args.label_file, args.rlabel_file, args.meta_file,
+              args.weight_file)
 
 if __name__ == '__main__':
   main()
