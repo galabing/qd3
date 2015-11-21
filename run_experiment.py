@@ -25,6 +25,7 @@
     - max_neg (default 0)
     - min_pos (default 0)
     - use_weight (default False)
+    - weight_power (default 1)
     - use_classification (default True), set to False to use regression
 
     TODO: start_date and end_date are hand picked for now but can be automated.
@@ -66,6 +67,7 @@ DEFAULT_VALUES = {
     'train_filter': '',
     'predict_filter': '',
     'use_weight': False,
+    'weight_power': 1.0,
     'use_classification': True,
 }
 
@@ -191,12 +193,14 @@ def collectData(experiment_dir, config_map):
   cmd = ('%s/collect_data.py --gain_dir=%s --max_neg=%f --min_pos=%f '
          '--feature_base_dir=%s --feature_list=%s --feature_stats=%s '
          '--min_date=%s --max_date=%s --window=%d --min_feature_perc=%f '
-         '--data_file=%s --label_file=%s --rlabel_file=%s --meta_file=%s --weight_file=%s' % (
+         '--data_file=%s --label_file=%s --rlabel_file=%s --meta_file=%s '
+         '--weight_power=%f --weight_file=%s' % (
             CODE_DIR, gain_dir, config_map['max_neg'], config_map['min_pos'],
             FEATURE_DIR, feature_list, FEATURE_STATS_FILE,
             config_map['min_date'], config_map['max_date'],
             config_map['feature_window'], config_map['min_feature_perc'],
-            data_file, label_file, rlabel_file, meta_file, weight_file))
+            data_file, label_file, rlabel_file, meta_file,
+            config_map['weight_power'], weight_file))
   util.run(cmd)
 
 def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path):

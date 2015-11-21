@@ -7,7 +7,6 @@
       ./collect_data.py --gain_dir=./gains/1
                         --max_neg=0.01
                         --min_pos=0.01
-                        --use_weights
                         --feature_base_dir=./features
                         --feature_list=./feature_list
                         --feature_stats=./feature_stats
@@ -19,6 +18,8 @@
                         --label_file=./label
                         --rlabel_file=./rlabel
                         --meta_file=./meta
+                        --weight_power=2
+                        --weight_file=./weight
 
     For each ticker, gains within specified min/max date are collected, and
     classified into positive/negative according to the thresholds.
@@ -65,7 +66,7 @@ def readFeatureRanges(feature_stats_file):
 def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
                 feature_list_file, feature_stats_file, min_date, max_date,
                 window, min_feature_perc, data_file, label_file, rlabel_file,
-                meta_file, weight_file):
+                meta_file, weight_power, weight_file):
   tickers = sorted(os.listdir(gain_dir))
   feature_list = readFeatureList(feature_list_file)
   min_feature_count = int(len(feature_list) * min_feature_perc)
@@ -140,6 +141,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
       else:
         weight = 0.0
         label = -1.0
+      weight = weight**weight_power
 
       features = [0.0 for i in range(len(feature_list))]
       feature_count = 0
@@ -222,6 +224,7 @@ def main():
   parser.add_argument('--label_file', required=True)
   parser.add_argument('--rlabel_file', required=True)
   parser.add_argument('--meta_file', required=True)
+  parser.add_argument('--weight_power', type=float, default=1.0)
   parser.add_argument('--weight_file',
                       help='if specified, will assign a weight to each '
                            'training sample with its distance to the '
@@ -234,7 +237,7 @@ def main():
               args.feature_base_dir, args.feature_list, args.feature_stats,
               args.min_date, args.max_date, args.window, args.min_feature_perc,
               args.data_file, args.label_file, args.rlabel_file, args.meta_file,
-              args.weight_file)
+              args.weight_power, args.weight_file)
 
 if __name__ == '__main__':
   main()
