@@ -416,7 +416,10 @@ def runExperiment(config_file):
     predict(experiment_dir, config_map, predict_meta_file)
     util.markDone(step)
 
-  analyze(experiment_dir, config_map)
+  step = '%s_analyze' % experiment
+  if not util.checkDone(step):
+    analyze(experiment_dir, config_map)
+    util.markDone(step)
 
 def main():
   parser = argparse.ArgumentParser()

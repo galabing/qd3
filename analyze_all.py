@@ -4,6 +4,7 @@
 
 from config import *
 import argparse
+import math
 
 def readData(input_file):
   # date => [[ticker, gain, score] ...]
@@ -49,18 +50,13 @@ def readMarketGains(market_gain_file):
     market[date] = float(gain)
   return market
 
-def writeKs(data, ks, output_file):
+def prepTopBot(data, ks):
   assert len(ks) > 0
-  total_gains = [0.0 for k in ks]
-  total_months = 0
-  gains_map = dict()  # year => gains, months
+  gains_map = dict()  # yyyy-mm => gains
   for date, items in data.iteritems():
+    assert date not in gains_map
+    gains = [0.0 for k in ks]
     items = [item[1] for item in items]
-    year, m = date.split('-')
-    if year not in gains_map:
-      gains_map[year] = [[0.0 for k in ks], 0]
-    gains_map[year][1] += 1
-    gains = gains_map[year][0]
     for i in range(len(ks)):
       k = ks[i]
       if k > 0:
@@ -72,23 +68,32 @@ def writeKs(data, ks, output_file):
       else:
         p = max(0, len(items) + k)
         q = len(items)
-      gain = sum(items[p:q]) / (q-p)
-      gains[i] += gain
-      total_gains[i] += gain
-    total_months += 1
-  for gains, months in gains_map.itervalues():
-    for i in range(len(gains)):
-      gains[i] /= months
-  for i in range(len(ks)):
-    total_gains[i] /= total_months
+      gains[i] = sum(items[p:q]) / (q-p)
+    gains_map[date] = gains
+  return gains_map
+
+def getStats(gains_map, nk):
+  mean = [0.0 for i in range(nk)]
+  std = [0.0 for i in range(nk)]
+  sharpe = [0.0 for i in range(nk)]
+  for i in range(nk):
+    gains = [value[i] for value in gains_map.itervalues()]
+    mean[i] = sum(gains)/len(gains)
+    diff = [gain - mean[i] for gain in gains]
+    std[i] = math.sqrt(sum([d**2 for d in diff])/len(diff))
+    sharpe[i] = mean[i]/std[i]
+  return mean, std, sharpe
+
+def writeTopBot(data, ks, output_file):
+  gains_map = prepTopBot(data, ks)
+  mean, std, sharpe = getStats(gains_map, len(ks))
   with open(output_file, 'w') as fp:
-    print >> fp, 'year\t%s\tmonths' % ('\t'.join(['%d' % k for k in ks]))
-    for year in sorted(gains_map.keys()):
-      gains, months = gains_map[year]
-      print >> fp, '%s\t%s\t%d' % (year, '\t'.join(['%f' % g for g in gains]),
-                                   months)
-    print >> fp, 'all\t%s\t%d' % ('\t'.join(['%f' % g for g in total_gains]),
-                                  total_months)
+    print >> fp, '\t'.join(['date'] + ['%d' % k for k in ks])
+    for date in sorted(gains_map.keys()):
+      print >> fp, '\t'.join([date] + ['%f' % gain for gain in gains_map[date]])
+    print >> fp, '\t'.join(['mean'] + ['%f' % m for m in mean])
+    print >> fp, '\t'.join(['std'] + ['%f' % s for s in std])
+    print >> fp, '\t'.join(['sharpe'] + ['%f' % s for s in sharpe])
 
 def writeBuckets(data, buckets, output_file):
   assert buckets > 0
@@ -238,7 +243,7 @@ def main():
   if args.market_gain_file:
     market = readMarketGains(args.market_gain_file)
 
-  writeKs(data, KS, '%s/topbot.tsv' % args.analyze_dir)
+  writeTopBot(data, KS, '%s/topbot.tsv' % args.analyze_dir)
 
   for buckets in BUCKETS_LIST:
     writeBuckets(data, buckets,
