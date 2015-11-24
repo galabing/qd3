@@ -45,9 +45,14 @@ def main():
         coverages.append(float(coverage[:-1]))
         perc1s.append(float(perc1))
         perc99s.append(float(perc99))
-      coverage = sum(coverages)/len(coverages)
-      perc1 = sum(perc1s)/len(perc1s)
-      perc99 = sum(perc99s)/len(perc99s)
+      if len(coverages) == 0:
+        coverage = 0.0
+        perc1 = 0.0
+        perc99 = 0.0
+      else:
+        coverage = sum(coverages)/len(coverages)
+        perc1 = sum(perc1s)/len(perc1s)
+        perc99 = sum(perc99s)/len(perc99s)
       print >> fp, '%s\t%.2f%%\t%.6f\t%.6f' % (
           feature, coverage, perc1, perc99)
 
