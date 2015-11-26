@@ -193,7 +193,7 @@ def main():
              args.train_meta_file, args.yyyymm, args.months,
              args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file)
   trainModel(args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file,
-             args.model_def, args.perc, args.model_file)
+             args.model_def, args.perc, args.imputer_strategy, args.model_file)
   if args.delete_tmp_files:
     deleteTmpFiles(args.tmp_data_file, args.tmp_label_file)
   # tmp_weight_file will not be used after this step so is not guarded by
