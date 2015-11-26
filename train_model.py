@@ -16,6 +16,7 @@
 
 from sklearn.ensemble import *
 from sklearn.linear_model import *
+from sklearn.preprocessing import Imputer
 from sklearn.svm import *
 import argparse
 import logging
@@ -103,11 +104,22 @@ def selectData(data_file, label_file, meta_file, weight_file, train_meta_file,
   if train_meta_fp is not None:
     train_meta_fp.close()
 
-def trainModel(data_file, label_file, weight_file, model_def, perc, model_file):
+def trainModel(data_file, label_file, weight_file, model_def, perc, imputer_strategy,
+               model_file):
   X = numpy.loadtxt(data_file)
   y = numpy.loadtxt(label_file)
   if weight_file:
     w = numpy.loadtxt(weight_file)
+
+  if imputer_strategy == 'zero':
+    for i in range(X.shape[0]):
+      for j in range(X.shape[1]):
+        if numpy.isnan(X[i][j]):
+          X[i][j] = 0.0
+  else:
+    assert imputer_strategy == 'mean' or imputer_strategy == 'median'
+    imputer = Imputer(missing_values='NaN', strategy=imputer_strategy)
+    X = imputer.fit_transform(X)
 
   if perc < 1:
     logging.info('sampling %f data for training' % perc)
@@ -158,6 +170,8 @@ def main():
   parser.add_argument('--perc', type=float, default=1.0,
                       help='if < 1, will randomly sample specified perc '
                            'of data for training')
+  parser.add_argument('--imputer_strategy', default='zero',
+                      help='strategy for filling in missing values')
   parser.add_argument('--model_file', required=True)
   parser.add_argument('--tmp_data_file', required=True,
                       help='location of tmp data file within specified '

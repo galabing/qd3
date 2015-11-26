@@ -15,6 +15,7 @@
     - train_window (defines training period in months, default -1 using entire
       history)
     - train_perc (default 1.0)
+    - imputer_strategy (default 'zero', can also be 'mean', 'median')
     - predict_window (defines prediction window in months, default 12)
     - delay_window (defines delay in months in model training, default 0 no
       delay)
@@ -57,6 +58,7 @@ DEFAULT_VALUES = {
     'feature_window': 120,
     'train_window': -1,
     'train_perc': 1.0,
+    'imputer_strategy': 'zero',
     'predict_window': 12,
     'delay_window': 0,
     'max_neg': 0.0,
@@ -310,11 +312,12 @@ def trainModels(experiment_dir, config_map, train_meta_file):
       model_file = getModelPath(model_dir, date, config_map)
       cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s %s '
              '--yyyymm=%s --months=%d --model_def="%s" --perc=%f --model_file=%s '
-             '--train_meta_file=%s --tmp_data_file=%s --tmp_label_file=%s' % (
+             '--train_meta_file=%s --tmp_data_file=%s --tmp_label_file=%s '
+             '--imputer_strategy=%s' % (
                 CODE_DIR, data_file, label_file, meta_file, weight_args, date,
                 config_map['train_window'], config_map['model_spec'],
                 config_map['train_perc'], model_file, train_meta_file,
-                TMP_DATA_FILE, TMP_LABEL_FILE))
+                TMP_DATA_FILE, TMP_LABEL_FILE, config_map['imputer_strategy']))
       util.run(cmd)
       if config_map['use_classification']:
         result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)

@@ -40,10 +40,12 @@ import argparse
 import bisect
 import datetime
 import logging
+import numpy
 import os
 import util
 
 DEBUG = False
+MISSING_VALUE = numpy.nan
 
 def readFeatureList(feature_list_file):
   with open(feature_list_file, 'r') as fp:
@@ -143,7 +145,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
         label = -1.0
       weight = weight**weight_power
 
-      features = [0.0 for i in range(len(feature_list))]
+      features = [MISSING_VALUE for i in range(len(feature_list))]
       feature_count = 0
       for i in range(len(feature_list)):
         if len(feature_items[i]) == 1 and feature_items[i][0][0] == '*':
