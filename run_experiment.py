@@ -141,6 +141,10 @@ def getWeightPath(data_dir):
 def getModelDir(experiment_dir):
   return '%s/models' % experiment_dir
 
+# Dir of imputers.
+def getImputerDir(experiment_dir):
+  return '%s/imputers' % experiment_dir
+
 # Get model base name.
 def getModelName(config_map):
   pos = config_map['model_spec'].find('(')
@@ -151,6 +155,10 @@ def getModelName(config_map):
 def getModelPath(model_dir, date, config_map):
   model = getModelName(config_map)
   return '%s/%s-%s-%d' % (model_dir, model, date, config_map['train_window'])
+
+# Path to a specific imputer.
+def getImputerPath(imputer_dir, date, config_map):
+  return '%s/imputer-%s-%d' % (imputer_dir, date, config_map['train_window'])
 
 # Dir of prediction results.
 def getResultDir(expeirment_dir):
@@ -236,11 +244,16 @@ def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path
       CODE_DIR, meta_file, filtered_path, ' '.join(filter_args), label_args))
   util.run(cmd)
 
-def evaluateModel(model_file, data_file, label_file):
+def evaluateModel(model_file, imputer_file, data_file, label_file):
   with open(model_file, 'rb') as fp:
     model = pickle.load(fp)
+  with open(imputer_file, 'rb') as fp:
+    imputer = pickle.load(fp)
   X = numpy.loadtxt(data_file)
   y = numpy.loadtxt(label_file)
+
+  X = imputer.transform(X)
+
   p = model.predict(X)
 
   result = dict()
@@ -289,6 +302,8 @@ def trainModels(experiment_dir, config_map, train_meta_file):
 
   model_dir = getModelDir(experiment_dir)
   util.maybeMakeDir(model_dir)
+  imputer_dir = getImputerDir(experiment_dir)
+  util.maybeMakeDir(imputer_dir)
 
   stats_file = getStatsPath(experiment_dir, config_map)
   weight_args = ''
@@ -310,17 +325,19 @@ def trainModels(experiment_dir, config_map, train_meta_file):
     ])
     for date in dates:
       model_file = getModelPath(model_dir, date, config_map)
+      imputer_file = getImputerPath(imputer_dir, date, config_map)
       cmd = ('%s/train_model.py --data_file=%s --label_file=%s --meta_file=%s %s '
              '--yyyymm=%s --months=%d --model_def="%s" --perc=%f --model_file=%s '
              '--train_meta_file=%s --tmp_data_file=%s --tmp_label_file=%s '
-             '--imputer_strategy=%s' % (
+             '--imputer_strategy=%s --imputer_file=%s' % (
                 CODE_DIR, data_file, label_file, meta_file, weight_args, date,
                 config_map['train_window'], config_map['model_spec'],
                 config_map['train_perc'], model_file, train_meta_file,
-                TMP_DATA_FILE, TMP_LABEL_FILE, config_map['imputer_strategy']))
+                TMP_DATA_FILE, TMP_LABEL_FILE,
+                config_map['imputer_strategy'], imputer_file))
       util.run(cmd)
       if config_map['use_classification']:
-        result = evaluateModel(model_file, TMP_DATA_FILE, TMP_LABEL_FILE)
+        result = evaluateModel(model_file, imputer_file, TMP_DATA_FILE, TMP_LABEL_FILE)
         # Keep in sync with evaluateModel().
         values = [date, '%.4f' % result['f1'], '%.4f' % result['auc']]
         for perc in EVAL_PERCS:
@@ -342,16 +359,21 @@ def predict(experiment_dir, config_map, predict_meta_file):
     label_file = getRlabelPath(data_dir)
   meta_file = getMetaPath(data_dir)
   model_dir = getModelDir(experiment_dir)
+  imputer_dir = getImputerDir(experiment_dir)
 
   model_prefix = '%s-' % getModelName(config_map)
   model_suffix = '-%d' % config_map['train_window']
+  imputer_prefix = 'imputer-'
+  imputer_suffix = '-%d' % config_map['train_window']
 
   cmd = ('%s/predict_all.py --data_file=%s --label_file=%s '
          '--meta_file=%s --model_dir=%s --model_prefix="%s" '
-         '--model_suffix="%s" --prediction_window=%d '
+         '--model_suffix="%s" --imputer_dir=%s --imputer_prefix="%s" '
+         '--imputer_suffix="%s" --prediction_window=%d '
          '--delay_window=%d --predict_meta_file=%s --result_file=%s' % (
             CODE_DIR, data_file, label_file, meta_file,
             model_dir, model_prefix, model_suffix,
+            imputer_dir, imputer_prefix, imputer_suffix,
             config_map['predict_window'],
             config_map['delay_window'], predict_meta_file,
             result_file))

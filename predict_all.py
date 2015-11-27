@@ -24,9 +24,9 @@ import util
 
 TMP_DATA_FILE = '/tmp/qd2_predict_all_tmp_data'
 
-def getModelName(ym, model_prefix, model_suffix):
+def getName(ym, prefix, suffix):
   y, m = ym.split('-')
-  return '%s%s%s%s' % (model_prefix, y, m, model_suffix)
+  return '%s%s%s%s' % (prefix, y, m, suffix)
 
 def prepareData(ym, data_file, label_file, meta_file, predict_meta_file,
                 tmp_data_file):
@@ -91,6 +91,9 @@ def main():
   parser.add_argument('--model_dir', required=True)
   parser.add_argument('--model_prefix', required=True)
   parser.add_argument('--model_suffix', required=True)
+  parser.add_argument('--imputer_dir', required=True)
+  parser.add_argument('--imputer_prefix', required=True)
+  parser.add_argument('--imputer_suffix', required=True)
   parser.add_argument('--prediction_window', type=int, required=True)
   parser.add_argument('--delay_window', type=int, required=True)
   parser.add_argument('--result_file', required=True)
@@ -111,11 +114,14 @@ def main():
   delta = args.prediction_window + args.delay_window
   for date in dates:
     ym = util.getPreviousYm(date, delta)
-    model_name = getModelName(ym, args.model_prefix, args.model_suffix)
+    model_name = getName(ym, args.model_prefix, args.model_suffix)
     model_file = '%s/%s' % (args.model_dir, model_name)
+    imputer_name = getName(ym, args.imputer_prefix, args.imputer_suffix)
+    imputer_file = '%s/%s' % (args.imputer_dir, imputer_name)
     if not os.path.isfile(model_file):
       assert not started
       continue
+    assert os.path.isfile(imputer_file)
     started = True
 
     meta = prepareData(date, args.data_file, args.label_file, args.meta_file,
@@ -123,6 +129,10 @@ def main():
     data = numpy.loadtxt(TMP_DATA_FILE)
     assert data.shape[0] == len(meta), 'inconsistent data size: %d vs %d' % (
         data.shape[0], len(meta))
+
+    with open(imputer_file, 'rb') as fp:
+      imputer = pickle.load(fp)
+    data = imputer.transform(data)
 
     with open(model_file, 'rb') as fp:
       model = pickle.load(fp)

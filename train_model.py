@@ -16,9 +16,9 @@
 
 from sklearn.ensemble import *
 from sklearn.linear_model import *
-from sklearn.preprocessing import Imputer
 from sklearn.svm import *
 import argparse
+import imputer_wrapper
 import logging
 import numpy
 import os
@@ -105,21 +105,14 @@ def selectData(data_file, label_file, meta_file, weight_file, train_meta_file,
     train_meta_fp.close()
 
 def trainModel(data_file, label_file, weight_file, model_def, perc, imputer_strategy,
-               model_file):
+               model_file, imputer_file):
   X = numpy.loadtxt(data_file)
   y = numpy.loadtxt(label_file)
   if weight_file:
     w = numpy.loadtxt(weight_file)
 
-  if imputer_strategy == 'zero':
-    for i in range(X.shape[0]):
-      for j in range(X.shape[1]):
-        if numpy.isnan(X[i][j]):
-          X[i][j] = 0.0
-  else:
-    assert imputer_strategy == 'mean' or imputer_strategy == 'median'
-    imputer = Imputer(missing_values='NaN', strategy=imputer_strategy)
-    X = imputer.fit_transform(X)
+  imputer = imputer_wrapper.ImputerWrapper(strategy=imputer_strategy)
+  X = imputer.fit_transform(X)
 
   if perc < 1:
     logging.info('sampling %f data for training' % perc)
@@ -138,6 +131,8 @@ def trainModel(data_file, label_file, weight_file, model_def, perc, imputer_stra
 
   with open(model_file, 'wb') as fp:
     pickle.dump(model, fp)
+  with open(imputer_file, 'wb') as fp:
+    pickle.dump(imputer, fp)
 
 def deleteTmpFiles(tmp_data_file, tmp_label_file):
   if os.path.isfile(tmp_data_file):
@@ -173,6 +168,7 @@ def main():
   parser.add_argument('--imputer_strategy', default='zero',
                       help='strategy for filling in missing values')
   parser.add_argument('--model_file', required=True)
+  parser.add_argument('--imputer_file', required=True)
   parser.add_argument('--tmp_data_file', required=True,
                       help='location of tmp data file within specified '
                            'training period; this can be used later for '
@@ -193,7 +189,8 @@ def main():
              args.train_meta_file, args.yyyymm, args.months,
              args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file)
   trainModel(args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file,
-             args.model_def, args.perc, args.imputer_strategy, args.model_file)
+             args.model_def, args.perc, args.imputer_strategy,
+             args.model_file, args.imputer_file)
   if args.delete_tmp_files:
     deleteTmpFiles(args.tmp_data_file, args.tmp_label_file)
   # tmp_weight_file will not be used after this step so is not guarded by
