@@ -10,7 +10,9 @@
 """
 
 import argparse
+import logging
 import os
+import re
 import util
 
 def findSymbols(equation):
@@ -23,7 +25,7 @@ def findSymbols(equation):
 
   symbols = set()
   index = 0
-  while index < size(formula):
+  while index < len(formula):
     p = formula.find('{', index)
     if p < 0:
       break
@@ -38,7 +40,7 @@ def computeCustomFeature(feature_dir, equation, ticker_file, info_dir):
   target, symbols, formula = findSymbols(equation)
   for symbol in symbols:
     assert os.path.isdir('%s/%s' % (feature_dir, symbol)), (
-        'nonexistent symbol: %s' % symbol
+        'nonexistent symbol: %s' % symbol)
   target_dir = '%s/%s' % (feature_dir, target)
   if not os.path.isdir(target_dir):
     os.mkdir(target_dir)
@@ -76,7 +78,7 @@ def computeCustomFeature(feature_dir, equation, ticker_file, info_dir):
           stats['missing_date'] += 1
           feature_info.append((year, None))
           continue
-        replace = {re.escape('{%s}' % symbol): data[symbol][date] for symbol in symbols}
+        replace = {re.escape('{%s}' % symbol): '%f' % data[symbol][date] for symbol in symbols}
         rformula = pattern.sub(lambda m: replace[re.escape(m.group(0))], formula)
         try:
           feature = eval(rformula)
@@ -88,7 +90,8 @@ def computeCustomFeature(feature_dir, equation, ticker_file, info_dir):
         feature_info.append((year, feature))
   util.writeFeatureInfo(
       [feature_dir, equation, ticker_file],
-      feature_info, '%s/%s' % (info_base_dir, target))
+      feature_info, '%s/%s' % (info_dir, target))
+  logging.info('stats: %s' % stats)
 
 def main():
   parser = argparse.ArgumentParser()

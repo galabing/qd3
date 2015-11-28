@@ -51,7 +51,7 @@ def main():
   args = parser.parse_args()
 
   for target, formula in ITEMS:
-    if not shouldRun(args.feature_base_dir, info_dir, target):
+    if not shouldRun(args.feature_base_dir, args.info_dir, target):
       continue
     cmd = ('%s --feature_base_dir=%s --ticker_file=%s --info_base_dir=%s '
            '--equation="{%s} = %s"' % (
