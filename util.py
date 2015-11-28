@@ -222,3 +222,13 @@ def readKeyValueList(kv_file):
     kv.append([k, float(v)])
   return kv
 
+def readKeyValueDict(kv_file):
+  with open(kv_file, 'r') as fp:
+    lines = fp.read().splitlines()
+  kv = dict()
+  for line in lines:
+    k, v = line.split('\t')
+    assert k not in kv, 'dup key %s in %s' % (k, kv_file)
+    kv[k] = float(v)
+  return kv
+
