@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 
 import os
 
@@ -10,7 +10,12 @@ EXCLUDED_PREFIXES = [
 
 INPUT_HEADERS = ['year', 'count', 'total', 'coverage', 'avg', 'min', '1perc', '10perc',
                  '25perc', '50perc', '75perc', '90perc', '99perc', 'max']
-OUTPUT_HEADS = ['feature\\stats', 'coverage', 'avg', '1perc', '50perc', '99perc']
+OUTPUT_HEADERS = ['feature\\stats', 'coverage', 'avg', '1perc', '50perc', '99perc']
+
+def getValue(v):
+  if v == '-':
+    return 0.0
+  return float(v)
 
 index = {key: INPUT_HEADERS.index(key) for key in ['coverage', 'avg', '1perc', '50perc', '99perc']}
 
@@ -44,15 +49,15 @@ with open(STATS_FILE, 'w') as fp:
       items = lines[i].split('\t')
       coverage = items[index['coverage']]
       avg = items[index['avg']]
-      perc1 = items[index['perc1']]
-      perc50 = items[index['perc50']]
-      perc99 = items[index['perc99']]
+      perc1 = items[index['1perc']]
+      perc50 = items[index['50perc']]
+      perc99 = items[index['99perc']]
       assert coverage.endswith('%')
       coverages.append(float(coverage[:-1]))
-      avg.append(float(avg))
-      perc1s.append(float(perc1))
-      perc50s.append(float(perc50))
-      perc99s.append(float(perc99))
+      avgs.append(getValue(avg))
+      perc1s.append(getValue(perc1))
+      perc50s.append(getValue(perc50))
+      perc99s.append(getValue(perc99))
     coverage = sum(coverages)/len(coverages)
     avg = sum(avgs)/len(avgs)
     perc1 = sum(perc1s)/len(perc1s)
