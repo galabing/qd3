@@ -25,6 +25,8 @@ import os
 import pickle
 import util
 
+MIN_SAMPLES = 10000
+
 def selectData(data_file, label_file, meta_file, weight_file, train_meta_file,
                yyyymm, months, tmp_data_file, tmp_label_file, tmp_weight_file):
   assert len(yyyymm) == 6
@@ -110,6 +112,9 @@ def trainModel(data_file, label_file, weight_file, model_def, perc, imputer_stra
   y = numpy.loadtxt(label_file)
   if weight_file:
     w = numpy.loadtxt(weight_file)
+  if X.shape[0] < MIN_SAMPLES:
+    logging.info('too few samples: required %d, got %d' % (MIN_SAMPLES, X.shape[0]))
+    return
 
   imputer = imputer_wrapper.ImputerWrapper(strategy=imputer_strategy)
   X = imputer.fit_transform(X)

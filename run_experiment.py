@@ -336,6 +336,8 @@ def trainModels(experiment_dir, config_map, train_meta_file):
                 TMP_DATA_FILE, TMP_LABEL_FILE,
                 config_map['imputer_strategy'], imputer_file))
       util.run(cmd)
+      if not os.path.isfile(model_file):
+        continue
       if config_map['use_classification']:
         result = evaluateModel(model_file, imputer_file, TMP_DATA_FILE, TMP_LABEL_FILE)
         # Keep in sync with evaluateModel().
