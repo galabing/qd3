@@ -147,7 +147,7 @@ def shouldRun(output_dir, info_dir, feature, windows):
   for window in windows:
     target_file = '%s_hp-%d' % (feature, window)
     if not os.path.isfile('%s/%s' % (info_dir, target_file)):
-      missing_file = True
+      missing_info = True
       target_dir = '%s/%s' % (output_dir, target_file)
       if not os.path.isdir(target_dir):
         os.mkdir(target_dir)
