@@ -145,7 +145,7 @@ def shouldRun(output_dir, info_dir, feature, windows):
   windows = [int(w) for w in windows.split(',')]
   missing_info = False
   for window in windows:
-    target_file = '%s_hp-%d' % (feature, window)
+    target_file = '%s_vp-%d' % (feature, window)
     if not os.path.isfile('%s/%s' % (info_dir, target_file)):
       missing_info = True
       target_dir = '%s/%s' % (output_dir, target_file)

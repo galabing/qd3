@@ -90,6 +90,8 @@ DO_REMOTE = {
     'compute_yahoo_logadjprice_feature': True,
     'compute_eod_logadjvolume_feature': DO_EOD,
     'compute_yahoo_logadjvolume_feature': True,
+    'compute_eod_adjprice_feature': DO_EOD,
+    'compute_yahoo_adjprice_feature': True,
     'compute_eod_gain_feature': DO_EOD,
     'compute_yahoo_gain_feature': True,
     'compute_eod_egain_feature': DO_EOD,
@@ -476,6 +478,26 @@ if logDo('compute_yahoo_logadjvolume_feature'):
         CODE_DIR, YAHOO_LOGADJVOLUME_DIR, k, output_dir))
     run(cmd)
   markDone('compute_yahoo_logadjvolume_feature')
+
+if logDo('compute_eod_adjprice_feature'):
+  for k in ADJPRICE_K_LIST:
+    output_dir = '%s/eod-adjprice-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, EOD_ADJPRICE_DIR, k, output_dir))
+    run(cmd)
+  markDone('compute_eod_adjprice_feature')
+
+if logDo('compute_yahoo_adjprice_feature'):
+  for k in ADJPRICE_K_LIST:
+    output_dir = '%s/yahoo-adjprice-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, YAHOO_ADJPRICE_DIR, k, output_dir))
+    run(cmd)
+  markDone('compute_yahoo_adjprice_feature')
 
 if logDo('compute_eod_gain_feature'):
   for k in GAIN_K_LIST:

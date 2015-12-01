@@ -24,7 +24,7 @@ import os
 import util
 
 def getTarget(feature, window):
-  return '%s_hp-%d' % (feature, window)
+  return '%s_vp-%d' % (feature, window)
 
 def getTargetDir(feature_dir, feature, window):
   return '%s/%s' % (feature_dir, getTarget(feature, window))
