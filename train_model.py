@@ -17,6 +17,7 @@
 from sklearn.ensemble import *
 from sklearn.linear_model import *
 from sklearn.svm import *
+from sklearn.tree import *
 import argparse
 import imputer_wrapper
 import logging
