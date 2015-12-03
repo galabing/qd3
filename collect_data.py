@@ -75,12 +75,9 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
   feature_ranges = readFeatureRanges(feature_stats_file)
   for feature in feature_list:
     if feature not in feature_ranges:
-      assert (feature.find('-gain-') > 0 or
-              feature.find('-egain-') > 0 or
-              feature.find('-logprice-') > 0 or
-              feature.find('-adjprice-') > 0 or
-              feature.find('-logadjprice-') > 0 or
-              feature.find('-logadjvolume-') > 0 or
+      assert (feature.find('gain') > 0 or
+              feature.find('price') > 0 or
+              feature.find('volume') > 0 or
               feature.startswith('sector') or
               feature.startswith('industry')), (
           'no range info for feature %s' % feature)
