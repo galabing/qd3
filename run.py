@@ -59,6 +59,7 @@ DO_REMOTE = {
     'compute_basic_features': True,
     'compute_custom_features': True,
     'compute_vert_perc_features': True,
+    'compute_vert_perc_2_features': True,
     'get_feature_stats': True,
     'get_sector': True,
     'get_industry': True,
@@ -231,6 +232,14 @@ if logDo('compute_vert_perc_features'):
       CODE_DIR, FEATURE_DIR, YAHOO_DIR, FEATURE_DIR, SF1_TICKER_FILE,
       FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_vert_perc_features')
+
+if logDo('compute_vert_perc_2_features'):
+  cmd = ('%s/compute_vert_perc_2_features.py --sf1_input_dir=%s --price_input_dir=%s '
+         '--feature_base_dir=%s --ticker_file=%s --info_dir=%s '
+         '--computer=%s/compute_vert_perc_2_feature.py') % (
+      CODE_DIR, FEATURE_DIR, YAHOO_DIR, FEATURE_DIR, SF1_TICKER_FILE,
+      FEATURE_INFO_DIR, CODE_DIR)
+  run(cmd, 'compute_vert_perc_2_features')
 
 if logDo('get_feature_stats'):
   cmd = '%s/get_feature_stats.py --info_dir=%s --stats_file=%s' % (
