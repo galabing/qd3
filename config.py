@@ -111,6 +111,7 @@ EOD_LOGADJVOLUME_DIR = '%s/logadjvolume' % EOD_DIR
 EOD_GAIN_DIR = '%s/gain' % EOD_DIR
 EOD_EGAIN_DIR = '%s/egain' % EOD_DIR
 EOD_VOLATILITY_DIR = '%s/volatility' % EOD_DIR
+EOD_VOLATILITY_PERC_DIR = '%s/volatility_perc' % EOD_DIR
 
 YAHOO_DIR = '%s/yahoo' % RUN_DIR
 YAHOO_PROCESSED_DIR = '%s/processed' % YAHOO_DIR
@@ -122,6 +123,7 @@ YAHOO_LOGADJVOLUME_DIR = '%s/logadjvolume' % YAHOO_DIR
 YAHOO_GAIN_DIR = '%s/gain' % YAHOO_DIR
 YAHOO_EGAIN_DIR = '%s/egain' % YAHOO_DIR
 YAHOO_VOLATILITY_DIR = '%s/volatility' % YAHOO_DIR
+YAHOO_VOLATILITY_PERC_DIR = '%s/volatility_perc' % YAHOO_DIR
 
 MARKET_DIR = '%s/market' % RUN_DIR
 MARKET_PROCESSED_DIR = '%s/processed' % MARKET_DIR

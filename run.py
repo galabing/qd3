@@ -99,6 +99,8 @@ DO_REMOTE = {
     'compute_yahoo_egain_feature': True,
     'compute_eod_volatility': DO_EOD,
     'compute_yahoo_volatility': True,
+    'compute_eod_volatility_perc': DO_EOD,
+    'compute_yahoo_volatility_perc': True,
     'run_experiments': True,
 }
 
@@ -169,6 +171,10 @@ util.maybeMakeDirs([
     YAHOO_EGAIN_DIR,
     EOD_EGAIN_LABEL_DIR,
     YAHOO_EGAIN_LABEL_DIR,
+    EOD_VOLATILITY_DIR,
+    YAHOO_VOLATILITY_DIR,
+    EOD_VOLATILITY_PERC_DIR,
+    YAHOO_VOLATILITY_PERC_DIR,
 ])
 
 if logDo('get_sf1_tickers'):
@@ -569,6 +575,20 @@ if logDo('compute_yahoo_volatility'):
       CODE_DIR, YAHOO_ADJPRICE_DIR, VOLATILITY_K, YAHOO_VOLATILITY_DIR))
   run(cmd)
   markDone('compute_yahoo_volatility')
+
+if logDo('compute_eod_volatility_perc'):
+  cmd = ('%s/compute_rank_perc.py --input_dir=%s '
+         '--output_dir=%s' % (
+      CODE_DIR, EOD_VOLATILITY_DIR, EOD_VOLATILITY_PERC_DIR))
+  run(cmd)
+  markDone('compute_eod_volatility_perc')
+
+if logDo('compute_yahoo_volatility_perc'):
+  cmd = ('%s/compute_rank_perc.py --input_dir=%s '
+         '--output_dir=%s' % (
+      CODE_DIR, YAHOO_VOLATILITY_DIR, YAHOO_VOLATILITY_PERC_DIR))
+  run(cmd)
+  markDone('compute_yahoo_volatility_perc')
 
 if logDo('run_experiments'):
   for experiment in EXPERIMENTS:
