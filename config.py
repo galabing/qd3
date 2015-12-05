@@ -36,6 +36,10 @@ LOGADJPRICE_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                       27, 30, 33, 36, 39, 42, 45, 48]
 LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                        27, 30, 33, 36, 39, 42, 45, 48]
+
+# Time window for computing volatility.
+VOLATILITY_K = 24
+
 # For labels, we only predict a 12-month window, and we enforce
 # a minimum raw price and/or membership for all transactions.
 PREDICTION_WINDOW = 12
@@ -106,6 +110,7 @@ EOD_LOGADJPRICE_DIR = '%s/logadjprice' % EOD_DIR
 EOD_LOGADJVOLUME_DIR = '%s/logadjvolume' % EOD_DIR
 EOD_GAIN_DIR = '%s/gain' % EOD_DIR
 EOD_EGAIN_DIR = '%s/egain' % EOD_DIR
+EOD_VOLATILITY_DIR = '%s/volatility' % EOD_DIR
 
 YAHOO_DIR = '%s/yahoo' % RUN_DIR
 YAHOO_PROCESSED_DIR = '%s/processed' % YAHOO_DIR
@@ -116,6 +121,7 @@ YAHOO_LOGADJPRICE_DIR = '%s/logadjprice' % YAHOO_DIR
 YAHOO_LOGADJVOLUME_DIR = '%s/logadjvolume' % YAHOO_DIR
 YAHOO_GAIN_DIR = '%s/gain' % YAHOO_DIR
 YAHOO_EGAIN_DIR = '%s/egain' % YAHOO_DIR
+YAHOO_VOLATILITY_DIR = '%s/volatility' % YAHOO_DIR
 
 MARKET_DIR = '%s/market' % RUN_DIR
 MARKET_PROCESSED_DIR = '%s/processed' % MARKET_DIR

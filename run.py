@@ -97,6 +97,8 @@ DO_REMOTE = {
     'compute_yahoo_gain_feature': True,
     'compute_eod_egain_feature': DO_EOD,
     'compute_yahoo_egain_feature': True,
+    'compute_eod_volatility': DO_EOD,
+    'compute_yahoo_volatility': True,
     'run_experiments': True,
 }
 
@@ -553,6 +555,20 @@ if logDo('compute_yahoo_egain_feature'):
           CODE_DIR, input_dir, k, output_dir))
       run(cmd)
   markDone('compute_yahoo_egain_feature')
+
+if logDo('compute_eod_volatility'):
+  cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
+         '--volatility_dir=%s' % (
+      CODE_DIR, EOD_ADJPRICE_DIR, VOLATILITY_K, EOD_VOLATILITY_DIR))
+  run(cmd)
+  markDone('compute_eod_volatility')
+
+if logDo('compute_yahoo_volatility'):
+  cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
+         '--volatility_dir=%s' % (
+      CODE_DIR, YAHOO_ADJPRICE_DIR, VOLATILITY_K, YAHOO_VOLATILITY_DIR))
+  run(cmd)
+  markDone('compute_yahoo_volatility')
 
 if logDo('run_experiments'):
   for experiment in EXPERIMENTS:
