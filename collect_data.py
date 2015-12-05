@@ -50,7 +50,7 @@ MISSING_VALUE = numpy.nan
 def readFeatureList(feature_list_file):
   with open(feature_list_file, 'r') as fp:
     return [line for line in fp.read().splitlines()
-            if not line.startswith('#')]
+            if line != '' and not line.startswith('#')]
 
 def readFeatureRanges(feature_stats_file):
   with open(feature_stats_file, 'r') as fp:
@@ -78,6 +78,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
       assert (feature.find('gain') > 0 or
               feature.find('price') > 0 or
               feature.find('volume') > 0 or
+              feature.find('volatility') > 0 or
               feature.startswith('sector') or
               feature.startswith('industry')), (
           'no range info for feature %s' % feature)

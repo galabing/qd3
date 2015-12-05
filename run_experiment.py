@@ -216,17 +216,24 @@ def collectData(experiment_dir, config_map):
 def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path):
   filters = [filter.strip() for filter in filter_str.split('+')]
   filter_args = []
+  _, market = getSourceAndMarket(config['label'])
   for filter in filters:
     if filter == '':
       continue
     key, value = filter.split('=')
     if key == 'min_raw_price':
       filter_args.append('--min_raw_price=%s' % value)
-      _, market = getSourceAndMarket(config['label'])
       if market == 'eod':
         filter_args.append('--raw_price_dir=%s' % EOD_PRICE_DIR)
       else:
         filter_args.append('--raw_price_dir=%s' % YAHOO_PRICE_DIR)
+      continue
+    if key == 'max_volatility_perc':
+      filter_args.append('--max_volatility=%s' % value)
+      if market == 'eod':
+        filter_args.append('--volatility_dir=%s' % EOD_VOLATILITY_PERC_DIR)
+      else:
+        filter_args.append('--volatility_dir=%s' % YAHOO_VOLATILITY_PERC_DIR)
       continue
     if key == 'membership':
       assert value == MEMBERSHIP

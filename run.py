@@ -101,7 +101,6 @@ DO_REMOTE = {
     'compute_yahoo_volatility': True,
     'compute_eod_volatility_perc': DO_EOD,
     'compute_yahoo_volatility_perc': True,
-    'run_experiments': True,
 }
 
 if TEST:
@@ -171,10 +170,6 @@ util.maybeMakeDirs([
     YAHOO_EGAIN_DIR,
     EOD_EGAIN_LABEL_DIR,
     YAHOO_EGAIN_LABEL_DIR,
-    EOD_VOLATILITY_DIR,
-    YAHOO_VOLATILITY_DIR,
-    EOD_VOLATILITY_PERC_DIR,
-    YAHOO_VOLATILITY_PERC_DIR,
 ])
 
 if logDo('get_sf1_tickers'):
@@ -563,37 +558,47 @@ if logDo('compute_yahoo_egain_feature'):
   markDone('compute_yahoo_egain_feature')
 
 if logDo('compute_eod_volatility'):
-  cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
-         '--volatility_dir=%s' % (
-      CODE_DIR, EOD_ADJPRICE_DIR, VOLATILITY_K, EOD_VOLATILITY_DIR))
-  run(cmd)
+  for k in VOLATILITY_K_LIST:
+    volatility_dir = '%s_%d' % (EOD_VOLATILITY_PREFIX, k)
+    util.maybeMakeDir(volatility_dir)
+    cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
+           '--volatility_dir=%s' % (
+        CODE_DIR, EOD_ADJPRICE_DIR, k, volatility_dir))
+    run(cmd)
   markDone('compute_eod_volatility')
 
 if logDo('compute_yahoo_volatility'):
-  cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
-         '--volatility_dir=%s' % (
-      CODE_DIR, YAHOO_ADJPRICE_DIR, VOLATILITY_K, YAHOO_VOLATILITY_DIR))
-  run(cmd)
+  for k in VOLATILITY_K_LIST:
+    volatility_dir = '%s_%d' % (YAHOO_VOLATILITY_PREFIX, k)
+    util.maybeMakeDir(volatility_dir)
+    cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
+           '--volatility_dir=%s' % (
+        CODE_DIR, YAHOO_ADJPRICE_DIR, k, volatility_dir))
+    run(cmd)
   markDone('compute_yahoo_volatility')
 
 if logDo('compute_eod_volatility_perc'):
-  cmd = ('%s/compute_rank_perc.py --input_dir=%s '
-         '--output_dir=%s' % (
-      CODE_DIR, EOD_VOLATILITY_DIR, EOD_VOLATILITY_PERC_DIR))
-  run(cmd)
+  for k in VOLATILITY_K_LIST:
+    input_dir = '%s_%d' % (EOD_VOLATILITY_PREFIX, k)
+    output_dir = '%s_%d' % (EOD_VOLATILITY_PERC_PREFIX, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_rank_perc.py --input_dir=%s '
+           '--output_dir=%s' % (CODE_DIR, input_dir, output_dir))
+    run(cmd)
   markDone('compute_eod_volatility_perc')
 
 if logDo('compute_yahoo_volatility_perc'):
-  cmd = ('%s/compute_rank_perc.py --input_dir=%s '
-         '--output_dir=%s' % (
-      CODE_DIR, YAHOO_VOLATILITY_DIR, YAHOO_VOLATILITY_PERC_DIR))
-  run(cmd)
+  for k in VOLATILITY_K_LIST:
+    input_dir = '%s_%d' % (YAHOO_VOLATILITY_PREFIX, k)
+    output_dir = '%s_%d' % (YAHOO_VOLATILITY_PERC_PREFIX, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_rank_perc.py --input_dir=%s '
+           '--output_dir=%s' % (CODE_DIR, input_dir, output_dir))
+    run(cmd)
   markDone('compute_yahoo_volatility_perc')
 
-if logDo('run_experiments'):
-  for experiment in EXPERIMENTS:
-    config_file = '%s/%s.json' % (CONFIG_DIR, experiment)
-    cmd = '%s/run_experiment.py --config=%s' % (CODE_DIR, config_file)
-    run(cmd)
-  markDone('run_experiments')
+for experiment in EXPERIMENTS:
+  config_file = '%s/%s.json' % (CONFIG_DIR, experiment)
+  cmd = '%s/run_experiment.py --config=%s' % (CODE_DIR, config_file)
+  run(cmd)
 
