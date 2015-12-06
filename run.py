@@ -99,6 +99,8 @@ DO_REMOTE = {
     'compute_yahoo_logadjvolume_feature': True,
     'compute_eod_adjprice_feature': DO_EOD,
     'compute_yahoo_adjprice_feature': True,
+    'compute_eod_price_feature': DO_EOD,
+    'compute_yahoo_price_feature': True,
     'compute_eod_gain_feature': DO_EOD,
     'compute_yahoo_gain_feature': True,
     'compute_eod_egain_feature': DO_EOD,
@@ -252,13 +254,13 @@ if logDo('compute_vert_perc_2_features'):
 
 if logDo('compute_hori_perc_features'):
   cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
-         '--computer=%s/compute_hori_perc_feature.py') % (
+         '--suffix=_hp --computer=%s/compute_hori_perc_feature.py') % (
       CODE_DIR, FEATURE_DIR, CODE_DIR)
   run(cmd, 'compute_hori_perc_features')
 
 if logDo('compute_hori_rank_perc_features'):
   cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s --rank '
-         '--computer=%s/compute_hori_perc_feature.py') % (
+         '--suffix=_hpr --computer=%s/compute_hori_perc_feature.py') % (
       CODE_DIR, FEATURE_DIR, CODE_DIR)
   run(cmd, 'compute_hori_rank_perc_features')
 
@@ -277,14 +279,14 @@ if logDo('get_industry_map'):
   run(cmd, 'get_industry_map')
 
 if logDo('compute_hori_perc_features_sector'):
-  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
+  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s --suffix=_hp_sector '
          '--group_map_file=%s --computer=%s/compute_hori_perc_feature.py') % (
       CODE_DIR, FEATURE_DIR, SECTOR_MAP_FILE, CODE_DIR)
   run(cmd, 'compute_hori_perc_features_sector')
 
 if logDo('compute_hori_rank_perc_features_sector'):
   cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
-         '--group_map_file=%s --rank '
+         '--group_map_file=%s --rank --suffix=_hpr_sector '
          '--computer=%s/compute_hori_perc_feature.py') % (
       CODE_DIR, FEATURE_DIR, SECTOR_MAP_FILE, CODE_DIR)
   run(cmd, 'compute_hori_rank_perc_features_sector')
@@ -553,6 +555,26 @@ if logDo('compute_yahoo_adjprice_feature'):
         CODE_DIR, YAHOO_ADJPRICE_DIR, k, output_dir))
     run(cmd)
   markDone('compute_yahoo_adjprice_feature')
+
+if logDo('compute_eod_price_feature'):
+  for k in PRICE_K_LIST:
+    output_dir = '%s/eod-price-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, EOD_PRICE_DIR, k, output_dir))
+    run(cmd)
+  markDone('compute_eod_price_feature')
+
+if logDo('compute_yahoo_price_feature'):
+  for k in PRICE_K_LIST:
+    output_dir = '%s/yahoo-price-%d' % (FEATURE_DIR, k)
+    util.maybeMakeDir(output_dir)
+    cmd = ('%s/compute_previous_feature.py --feature_dir=%s --k=%d '
+           '--pfeature_dir=%s' % (
+        CODE_DIR, YAHOO_PRICE_DIR, k, output_dir))
+    run(cmd)
+  markDone('compute_yahoo_price_feature')
 
 if logDo('compute_eod_gain_feature'):
   for k in GAIN_K_LIST:

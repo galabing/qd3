@@ -136,6 +136,7 @@ def main():
   parser.add_argument('--computer',
       default='/Users/lnyang/lab/qd2/qd2/compute_hori_perc_feature.py')
   parser.add_argument('--feature_base_dir', required=True)
+  parser.add_argument('--suffix', required=True)
   parser.add_argument('--group_map_file')
   parser.add_argument('--rank', action='store_true')
   args = parser.parse_args()
@@ -149,10 +150,7 @@ def main():
 
   for feature in SF1_ITEMS:
     input_dir = '%s/%s' % (args.feature_base_dir, feature)
-    suffix = '_hp'
-    if args.rank:
-      suffix = '_hpr'
-    output_dir = '%s/%s%s' % (args.feature_base_dir, feature, suffix)
+    output_dir = '%s/%s%s' % (args.feature_base_dir, feature, args.suffix)
     if not os.path.isdir(output_dir):
       os.mkdir(output_dir)
     cmd = '%s --input_dir=%s --output_dir=%s %s %s' % (

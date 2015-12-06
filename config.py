@@ -15,8 +15,6 @@ else:
 
 RUN_ID = '20151101'
 EXPERIMENTS = [
-    'A',
-    'B',
 ]
 
 MARKETS = ['R3000', 'SP500']
@@ -28,6 +26,8 @@ DRY_RUN = False
 # enforce any minimum raw price.
 GAIN_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                27, 30, 33, 36, 39, 42, 45, 48]
+PRICE_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
+                27, 30, 33, 36, 39, 42, 45, 48]
 LOGPRICE_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                    27, 30, 33, 36, 39, 42, 45, 48]
 ADJPRICE_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
