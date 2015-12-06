@@ -231,9 +231,11 @@ def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path
     if key == 'max_volatility_perc':
       filter_args.append('--max_volatility=%s' % value)
       if market == 'eod':
-        filter_args.append('--volatility_dir=%s' % EOD_VOLATILITY_PERC_DIR)
+        filter_args.append('--volatility_dir=%s_%d' % (
+            EOD_VOLATILITY_PERC_PREFIX, FILTER_VOLATILITY_K))
       else:
-        filter_args.append('--volatility_dir=%s' % YAHOO_VOLATILITY_PERC_DIR)
+        filter_args.append('--volatility_dir=%s_%d' % (
+            YAHOO_VOLATILITY_PERC_PREFIX, FILTER_VOLATILITY_K))
       continue
     if key == 'membership':
       assert value == MEMBERSHIP

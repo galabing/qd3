@@ -38,6 +38,7 @@ LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
                        27, 30, 33, 36, 39, 42, 45, 48]
 
 # Time windows for computing volatility.
+FILTER_VOLATILITY_K = 24  # This must in the list below.
 VOLATILITY_K_LIST = [24, 48]
 
 # For labels, we only predict a 12-month window, and we enforce
@@ -137,6 +138,8 @@ YAHOO_VOLATILITY_PERC_PREFIX = '%s/yahoo_volatility_perc_' % FEATURE_DIR
 
 MISC_DIR = '%s/misc' % RUN_DIR
 FEATURE_STATS_FILE = '%s/feature_stats.tsv' % MISC_DIR
+SECTOR_MAP_FILE = '%s/sector_map.tsv' % MISC_DIR
+INDUSTRY_MAP_FILE = '%s/industry_map.tsv' % MISC_DIR
 SECTOR_STATS_FILE = '%s/sector_stats' % MISC_DIR
 INDUSTRY_STATS_FILE = '%s/industry_stats' % MISC_DIR
 MEMBERSHIP_FILE = '%s/%s-membership' % (MISC_DIR, MEMBERSHIP)

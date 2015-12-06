@@ -60,9 +60,15 @@ DO_REMOTE = {
     'compute_custom_features': True,
     'compute_vert_perc_features': True,
     'compute_vert_perc_2_features': True,
+    'compute_hori_perc_features': True,
+    'compute_hori_rank_perc_features': True,
+    'compute_hori_perc_features_sector': True,
+    'compute_hori_rank_perc_features_sector': True,
     'get_feature_stats': True,
-    'get_sector': True,
-    'get_industry': True,
+    'get_sector_map': True,
+    'get_industry_map': True,
+    'get_sector_feature': True,
+    'get_industry_feature': True,
     'get_eod_price': DO_EOD,
     'get_eod_adjprice': DO_EOD,
     'get_eod_logprice': DO_EOD,
@@ -244,24 +250,61 @@ if logDo('compute_vert_perc_2_features'):
       FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_vert_perc_2_features')
 
+if logDo('compute_hori_perc_features'):
+  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
+         '--computer=%s/compute_hori_perc_feature.py') % (
+      CODE_DIR, FEATURE_DIR, CODE_DIR)
+  run(cmd, 'compute_hori_perc_features')
+
+if logDo('compute_hori_rank_perc_features'):
+  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s --rank '
+         '--computer=%s/compute_hori_perc_feature.py') % (
+      CODE_DIR, FEATURE_DIR, CODE_DIR)
+  run(cmd, 'compute_hori_rank_perc_features')
+
+if logDo('get_sector_map'):
+  cmd = ('%s/get_sector_industry_map.py --ticker_file=%s --info_file=%s '
+         '--sector --map_file=%s --stats_file=%s' % (
+      CODE_DIR, SF1_TICKER_FILE, SF1_INFO_FILE,
+      SECTOR_MAP_FILE, SECTOR_STATS_FILE))
+  run(cmd, 'get_sector_map')
+
+if logDo('get_industry_map'):
+  cmd = ('%s/get_sector_industry_map.py --ticker_file=%s --info_file=%s '
+         '--industry --map_file=%s --stats_file=%s' % (
+      CODE_DIR, SF1_TICKER_FILE, SF1_INFO_FILE,
+      INDUSTRY_MAP_FILE, INDUSTRY_STATS_FILE))
+  run(cmd, 'get_industry_map')
+
+if logDo('compute_hori_perc_features_sector'):
+  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
+         '--group_map_file=%s --computer=%s/compute_hori_perc_feature.py') % (
+      CODE_DIR, FEATURE_DIR, SECTOR_MAP_FILE, CODE_DIR)
+  run(cmd, 'compute_hori_perc_features_sector')
+
+if logDo('compute_hori_rank_perc_features_sector'):
+  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
+         '--group_map_file=%s --rank '
+         '--computer=%s/compute_hori_perc_feature.py') % (
+      CODE_DIR, FEATURE_DIR, SECTOR_MAP_FILE, CODE_DIR)
+  run(cmd, 'compute_hori_rank_perc_features_sector')
+
 if logDo('get_feature_stats'):
   cmd = '%s/get_feature_stats.py --info_dir=%s --stats_file=%s' % (
       CODE_DIR, FEATURE_INFO_DIR, FEATURE_STATS_FILE)
   run(cmd, 'get_feature_stats')
 
-if logDo('get_sector'):
-  cmd = ('%s/get_sector_industry.py --ticker_file=%s --info_file=%s '
-         '--sector --output_base_dir=%s --stats_file=%s' % (
-      CODE_DIR, SF1_TICKER_FILE, SF1_INFO_FILE, FEATURE_DIR,
-      SECTOR_STATS_FILE))
-  run(cmd, 'get_sector')
+if logDo('get_sector_feature'):
+  cmd = ('%s/get_sector_industry_feature.py --map_file=%s --sector '
+         '--output_base_dir=%s' % (
+      CODE_DIR, SECTOR_MAP_FILE, FEATURE_DIR))
+  run(cmd, 'get_sector_feature')
 
-if logDo('get_industry'):
-  cmd = ('%s/get_sector_industry.py --ticker_file=%s --info_file=%s '
-         '--industry --output_base_dir=%s --stats_file=%s' % (
-      CODE_DIR, SF1_TICKER_FILE, SF1_INFO_FILE, FEATURE_DIR,
-      INDUSTRY_STATS_FILE))
-  run(cmd, 'get_industry')
+if logDo('get_industry_feature'):
+  cmd = ('%s/get_sector_industry_feature.py --map_file=%s --industry '
+         '--output_base_dir=%s' % (
+      CODE_DIR, INDUSTRY_MAP_FILE, FEATURE_DIR))
+  run(cmd, 'get_industry_feature')
 
 if logDo('get_eod_price'):
   cmd = ('%s/get_price_volume.py --processed_dir=%s --column=price '
