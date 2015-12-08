@@ -79,6 +79,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
               feature.find('price') > 0 or
               feature.find('volume') > 0 or
               feature.find('volatility') > 0 or
+              feature.find('_hp') > 0 or
               feature.startswith('sector') or
               feature.startswith('industry')), (
           'no range info for feature %s' % feature)
@@ -113,7 +114,15 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
       if not os.path.isfile(feature_file):
         skip_stats['feature_file'] += 1
         continue
-      feature_items[i] = util.readKeyValueList(feature_file)
+      items = util.readKeyValueList(feature_file)
+      for j in range(len(items)):
+        ymd = items[j][0].split('-')
+        if len(ymd) == 3:
+          continue
+        # Change yyyy-mm to yyyy-mm-01
+        assert len(ymd) == 2
+        items[j][0] += '-01'
+      feature_items[i] = items
 
     for gain_date, gain in gains:
       if gain_date < min_date:
