@@ -52,11 +52,21 @@ def readMarketGains(market_gain_file):
 
 def prepTopBot(data, ks):
   assert len(ks) > 0
-  gains_map = dict()  # yyyy-mm => gains
+  gain_map = dict()  # yyyy-mm => gains
+  precision_map = dict()  # yyyy-mm => precisions
   for date, items in data.iteritems():
-    assert date not in gains_map
+    assert date not in gain_map
+    assert date not in precision_map
     gains = [0.0 for k in ks]
+    precisions = [0.0 for k in ks]
     items = [item[1] for item in items]
+    bitems = []  # 1 if positive gain, 0 otherwise
+    for item in items:
+      if item > 0:
+        bitems.append(1.0)
+      else:
+        bitems.append(0.0)
+    assert len(bitems) == len(items)
     for i in range(len(ks)):
       k = ks[i]
       if k > 0:
@@ -69,31 +79,37 @@ def prepTopBot(data, ks):
         p = max(0, len(items) + k)
         q = len(items)
       gains[i] = sum(items[p:q]) / (q-p)
-    gains_map[date] = gains
-  return gains_map
+      precisions[i] = sum(bitems[p:q]) / (q-p)
+    gain_map[date] = gains
+    precision_map[date] = precisions
+  return gain_map, precision_map
 
-def getStats(gains_map, nk):
+def getStats(value_map, nk):
   mean = [0.0 for i in range(nk)]
   std = [0.0 for i in range(nk)]
   sharpe = [0.0 for i in range(nk)]
   for i in range(nk):
-    gains = [value[i] for value in gains_map.itervalues()]
-    mean[i] = sum(gains)/len(gains)
-    diff = [gain - mean[i] for gain in gains]
+    values = [value[i] for value in value_map.itervalues()]
+    mean[i] = sum(values)/len(values)
+    diff = [value - mean[i] for value in values]
     std[i] = math.sqrt(sum([d**2 for d in diff])/len(diff))
     sharpe[i] = mean[i]/std[i]
   return mean, std, sharpe
 
-def writeTopBot(data, ks, output_file):
-  gains_map = prepTopBot(data, ks)
-  mean, std, sharpe = getStats(gains_map, len(ks))
+def writeOneTopBot(value_map, ks, output_file):
+  mean, std, sharpe = getStats(value_map, len(ks))
   with open(output_file, 'w') as fp:
     print >> fp, '\t'.join(['date'] + ['%d' % k for k in ks])
-    for date in sorted(gains_map.keys()):
-      print >> fp, '\t'.join([date] + ['%f' % gain for gain in gains_map[date]])
+    for date in sorted(value_map.keys()):
+      print >> fp, '\t'.join([date] + ['%f' % value for value in value_map[date]])
     print >> fp, '\t'.join(['mean'] + ['%f' % m for m in mean])
     print >> fp, '\t'.join(['std'] + ['%f' % s for s in std])
     print >> fp, '\t'.join(['sharpe'] + ['%f' % s for s in sharpe])
+
+def writeTopBot(data, ks, gain_file, precision_file):
+  gain_map, precision_map = prepTopBot(data, ks)
+  writeOneTopBot(gain_map, ks, gain_file)
+  writeOneTopBot(precision_map, ks, precision_file)
 
 def writeBuckets(data, buckets, output_file):
   assert buckets > 0
@@ -243,7 +259,9 @@ def main():
   if args.market_gain_file:
     market = readMarketGains(args.market_gain_file)
 
-  writeTopBot(data, KS, '%s/topbot.tsv' % args.analyze_dir)
+  writeTopBot(data, KS,
+      '%s/gain_topbot.tsv' % args.analyze_dir,
+      '%s/precision_topbot.tsv' % args.analyze_dir)
 
   for buckets in BUCKETS_LIST:
     writeBuckets(data, buckets,
