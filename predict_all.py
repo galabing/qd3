@@ -17,6 +17,7 @@
 """
 
 import argparse
+import logging
 import numpy
 import os
 import pickle
@@ -97,6 +98,7 @@ def main():
   parser.add_argument('--prediction_window', type=int, required=True)
   parser.add_argument('--delay_window', type=int, required=True)
   parser.add_argument('--result_file', required=True)
+  parser.add_argument('--allow_older_models', action='store_true')
   args = parser.parse_args()
 
   # get dates for prediction
@@ -112,17 +114,25 @@ def main():
 
   started = False  # check no 'hole' in simulation period
   delta = args.prediction_window + args.delay_window
+  previous_files = [None, None]  # model, imputer
   for date in dates:
     ym = util.getPreviousYm(date, delta)
     model_name = getName(ym, args.model_prefix, args.model_suffix)
-    model_file = '%s/%s' % (args.model_dir, model_name)
     imputer_name = getName(ym, args.imputer_prefix, args.imputer_suffix)
+    model_file = '%s/%s' % (args.model_dir, model_name)
     imputer_file = '%s/%s' % (args.imputer_dir, imputer_name)
     if not os.path.isfile(model_file):
-      assert not started
-      continue
+      if args.allow_older_models and previous_files[0] is not None:
+        model_file = previous_files[0]
+        imputer_file = previous_files[1]
+        logging.warn('using previous model %s for %s' % (model_file, date))
+      else:
+        assert not started
+        continue
+
     assert os.path.isfile(imputer_file)
     started = True
+    previous_files = [model_file, imputer_file]
 
     meta = prepareData(date, args.data_file, args.label_file, args.meta_file,
                        args.predict_meta_file, TMP_DATA_FILE)
@@ -136,6 +146,7 @@ def main():
 
     with open(model_file, 'rb') as fp:
       model = pickle.load(fp)
+
     if 'predict_proba' in dir(model):
       prob = model.predict_proba(data)
       prob = [item[1] for item in prob]

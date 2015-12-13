@@ -49,7 +49,6 @@ DO_LOCAL = {
 # Steps to execute on remote machine, set to False to skip steps.
 DO_EOD = False
 DO_REMOTE = {
-    'get_sf1_tickers': True,
     'get_eod_tickers': DO_EOD,
     'convert_sf1_raw': True,
     'process_sf1_raw': True,
@@ -58,17 +57,23 @@ DO_REMOTE = {
     'process_yahoo': True,
     'compute_basic_features': True,
     'compute_custom_features': True,
-    'compute_vert_perc_features': True,
-    'compute_vert_perc_2_features': True,
+
+    # Disabled vert perc and variants of hari perc features,
+    # except for compute_hori_perc_features.
+    'compute_vert_perc_features': False,
+    'compute_vert_perc_2_features': False,
     'compute_hori_perc_features': True,
-    'compute_hori_rank_perc_features': True,
-    'compute_hori_perc_features_sector': True,
-    'compute_hori_rank_perc_features_sector': True,
+    'compute_hori_rank_perc_features': False,
+    'compute_hori_perc_features_sector': False,
+    'compute_hori_rank_perc_features_sector': False,
     'get_feature_stats': True,
-    'get_sector_map': True,
-    'get_industry_map': True,
-    'get_sector_feature': True,
-    'get_industry_feature': True,
+
+    # Disabled sector/industry features.
+    'get_sector_map': False,
+    'get_industry_map': False,
+    'get_sector_feature': False,
+    'get_industry_feature': False,
+
     'get_eod_price': DO_EOD,
     'get_eod_adjprice': DO_EOD,
     'get_eod_logprice': DO_EOD,
@@ -76,35 +81,49 @@ DO_REMOTE = {
     'get_eod_logadjvolume': DO_EOD,
     'get_yahoo_price': True,
     'get_yahoo_adjprice': True,
-    'get_yahoo_logprice': True,
-    'get_yahoo_logadjprice': True,
-    'get_yahoo_logadjvolume': True,
+
+    # Disabled log price/volume features.
+    'get_yahoo_logprice': False,
+    'get_yahoo_logadjprice': False,
+    'get_yahoo_logadjvolume': False,
     'get_eod_gain_feature': DO_EOD,
-    'get_yahoo_gain_feature': True,
+
+    # Disabled gain features.
+    'get_yahoo_gain_feature': False,
+
+    # Disabled membership filtering.
     'get_membership': False,  # Files changed on 2015-10-01. Need to be fixed.
+
     'get_eod_gain_label': DO_EOD,
     'get_yahoo_gain_label': True,
+    # Only yahoo offers market index history, so there is no eod version.
     'process_market': True,
     'get_market_adjprice': True,
     'get_market_gain': True,
+
+    # Diabled egain features.
     'get_eod_egain_feature': DO_EOD,
-    'get_yahoo_egain_feature': True,
+    'get_yahoo_egain_feature': False,
+
     'get_eod_egain_label': DO_EOD,
     'get_yahoo_egain_label': True,
+
+    # Diabled price/volume features.
     'compute_eod_logprice_feature': DO_EOD,
-    'compute_yahoo_logprice_feature': True,
+    'compute_yahoo_logprice_feature': False,
     'compute_eod_logadjprice_feature': DO_EOD,
-    'compute_yahoo_logadjprice_feature': True,
+    'compute_yahoo_logadjprice_feature': False,
     'compute_eod_logadjvolume_feature': DO_EOD,
-    'compute_yahoo_logadjvolume_feature': True,
+    'compute_yahoo_logadjvolume_feature': False,
     'compute_eod_adjprice_feature': DO_EOD,
-    'compute_yahoo_adjprice_feature': True,
+    'compute_yahoo_adjprice_feature': False,
     'compute_eod_price_feature': DO_EOD,
-    'compute_yahoo_price_feature': True,
+    'compute_yahoo_price_feature': False,
     'compute_eod_gain_feature': DO_EOD,
-    'compute_yahoo_gain_feature': True,
+    'compute_yahoo_gain_feature': False,
     'compute_eod_egain_feature': DO_EOD,
-    'compute_yahoo_egain_feature': True,
+    'compute_yahoo_egain_feature': False,
+
     'compute_eod_volatility': DO_EOD,
     'compute_yahoo_volatility': True,
     'compute_eod_volatility_perc': DO_EOD,

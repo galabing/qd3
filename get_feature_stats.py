@@ -27,7 +27,7 @@ def main():
       info_file = '%s/%s' % (args.info_dir, feature)
       with open(info_file, 'r') as ifp:
         lines = ifp.read().splitlines()
-      assert len(lines) > 2
+      assert len(lines) > 2, 'bad file: %s' % info_file
       assert lines[1] == INFO_HEADER
       coverages = []
       perc1s = []
