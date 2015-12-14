@@ -6,6 +6,7 @@ import util
 
 # https://docs.google.com/spreadsheets/d/1XwI_qtsYzTwNhEnxPhGf2ftEl0EwXCc_c_1KVS1_w8w/edit#gid=400608303&vpid=A1
 # with coverage > 0
+# 2015/12/13: + INVCAPAVG-ART ROIC-ART
 SF1_ITEMS = [
     'ACCOCI-ARQ',
     'ASSETS-ARQ',
@@ -67,6 +68,7 @@ SF1_ITEMS = [
     'INTERESTBURDEN-ART',
     'INTEXP-ARQ',
     'INTEXP-ART',
+    'INVCAPAVG-ART',
     'LEVERAGERATIO-ART',
     'LIABILITIES-ARQ',
     'LIABILITIESC-ARQ',
@@ -110,6 +112,7 @@ SF1_ITEMS = [
     'RND-ART',
     'ROA-ART',
     'ROE-ART',
+    'ROIC-ART',
     'ROS-ART',
     'SGNA-ARQ',
     'SGNA-ART',
