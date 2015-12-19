@@ -179,14 +179,15 @@ def getStatsPath(experiment_dir, config_map):
   return '%s/%s-stats.tsv' % (experiment_dir, model)
 
 def makeFeatureList(experiment_dir, config_map):
-  features = [item.strip() for item in config_map['features'].split('+')]
-  with open(getFeatureListPath(experiment_dir), 'w') as ofp:
-    for feature in features:
-      with open('%s/%s' % (FEATURE_LIST_DIR, feature), 'r') as ifp:
-        lines = ifp.read().splitlines()
-      for line in lines:
-        if not line.startswith('#'):
-          print >> ofp, line
+  groups = [item.strip() for item in config_map['features'].split('+')]
+  features = set()
+  for group in groups:
+    with open('%s/%s' % (FEATURE_LIST_DIR, group), 'r') as fp:
+      features.update([line for line in fp.read().splitlines()
+                       if not line.startswith('#')])
+  with open(getFeatureListPath(experiment_dir), 'w') as fp:
+    for feature in sorted(features):
+      print >> fp, feature
 
 def collectData(experiment_dir, config_map):
   data_dir = getDataDir(experiment_dir)

@@ -116,6 +116,8 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
         continue
       items = util.readKeyValueList(feature_file)
       for j in range(len(items)):
+        if items[j][0] == '*':
+          continue
         ymd = items[j][0].split('-')
         if len(ymd) == 3:
           continue
