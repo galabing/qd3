@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/Users/lnyang/miniconda2/bin/python2.7
 
 from sklearn import tree
 from sklearn.externals.six import StringIO
@@ -19,7 +19,9 @@ def visualize(model_file, feature_file, output_dir):
   for i in range(len(model.estimators_)):
     print 'visualizing tree %d/%d' % (i+1, len(model.estimators_))
     dot_data = StringIO()
-    tree.export_graphviz(model.estimators_[i], feature_names=features, out_file=dot_data)
+    tree.export_graphviz(model.estimators_[i], feature_names=features,
+                         class_names=['neg', 'pos'], filled=True,
+                         out_file=dot_data)
     graph = pydot.graph_from_dot_data(dot_data.getvalue())
     graph.write_png('%s/tree-%d.png' % (output_dir, i))
 

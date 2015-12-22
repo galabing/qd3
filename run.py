@@ -66,6 +66,9 @@ DO_REMOTE = {
     'compute_hori_rank_perc_features': False,
     'compute_hori_perc_features_sector': False,
     'compute_hori_rank_perc_features_sector': False,
+
+    'compute_vert_gain_features': True,
+
     'get_feature_stats': True,
 
     # Disabled sector/industry features.
@@ -309,6 +312,14 @@ if logDo('compute_hori_rank_perc_features_sector'):
          '--computer=%s/compute_hori_perc_feature.py') % (
       CODE_DIR, FEATURE_DIR, SECTOR_MAP_FILE, CODE_DIR)
   run(cmd, 'compute_hori_rank_perc_features_sector')
+
+if logDo('compute_vert_gain_features'):
+  cmd = ('%s/compute_vert_gain_features.py --sf1_input_dir=%s '
+         '--feature_base_dir=%s --ticker_file=%s --info_dir=%s '
+         '--computer=%s/compute_vert_gain_feature.py') % (
+      CODE_DIR, FEATURE_DIR, FEATURE_DIR, SF1_TICKER_FILE,
+      FEATURE_INFO_DIR, CODE_DIR)
+  run(cmd, 'compute_vert_gain_features')
 
 if logDo('get_feature_stats'):
   cmd = '%s/get_feature_stats.py --info_dir=%s --stats_file=%s' % (
