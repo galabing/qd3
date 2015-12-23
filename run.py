@@ -49,6 +49,7 @@ DO_LOCAL = {
 # Steps to execute on remote machine, set to False to skip steps.
 DO_EOD = False
 DO_REMOTE = {
+    'get_sf1_tickers': True,
     'get_eod_tickers': DO_EOD,
     'convert_sf1_raw': True,
     'process_sf1_raw': True,
@@ -56,7 +57,9 @@ DO_REMOTE = {
     'process_eod_raw': DO_EOD,
     'process_yahoo': True,
     'compute_basic_features': True,
+    'compute_basic_features_mrx': True,
     'compute_custom_features': True,
+    'compute_custom_features_mrx': True,
 
     # Disabled vert perc and variants of hari perc features,
     # except for compute_hori_perc_features.
@@ -67,6 +70,7 @@ DO_REMOTE = {
     'compute_hori_perc_features_sector': False,
     'compute_hori_rank_perc_features_sector': False,
 
+    'compute_hori_perc_features_mrx': True,
     'compute_vert_gain_features': True,
 
     'get_feature_stats': True,
@@ -252,11 +256,25 @@ if logDo('compute_basic_features'):
       FEATURE_DIR, FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_basic_features')
 
+if logDo('compute_basic_features_mrx'):
+  cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '
+         '--feature_base_dir=%s --info_dir=%s '
+         '--computer=%s/compute_basic_feature.py --use_mrx') % (
+      CODE_DIR, SF1_PROCESSED_DIR, SF1_TICKER_FILE,
+      FEATURE_DIR, FEATURE_INFO_DIR, CODE_DIR)
+  run(cmd, 'compute_basic_features_mrx')
+
 if logDo('compute_custom_features'):
   cmd = ('%s/compute_custom_features.py --feature_base_dir=%s --ticker_file=%s '
          '--info_dir=%s --computer=%s/compute_custom_feature.py') % (
       CODE_DIR, FEATURE_DIR, SF1_TICKER_FILE, FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_custom_features')
+
+if logDo('compute_custom_features_mrx'):
+  cmd = ('%s/compute_custom_features.py --feature_base_dir=%s --ticker_file=%s '
+         '--info_dir=%s --computer=%s/compute_custom_feature.py --use_mrx') % (
+      CODE_DIR, FEATURE_DIR, SF1_TICKER_FILE, FEATURE_INFO_DIR, CODE_DIR)
+  run(cmd, 'compute_custom_features_mrx')
 
 if logDo('compute_vert_perc_features'):
   cmd = ('%s/compute_vert_perc_features.py --sf1_input_dir=%s --price_input_dir=%s '
@@ -279,6 +297,12 @@ if logDo('compute_hori_perc_features'):
          '--suffix=_hp --computer=%s/compute_hori_perc_feature.py') % (
       CODE_DIR, FEATURE_DIR, CODE_DIR)
   run(cmd, 'compute_hori_perc_features')
+
+if logDo('compute_hori_perc_features_mrx'):
+  cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s '
+         '--suffix=_hp --computer=%s/compute_hori_perc_feature.py --use_mrx') % (
+      CODE_DIR, FEATURE_DIR, CODE_DIR)
+  run(cmd, 'compute_hori_perc_features_mrx')
 
 if logDo('compute_hori_rank_perc_features'):
   cmd = ('%s/compute_hori_perc_features.py --feature_base_dir=%s --rank '

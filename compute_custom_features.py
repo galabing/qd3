@@ -10,7 +10,7 @@ ITEMS = [
     ['FCF_REVENUE-ARQ', '{FCF-ARQ}/{REVENUE-ARQ}'],
     ['FCF_REVENUE-ART', '{FCF-ART}/{REVENUE-ART}'],
     ['RECEIVABLES_REVENUE-ARQ', '{RECEIVABLES-ARQ}/{REVENUE-ARQ}'],
-    ['COR_INVENTORY-ARQ', '{COR-ARQ}/{INVENTORY-ARQ}'],
+#    ['COR_INVENTORY-ARQ', '{COR-ARQ}/{INVENTORY-ARQ}'],
     ['INTANGIBLES_ASSETS-ARQ', '{INTANGIBLES-ARQ}/{ASSETS-ARQ}'],
     ['LIABILITIESC_ASSETSC-ARQ', '{LIABILITIESC-ARQ}/{ASSETSC-ARQ}'],
     ['SGNA_REVENUE-ARQ', '{SGNA-ARQ}/{REVENUE-ARQ}'],
@@ -19,10 +19,10 @@ ITEMS = [
     ['EBIT_REVENUE-ART', '{EBIT-ART}/{REVENUE-ART}'],
     ['EBIT_INTEXP-ARQ', '{EBIT-ARQ}/{INTEXP-ARQ}'],
     ['EBIT_INTEXP-ART', '{EBIT-ART}/{INTEXP-ART}'],
-    ['TAXRATE-ARQ', '({EBT-ARQ} - {NETINC-ARQ}) / {NETINC-ARQ}'],
-    ['TAXRATE-ART', '({EBT-ART} - {NETINC-ART}) / {NETINC-ART}'],
+#    ['TAXRATE-ARQ', '({EBT-ARQ} - {NETINC-ARQ}) / {NETINC-ARQ}'],
+#    ['TAXRATE-ART', '({EBT-ART} - {NETINC-ART}) / {NETINC-ART}'],
     ['ASSETS_EQUITY-ARQ', '{ASSETS-ARQ}/{EQUITY-ARQ}'],
-    ['QUICKRATIO-ARQ', '({ASSETSC-ARQ} - {INVENTORY-ARQ}) / {LIABILITIESC-ARQ}'],
+#    ['QUICKRATIO-ARQ', '({ASSETSC-ARQ} - {INVENTORY-ARQ}) / {LIABILITIESC-ARQ}'],
     ['CASHNEQ_ASSETS-ARQ', '{CASHNEQ-ARQ}/{ASSETS-ARQ}'],
 ]
 
@@ -48,9 +48,13 @@ def main():
   parser.add_argument('--ticker_file', required=True)
   parser.add_argument('--feature_base_dir', required=True)
   parser.add_argument('--info_dir', required=True)
+  parser.add_argument('--use_mrx', action='store_true')
   args = parser.parse_args()
 
   for target, formula in ITEMS:
+    if args.use_mrx:
+      target = util.getMrx(target)
+      formula = util.getMrx(formula)
     if not shouldRun(args.feature_base_dir, args.info_dir, target):
       continue
     cmd = ('%s --feature_base_dir=%s --ticker_file=%s --info_base_dir=%s '

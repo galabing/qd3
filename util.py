@@ -39,6 +39,9 @@ def maybeMakeDirs(dirs):
   for dir in dirs:
     maybeMakeDir(dir)
 
+def getMrx(arx):
+  return arx.replace('ARQ', 'MRQ').replace('ART', 'MRT')
+
 ################
 ## Date utils ##
 ################
