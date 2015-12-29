@@ -56,6 +56,11 @@ DO_REMOTE = {
     'convert_eod_raw': DO_EOD,
     'process_eod_raw': DO_EOD,
     'process_yahoo': True,
+
+    # Need access to raw-format files, thus not compatible to EOD.
+    'get_yahoo_trading_days': True,
+    'get_yahoo_holes': True,
+
     'compute_basic_features': True,
     'compute_basic_features_mrx': True,
     'compute_custom_features': True,
@@ -193,6 +198,7 @@ util.maybeMakeDirs([
     YAHOO_LOGPRICE_DIR,
     YAHOO_LOGADJPRICE_DIR,
     YAHOO_LOGADJVOLUME_DIR,
+    YAHOO_HOLE_DIR,
     EOD_GAIN_DIR,
     YAHOO_GAIN_DIR,
     EOD_GAIN_LABEL_DIR,
@@ -247,6 +253,17 @@ if logDo('process_yahoo'):
   cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, YAHOO_SF1_DIR, YAHOO_PROCESSED_DIR)
   run(cmd, 'process_yahoo')
+
+if logDo('get_yahoo_trading_days'):
+  cmd = '%s/get_yahoo_trading_days.py --raw_dir=%s --output_file=%s' % (
+      CODE_DIR, YAHOO_SF1_DIR, YAHOO_TRADING_DAY_FILE)
+  run(cmd, 'get_yahoo_trading_days')
+
+if logDo('get_yahoo_holes'):
+  cmd = ('%s/get_yahoo_holes.py --raw_dir=%s --trading_day_file=%s '
+         '--output_dir=%s' % (
+      CODE_DIR, YAHOO_SF1_DIR, YAHOO_TRADING_DAY_FILE, YAHOO_HOLE_DIR))
+  run(cmd, 'get_yahoo_holes')
 
 if logDo('compute_basic_features'):
   cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '

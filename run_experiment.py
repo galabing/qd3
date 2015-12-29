@@ -242,6 +242,10 @@ def filterMetadata(experiment_dir, config, filter_str, label_file, filtered_path
       filter_args.append('--min_marketcap=%s' % value)
       filter_args.append('--marketcap_dir=%s/MARKETCAP-ND' % FEATURE_DIR)
       continue
+    if key == 'max_holes':
+      filter_args.append('--max_holes=%s' % value)
+      filter_args.append('--hole_dir=%s' % YAHOO_HOLE_DIR)
+      continue
     if key == 'membership':
       assert value == MEMBERSHIP
       filter_args.append('--membership_file=%s' % MEMBERSHIP_FILE)

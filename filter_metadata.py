@@ -13,6 +13,8 @@
                            --volatility_dir=./volatility_perc
                            --min_marketcap=2000000000
                            --marketcap_dir=./MARKETCAP-ND
+                           --max_holes=0.01
+                           --hole_dir=./holes
                            --membership_file=./membership
                            --remove_neg_labels
                            --output_file=./filtered_meta
@@ -26,6 +28,8 @@
                       threshold (requires --volatility_dir).
     --min_marketcap: only keep tickers with larger market cap than the
                      threshold (requires --marketcap_dir).
+    --max_holes: only keep tickers with less holes than the threshold
+                 (requires --hole_dir).
     --membership_file: only keep tickers that are part of some membership
                        on the trading day.
     --remove_neg_labels: only keep zero and positive labels (for training).
@@ -45,6 +49,7 @@ import util
 MIN_RAW_PRICE = float('-Inf')
 MAX_VOLATILITY = float('Inf')
 MIN_MARKETCAP = float('-Inf')
+MAX_HOLES = float('Inf')
 
 def readMembership(membership_file):
   with open(membership_file, 'r') as fp:
@@ -77,12 +82,14 @@ def isMember(membership, ticker, date):
 
 def filterMetadata(input_file, min_raw_price, raw_price_dir,
                    max_volatility, volatility_dir, min_marketcap,
-                   marketcap_dir, membership_file, remove_neg_labels,
+                   marketcap_dir, max_holes, hole_dir,
+                   membership_file, remove_neg_labels,
                    label_file, output_file):
   stats = {
     'min_raw_price': 0,
     'max_volatility': 0,
     'min_marketcap': 0,
+    'max_holes': 0,
     'membership': 0,
     'neg_label': 0,
   }
@@ -96,6 +103,7 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
   price = None  # for prev_ticker, date => price
   volatility = None  # for prev ticker, date => volatility
   marketcap = None  # for prev ticker, [dates, values]
+  hole = None  # for prev ticker, [dates, holes]
   if membership_file is None:
     membership = None
   else:
@@ -124,6 +132,11 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
         marketcap_dates = [t[0] for t in tmp]
         marketcap_values = [t[1] for t in tmp]
         marketcap = (marketcap_dates, marketcap_values)
+      if hole_dir is not None:
+        tmp = util.readKeyValueList('%s/%s' % (hole_dir, ticker))
+        hole_dates = [t[0] for t in tmp]
+        hole_values = [t[1] for t in tmp]
+        hole = (hole_dates, hole_values)
     # Maybe check price.
     if price is not None:
       assert date in price, 'missing price for %s on %s' % (ticker, date)
@@ -142,6 +155,13 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
       index = bisect.bisect_right(marketcap_dates, date) - 1
       if index < 0 or marketcap_values[index] < min_marketcap:
         stats['min_marketcap'] += 1
+        continue
+    # Maybe check holes.
+    if hole is not None:
+      hole_dates, hole_values = hole
+      index = bisect.bisect_right(hole_dates, date) - 1
+      if index < 0 or hole_values[index] > max_holes:
+        stats['max_holes'] += 1
         continue
     # Maybe check membership.
     if membership is not None:
@@ -167,6 +187,8 @@ def main():
   parser.add_argument('--volatility_dir')
   parser.add_argument('--min_marketcap', type=float, default=MIN_MARKETCAP)
   parser.add_argument('--marketcap_dir')
+  parser.add_argument('--max_holes', type=float, default=MAX_HOLES)
+  parser.add_argument('--hole_dir')
   parser.add_argument('--membership_file')
   parser.add_argument('--remove_neg_labels', action='store_true')
   parser.add_argument('--label_file')
@@ -187,12 +209,18 @@ def main():
         'must also specify --marketcap_dir since --min_marketcap is specified')
   else:
     assert args.marketcap_dir is None
+  if args.max_holes < MAX_HOLES:
+    assert args.hole_dir is not None, (
+        'must also specify --hole_dir since max_holes is specified')
+  else:
+    assert args.hole_dir is None
   if args.remove_neg_labels:
     assert args.label_file is not None, (
         'must also specify --label_file since --remove_neg_labels is specified')
   filterMetadata(args.input_file, args.min_raw_price, args.raw_price_dir,
                  args.max_volatility, args.volatility_dir, args.min_marketcap,
-                 args.marketcap_dir, args.membership_file, args.remove_neg_labels,
+                 args.marketcap_dir, args.max_holes, args.hole_dir,
+                 args.membership_file, args.remove_neg_labels,
                  args.label_file, args.output_file)
 
 if __name__ == '__main__':
