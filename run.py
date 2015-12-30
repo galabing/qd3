@@ -55,11 +55,14 @@ DO_REMOTE = {
     'process_sf1_raw': True,
     'convert_eod_raw': DO_EOD,
     'process_eod_raw': DO_EOD,
-    'process_yahoo': True,
+    #'process_yahoo': True,
 
     # Need access to raw-format files, thus not compatible to EOD.
     'get_yahoo_trading_days': True,
-    'get_yahoo_holes': True,
+    #'get_yahoo_holes': True,
+
+    'project_yahoo': True,
+    'compute_yahoo_open_gain_label': True,
 
     'compute_basic_features': True,
     'compute_basic_features_mrx': True,
@@ -70,13 +73,13 @@ DO_REMOTE = {
     # except for compute_hori_perc_features.
     'compute_vert_perc_features': False,
     'compute_vert_perc_2_features': False,
-    'compute_hori_perc_features': True,
     'compute_hori_rank_perc_features': False,
     'compute_hori_perc_features_sector': False,
     'compute_hori_rank_perc_features_sector': False,
+    'compute_vert_gain_features': False,
 
+    'compute_hori_perc_features': True,
     'compute_hori_perc_features_mrx': True,
-    'compute_vert_gain_features': True,
 
     'get_feature_stats': True,
 
@@ -91,8 +94,8 @@ DO_REMOTE = {
     'get_eod_logprice': DO_EOD,
     'get_eod_logadjprice': DO_EOD,
     'get_eod_logadjvolume': DO_EOD,
-    'get_yahoo_price': True,
-    'get_yahoo_adjprice': True,
+    #'get_yahoo_price': True,
+    #'get_yahoo_adjprice': True,
 
     # Disabled log price/volume features.
     'get_yahoo_logprice': False,
@@ -109,16 +112,16 @@ DO_REMOTE = {
     'get_eod_gain_label': DO_EOD,
     'get_yahoo_gain_label': True,
     # Only yahoo offers market index history, so there is no eod version.
-    'process_market': True,
-    'get_market_adjprice': True,
-    'get_market_gain': True,
+    #'process_market': True,
+    #'get_market_adjprice': True,
+    #'get_market_gain': True,
 
     # Diabled egain features.
     'get_eod_egain_feature': DO_EOD,
     'get_yahoo_egain_feature': False,
 
     'get_eod_egain_label': DO_EOD,
-    'get_yahoo_egain_label': True,
+    #'get_yahoo_egain_label': True,
 
     # Diabled price/volume features.
     'compute_eod_logprice_feature': DO_EOD,
@@ -137,9 +140,9 @@ DO_REMOTE = {
     'compute_yahoo_egain_feature': False,
 
     'compute_eod_volatility': DO_EOD,
-    'compute_yahoo_volatility': True,
+    #'compute_yahoo_volatility': True,
     'compute_eod_volatility_perc': DO_EOD,
-    'compute_yahoo_volatility_perc': True,
+    #'compute_yahoo_volatility_perc': True,
 }
 
 if TEST:
@@ -199,6 +202,7 @@ util.maybeMakeDirs([
     YAHOO_LOGADJPRICE_DIR,
     YAHOO_LOGADJVOLUME_DIR,
     YAHOO_HOLE_DIR,
+    YAHOO_PROJECTED_DIR,
     EOD_GAIN_DIR,
     YAHOO_GAIN_DIR,
     EOD_GAIN_LABEL_DIR,
@@ -264,6 +268,12 @@ if logDo('get_yahoo_holes'):
          '--output_dir=%s' % (
       CODE_DIR, YAHOO_SF1_DIR, YAHOO_TRADING_DAY_FILE, YAHOO_HOLE_DIR))
   run(cmd, 'get_yahoo_holes')
+
+if logDo('project_yahoo'):
+  cmd = ('%s/project_yahoo.py --raw_dir=%s --trading_day_file=%s '
+         '--projected_dir=%s' % (
+      CODE_DIR, YAHOO_SF1_DIR, YAHOO_TRADING_DAY_FILE, YAHOO_PROJECTED_DIR))
+  run(cmd, 'project_yahoo')
 
 if logDo('compute_basic_features'):
   cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '
@@ -471,8 +481,8 @@ if logDo('get_eod_gain_label'):
   run(cmd, 'get_eod_gain_label')
 
 if logDo('get_yahoo_gain_label'):
-  cmd = '%s/compute_gain.py --price_dir=%s --k=%d --fill --gain_dir=%s' % (
-      CODE_DIR, YAHOO_ADJPRICE_DIR, PREDICTION_WINDOW, YAHOO_GAIN_LABEL_DIR)
+  cmd = '%s/compute_open_gain.py --yahoo_dir=%s --k=%d --fill --gain_dir=%s' % (
+      CODE_DIR, YAHOO_PROJECTED_DIR, PREDICTION_WINDOW, YAHOO_GAIN_LABEL_DIR)
   run(cmd, 'get_yahoo_gain_label')
 
 if logDo('process_market'):

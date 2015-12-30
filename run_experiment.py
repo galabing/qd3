@@ -43,9 +43,9 @@ import pickle
 import util
 
 CONFIG_SUFFIX = '.json'
-TMP_DATA_FILE = '/tmp/qd2_tmp_data'
-TMP_LABEL_FILE = '/tmp/qd2_tmp_label'
-TMP_WEIGHT_FILE = '/tmp/qd2_tmp_weight'
+TMP_DATA_FILE = '/tmp/qd3_tmp_data'
+TMP_LABEL_FILE = '/tmp/qd3_tmp_label'
+TMP_WEIGHT_FILE = '/tmp/qd3_tmp_weight'
 
 REQUIRED_FIELDS = [
     'features',

@@ -86,6 +86,37 @@ def readTickers(ticker_file):
   with open(ticker_file, 'r') as fp:
     return sorted(fp.read().splitlines())
 
+# Reads yahoo projected data.  File format:
+#   date open high low close adjclose volume
+# separated by tabs.
+# Use 'labels' to specify interested columns, eg:
+#   dates, closes, adj_closes = readYahoo(yahoo_file, 'date,close,adjclose')
+def readYahoo(yahoo_file, labels):
+  data = {
+      'date': [],
+      'open': [],
+      'high': [],
+      'low': [],
+      'close': [],
+      'adjclose': [],
+      'volume': [],
+  }
+  labels = labels.split(',')
+  for label in labels:
+    assert label in data, 'bad label: %s' % label
+  with open(yahoo_file, 'r') as fp:
+    lines = fp.read().splitlines()
+  for line in lines:
+    date, op, hi, lo, cl, adjcl, vo = line.split('\t')
+    data['date'].append(date)
+    data['open'].append(float(op))
+    data['high'].append(float(hi))
+    data['low'].append(float(lo))
+    data['close'].append(float(cl))
+    data['adjclose'].append(float(adjcl))
+    data['volume'].append(float(vo))
+  return [data[label] for label in labels]
+
 ## Sf1
 
 SF1_INFO_HEADERS = [

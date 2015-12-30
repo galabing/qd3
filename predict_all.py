@@ -23,7 +23,7 @@ import os
 import pickle
 import util
 
-TMP_DATA_FILE = '/tmp/qd2_predict_all_tmp_data'
+TMP_DATA_FILE = '/tmp/qd3_predict_all_tmp_data'
 
 def getName(ym, prefix, suffix):
   y, m = ym.split('-')

@@ -4,10 +4,10 @@ import socket
 HOST = socket.gethostname()
 assert HOST == 'lnyang-mn1' or HOST == 'lnyang-ld1'
 if HOST == 'lnyang-mn1':
-  HOST_DIR = '/Users/lnyang/lab/qd2'
+  HOST_DIR = '/Users/lnyang/lab/qd3'
 else:
   assert HOST == 'lnyang-ld1'
-  HOST_DIR = '/home/lnyang/lab/qd2'
+  HOST_DIR = '/home/lnyang/lab/qd3'
 
 ###############
 ## Constants ##
@@ -44,9 +44,9 @@ LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
 FILTER_VOLATILITY_K = 24  # This must in the list below.
 VOLATILITY_K_LIST = [24, 48]
 
-# For labels, we only predict a 12-month window, and we enforce
+# For labels, we only predict a 12-day window, and we enforce
 # a minimum raw price and/or membership for all transactions.
-PREDICTION_WINDOW = 12
+PREDICTION_WINDOW = 5
 MEMBERSHIP = 'SP500'
 
 # [[max_look, max_pick, max_hold] ...]
@@ -64,7 +64,7 @@ TRADE_CONFIGS = [
     [-1, 5, -1],
 ]
 
-CODE_DIR = '%s/qd2' % HOST_DIR
+CODE_DIR = '%s/qd3' % HOST_DIR
 
 if TEST:
   RUN_DIR = '%s/testdata' % CODE_DIR
@@ -127,6 +127,7 @@ YAHOO_EGAIN_DIR = '%s/egain' % YAHOO_DIR
 
 YAHOO_TRADING_DAY_FILE = '%s/trading_days' % YAHOO_DIR
 YAHOO_HOLE_DIR = '%s/hole' % YAHOO_DIR
+YAHOO_PROJECTED_DIR = '%s/projected' % YAHOO_DIR
 
 MARKET_DIR = '%s/market' % RUN_DIR
 MARKET_PROCESSED_DIR = '%s/processed' % MARKET_DIR
