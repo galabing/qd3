@@ -1,5 +1,6 @@
 from config import SYMBOL_DIR
 import logging
+import math
 import os
 
 # Configures logging format.
@@ -77,6 +78,24 @@ def getPreviousYm(ym, k=1):
     m += 12
     y -= 1
   return '%02d-%02d' % (y, m)
+
+################
+## Math utils ##
+################
+
+# Normalizes to zero-mean and unit-std.
+def normalize(values):
+  assert len(values) > 0
+  if len(values) == 1:
+    return [0.0]
+  mean = sum(values) / len(values)
+  norms = [(values[i] - mean) for i in range(len(values))]
+  l2 = math.sqrt(sum([value**2 for value in norms]))
+  if l2 < 1e-5:
+    return [0.0 for i in range(len(values))]
+  for i in range(len(norms)):
+    norms[i] /= l2
+  return norms
 
 ##############
 ## IO utils ##

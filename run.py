@@ -64,6 +64,7 @@ DO_REMOTE = {
     'project_yahoo': True,
     'compute_yahoo_open_gain_label': True,
     'adjust_yahoo': True,
+    'compute_window_features': True,
 
     'compute_basic_features': True,
     'compute_basic_features_mrx': True,
@@ -493,6 +494,12 @@ if logDo('adjust_yahoo'):
   cmd = '%s/adjust_yahoo.py --yahoo_dir=%s --output_dir=%s' % (
       CODE_DIR, YAHOO_PROJECTED_DIR, YAHOO_ADJUSTED_DIR)
   run(cmd, 'adjust_yahoo')
+
+if logDo('compute_window_features'):
+  cmd = ('%s/compute_window_features.py --adjusted_dir=%s '
+         '--feature_base_dir=%s --computer=%s/compute_window_feature.py') % (
+      CODE_DIR, YAHOO_ADJUSTED_DIR, FEATURE_DIR, CODE_DIR)
+  run(cmd, 'compute_window_features')
 
 if logDo('process_market'):
   cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
