@@ -63,6 +63,7 @@ DO_REMOTE = {
 
     'project_yahoo': True,
     'compute_yahoo_open_gain_label': True,
+    'adjust_yahoo': True,
 
     'compute_basic_features': True,
     'compute_basic_features_mrx': True,
@@ -114,14 +115,15 @@ DO_REMOTE = {
     # Only yahoo offers market index history, so there is no eod version.
     #'process_market': True,
     #'get_market_adjprice': True,
-    #'get_market_gain': True,
+    'project_market': True,
+    'get_market_gain': True,
 
     # Diabled egain features.
     'get_eod_egain_feature': DO_EOD,
     'get_yahoo_egain_feature': False,
 
     'get_eod_egain_label': DO_EOD,
-    #'get_yahoo_egain_label': True,
+    'get_yahoo_egain_label': True,
 
     # Diabled price/volume features.
     'compute_eod_logprice_feature': DO_EOD,
@@ -203,6 +205,7 @@ util.maybeMakeDirs([
     YAHOO_LOGADJVOLUME_DIR,
     YAHOO_HOLE_DIR,
     YAHOO_PROJECTED_DIR,
+    YAHOO_ADJUSTED_DIR,
     EOD_GAIN_DIR,
     YAHOO_GAIN_DIR,
     EOD_GAIN_LABEL_DIR,
@@ -210,6 +213,7 @@ util.maybeMakeDirs([
     MARKET_PROCESSED_DIR,
     MARKET_ADJPRICE_DIR,
     MARKET_GAIN_DIR,
+    MARKET_PROJECTED_DIR,
     EOD_EGAIN_DIR,
     YAHOO_EGAIN_DIR,
     EOD_EGAIN_LABEL_DIR,
@@ -485,6 +489,11 @@ if logDo('get_yahoo_gain_label'):
       CODE_DIR, YAHOO_PROJECTED_DIR, PREDICTION_WINDOW, YAHOO_GAIN_LABEL_DIR)
   run(cmd, 'get_yahoo_gain_label')
 
+if logDo('adjust_yahoo'):
+  cmd = '%s/adjust_yahoo.py --yahoo_dir=%s --output_dir=%s' % (
+      CODE_DIR, YAHOO_PROJECTED_DIR, YAHOO_ADJUSTED_DIR)
+  run(cmd, 'adjust_yahoo')
+
 if logDo('process_market'):
   cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, YAHOO_MARKET_DIR, MARKET_PROCESSED_DIR)
@@ -496,6 +505,12 @@ if logDo('get_market_adjprice'):
       CODE_DIR, MARKET_PROCESSED_DIR, MARKET_ADJPRICE_DIR))
   run(cmd, 'get_market_adjprice')
 
+if logDo('project_market'):
+  cmd = ('%s/project_yahoo.py --raw_dir=%s --trading_day_file=%s '
+         '--projected_dir=%s' % (
+      CODE_DIR, YAHOO_MARKET_DIR, YAHOO_TRADING_DAY_FILE, MARKET_PROJECTED_DIR))
+  run(cmd, 'project_yahoo')
+
 if logDo('get_market_gain'):
   # For market we only do one version of gain (without mininum raw price)
   # and it will be used for both features and labels.  GAIN_K_LIST specify
@@ -506,8 +521,8 @@ if logDo('get_market_gain'):
   for k in sorted(k_list):
     gain_dir = '%s/%d' % (MARKET_GAIN_DIR, k)
     util.maybeMakeDir(gain_dir)
-    cmd = '%s/compute_gain.py --price_dir=%s --k=%d --fill --gain_dir=%s' % (
-        CODE_DIR, MARKET_ADJPRICE_DIR, k, gain_dir)
+    cmd = '%s/compute_open_gain.py --yahoo_dir=%s --k=%d --fill --gain_dir=%s' % (
+        CODE_DIR, MARKET_PROJECTED_DIR, k, gain_dir)
     run(cmd)
   markDone('get_market_gain')
 
@@ -551,7 +566,7 @@ if logDo('get_yahoo_egain_label'):
     market_file = '%s/%d/%s' % (MARKET_GAIN_DIR, PREDICTION_WINDOW, market)
     egain_dir = '%s/%s' % (YAHOO_EGAIN_LABEL_DIR, market)
     util.maybeMakeDir(egain_dir)
-    cmd = ('%s/compute_egain.py --gain_dir=%s --market_file=%s '
+    cmd = ('%s/compute_egain_2.py --gain_dir=%s --market_file=%s '
            '--egain_dir=%s' % (
         CODE_DIR, YAHOO_GAIN_LABEL_DIR, market_file, egain_dir))
     run(cmd)

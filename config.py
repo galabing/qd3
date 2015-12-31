@@ -128,11 +128,13 @@ YAHOO_EGAIN_DIR = '%s/egain' % YAHOO_DIR
 YAHOO_TRADING_DAY_FILE = '%s/trading_days' % YAHOO_DIR
 YAHOO_HOLE_DIR = '%s/hole' % YAHOO_DIR
 YAHOO_PROJECTED_DIR = '%s/projected' % YAHOO_DIR
+YAHOO_ADJUSTED_DIR = '%s/adjusted' % YAHOO_DIR
 
 MARKET_DIR = '%s/market' % RUN_DIR
 MARKET_PROCESSED_DIR = '%s/processed' % MARKET_DIR
 MARKET_ADJPRICE_DIR = '%s/adjprice' % MARKET_DIR
 MARKET_GAIN_DIR = '%s/gain' % MARKET_DIR
+MARKET_PROJECTED_DIR = '%s/projected' % MARKET_DIR
 
 FEATURE_DIR = '%s/features' % RUN_DIR
 FEATURE_INFO_DIR = '%s/feature_info' % RUN_DIR
