@@ -4,11 +4,13 @@
 """ Trains a model based on training data, labels and model def.
     This is similar to train_model.py except that it takes all the data
     (see experiment Q) and selects a portion of it for training.  The
-    selected portion is specified by --yyyymm and --months.
-    Eg, with yyyymm=201012 and months=12, it will use all the
-    data within [201001, 201012] for training.  It's the caller's
+    selected portion is specified by --date and --months.
+    Eg, with date=2010-12 and months=12, it will use all the
+    data within [2010-01, 2010-12] for training.  It's the caller's
     responsibility that there is enough data within the specified
-    period.
+    period.  Another option is to specify date as yyyy-mm-dd.
+    Eg, with date=2010-12-13 and months = 12, it will use all the
+    data within [2009-12-13, 2010-12-13] for training.
 
     For simplicity, it dumps selected portions of features and labels
     to temp files.  This can be improved.
@@ -29,17 +31,31 @@ import util
 MIN_SAMPLES = 10000
 
 def selectData(data_file, label_file, meta_file, weight_file, train_meta_file,
-               yyyymm, months, tmp_data_file, tmp_label_file, tmp_weight_file):
-  assert len(yyyymm) == 6
-  y = yyyymm[:4]
-  m = yyyymm[4:]
-  last_ym = '%s-%s' % (y, m)
-  if months <= 0:
-    first_ym = '0000-00'
+               date, months, tmp_data_file, tmp_label_file, tmp_weight_file):
+  if date.find('-') < 0:  # backward compatible
+    assert len(date) == 6
+    items = [date[:4], date[4:]]
   else:
-    first_ym = util.getPreviousYm(last_ym, months - 1)
-  logging.info('training period: %s - %s' % (first_ym, last_ym))
-  assert first_ym <= last_ym
+    items = date.split('-')
+  first_ymd = '0000-00-00'
+  last_ymd = None
+  if len(items) == 2:
+    y, m = items
+    last_ym = '%s-%s' % (y, m)
+    last_ymd = '%s-99' % last_ym
+    if months > 0:
+      first_ym = util.getPreviousYm(last_ym, months - 1)
+      first_ymd = '%s-00' % first_ym
+  else:
+    assert len(items) == 3
+    y, m, d = items
+    last_ym = '%s-%s' % (y, m)
+    last_ymd = date
+    if months > 0:
+      first_ym = util.getPreviousYm(last_ym, months)
+      first_ymd = '%s-%s' % (first_ym, d)
+  logging.info('training period: %s - %s' % (first_ymd, last_ymd))
+  assert first_ymd <= last_ymd
 
   data_ifp = open(data_file, 'r')
   data_ofp = open(tmp_data_file, 'w')
@@ -82,8 +98,7 @@ def selectData(data_file, label_file, meta_file, weight_file, train_meta_file,
 
     assert meta[-1] == '\n'
     ticker, date, tmp1, tmp2 = meta[:-1].split('\t')
-    ym = util.ymdToYm(date)
-    if ym < first_ym or ym > last_ym:
+    if date < first_ymd or date > last_ymd:
       continue
     assert data[-1] == '\n'
     assert label[-1] == '\n'
@@ -161,8 +176,9 @@ def main():
   # collected for training, but --meta_file is still needed
   # for joining with --data_file and --label_file.
   parser.add_argument('--train_meta_file')
-  parser.add_argument('--yyyymm', required=True,
-                      help='last date of training period')
+  # Set one of --date and --yyyymm.
+  parser.add_argument('--date')
+  parser.add_argument('--yyyymm')
   parser.add_argument('--months', type=int, required=True,
                       help='length of training period in months, '
                            'use -1 to denote entire history')
@@ -191,8 +207,15 @@ def main():
   util.configLogging()
   if args.weight_file:
     assert args.tmp_weight_file, 'must specify --tmp_weight_file since --weight_file is specified'
+  # To be backward compatible.
+  assert args.date or args.yyyymm, 'must specify --date or --yyyymm'
+  assert args.date is None or args.yyyymm is None, 'must specify --date or --yyyymm'
+  if args.date is not None:
+    date = args.date
+  else:
+    date = args.yyyymm
   selectData(args.data_file, args.label_file, args.meta_file, args.weight_file,
-             args.train_meta_file, args.yyyymm, args.months,
+             args.train_meta_file, date, args.months,
              args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file)
   trainModel(args.tmp_data_file, args.tmp_label_file, args.tmp_weight_file,
              args.model_def, args.perc, args.imputer_strategy,

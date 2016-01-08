@@ -5,6 +5,7 @@
 
     Example usage:
       ./collect_data.py --gain_dir=./gains/1
+                        --date_file=./dates
                         --max_neg=0.01
                         --min_pos=0.01
                         --feature_base_dir=./features
@@ -25,6 +26,9 @@
     classified into positive/negative according to the thresholds.
     For each dated gain, features are joined by looking back a specified max
     window and using the most recent value (or 0 if not found).
+
+    If --date_file is specified, only dates in the file (and satisfying
+    min/max date thresholds) will be selcted for data collection.
 
     These files are written:
     data_file: matrix of features delimited by space.  Features are in the
@@ -65,7 +69,7 @@ def readFeatureRanges(feature_stats_file):
     feature_ranges[feature] = [perc1, perc99]
   return feature_ranges
 
-def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
+def collectData(gain_dir, date_file, max_neg, min_pos, feature_base_dir,
                 feature_list_file, feature_stats_file, min_date, max_date,
                 window, min_feature_perc, data_file, label_file, rlabel_file,
                 meta_file, weight_power, weight_file):
@@ -81,7 +85,8 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
               feature.find('volatility') > 0 or
               feature.find('_hp') > 0 or
               feature.startswith('sector') or
-              feature.startswith('industry')), (
+              feature.startswith('industry') or
+              feature.startswith('window')), (
           'no range info for feature %s' % feature)
       feature_ranges[feature] = [float('-Inf'), float('Inf')]
     lower, upper = feature_ranges[feature]
@@ -98,11 +103,17 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
                 'index': 0,
                 'min_date': 0,
                 'max_date': 0,
+                'filter_date': 0,
                 'neg_pos': 0,
                 'window': 0,
                 'min_perc': 0,
                 '1_perc': 0,
                 '99_perc': 0}
+
+  dates = None
+  if date_file:
+    with open(date_file, 'r') as fp:
+      dates = set(fp.read().splitlines())
 
   for ticker in tickers:
     gain_file = '%s/%s' % (gain_dir, ticker)
@@ -132,6 +143,9 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
         continue
       if gain_date > max_date:
         skip_stats['max_date'] += 1
+        continue
+      if dates is not None and gain_date not in dates:
+        skip_stats['filter_date'] += 1
         continue
 
       if max_neg < gain and gain < min_pos:
@@ -218,6 +232,7 @@ def collectData(gain_dir, max_neg, min_pos, feature_base_dir,
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--gain_dir', required=True)
+  parser.add_argument('--date_file')
   parser.add_argument('--max_neg', type=float, default=0.01)
   parser.add_argument('--min_pos', type=float, default=0.01)
   parser.add_argument('--feature_base_dir', required=True)
@@ -245,7 +260,7 @@ def main():
   assert args.max_neg <= args.min_pos, 'max_neg > min_pos: %f vs %f' % (
       args.max_neg, args.min_pos)
   util.configLogging()
-  collectData(args.gain_dir, args.max_neg, args.min_pos,
+  collectData(args.gain_dir, args.date_file, args.max_neg, args.min_pos,
               args.feature_base_dir, args.feature_list, args.feature_stats,
               args.min_date, args.max_date, args.window, args.min_feature_perc,
               args.data_file, args.label_file, args.rlabel_file, args.meta_file,

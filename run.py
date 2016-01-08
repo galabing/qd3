@@ -1,38 +1,5 @@
 #!/usr/bin/python2.7
 
-""" Runs data collection, training, analysis and prediction.
-
-    Steps:
-    - make a new dir, eg, /Users/lnyang/lab/qd2/data/runs/20150530
-    - make subdirs raw/sf1, raw/eod, raw/yahoo
-
-    - download sf1 to raw/sf1:
-      https://www.quandl.com/api/v3/databases/SF1/data?auth_token=KH43r2CQK7vmRodxQXX3
-    - unzip and rename to sf1.csv
-    - download indicators to raw/sf1/indicators.txt:
-      http://www.sharadar.com/meta/indicators.txt
-    - download ticker info to raw/sf1/tickers.txt:
-      http://www.sharadar.com/meta/tickers.txt
-
-    - download eod to raw/eod:
-      https://www.quandl.com/api/v3/databases/EOD/data?auth_token=KH43r2CQK7vmRodxQXX3
-    - unzip and rename to eod.csv
-
-    - download market data to raw/yahoo/market:
-      http://real-chart.finance.yahoo.com/table.csv?s=%5ERUA (^RUA for russell 3000)
-      http://real-chart.finance.yahoo.com/table.csv?s=%5EGSPC (^GSPC for sp 500)
-    - rename to R3000.csv, SP500.csv etc
-
-    - prepare feature lists under feature_lists dir
-    - prepare experiment configs under configs dir
-    - prepare membership file under raw/misc dir
-
-    - modify config.py to update:
-      - RUN_ID
-      - CONFIGS
-      - etc
-"""
-
 from config import *
 import logging
 import os
@@ -59,17 +26,20 @@ DO_REMOTE = {
 
     # Need access to raw-format files, thus not compatible to EOD.
     'get_yahoo_trading_days': True,
+    'filter_yahoo_dates': True,
     #'get_yahoo_holes': True,
 
     'project_yahoo': True,
-    'compute_yahoo_open_gain_label': True,
     'adjust_yahoo': True,
+    'compute_rolling_window_volumed': True,
     'compute_window_features': True,
 
     'compute_basic_features': True,
     'compute_basic_features_mrx': True,
     'compute_custom_features': True,
     'compute_custom_features_mrx': True,
+
+    'compute_yahoo_volumed_perc': True,
 
     # Disabled vert perc and variants of hari perc features,
     # except for compute_hori_perc_features.
@@ -143,9 +113,9 @@ DO_REMOTE = {
     'compute_yahoo_egain_feature': False,
 
     'compute_eod_volatility': DO_EOD,
-    #'compute_yahoo_volatility': True,
+    'compute_yahoo_volatility': True,
     'compute_eod_volatility_perc': DO_EOD,
-    #'compute_yahoo_volatility_perc': True,
+    'compute_yahoo_volatility_perc': True,
 }
 
 if TEST:
@@ -268,6 +238,17 @@ if logDo('get_yahoo_trading_days'):
       CODE_DIR, YAHOO_SF1_DIR, YAHOO_TRADING_DAY_FILE)
   run(cmd, 'get_yahoo_trading_days')
 
+if logDo('filter_yahoo_dates'):
+  for i in [1, 2, 3, 4, 5]:
+    cmd = ('%s/filter_dates.py --input_file=%s --nth_day_of_week=%d '
+           '--output_file=%s%d' % (
+        CODE_DIR, YAHOO_TRADING_DAY_FILE, i, YAHOO_DOW_PREFIX, i))
+    run(cmd)
+  cmd = ('%s/filter_dates.py --input_file=%s --nth_day_of_month=1 '
+         '--output_file=%s1' % (
+      CODE_DIR, YAHOO_TRADING_DAY_FILE, YAHOO_DOM_PREFIX))
+  run(cmd, 'filter_yahoo_dates')
+
 if logDo('get_yahoo_holes'):
   cmd = ('%s/get_yahoo_holes.py --raw_dir=%s --trading_day_file=%s '
          '--output_dir=%s' % (
@@ -279,6 +260,25 @@ if logDo('project_yahoo'):
          '--projected_dir=%s' % (
       CODE_DIR, YAHOO_SF1_DIR, YAHOO_TRADING_DAY_FILE, YAHOO_PROJECTED_DIR))
   run(cmd, 'project_yahoo')
+
+if logDo('adjust_yahoo'):
+  cmd = '%s/adjust_yahoo.py --yahoo_dir=%s --output_dir=%s' % (
+      CODE_DIR, YAHOO_PROJECTED_DIR, YAHOO_ADJUSTED_DIR)
+  run(cmd, 'adjust_yahoo')
+
+if logDo('compute_rolling_window_volumed'):
+  output_dir = '%s/volumed_mean_%d' % (YAHOO_ADJUSTED_DIR, VOLUMED_K)
+  util.maybeMakeDir(output_dir)
+  cmd = ('%s/compute_rolling_window_feature.py --input_dir=%s/volumed '
+         '--window=%d --method=mean --output_dir=%s' % (
+      CODE_DIR, YAHOO_ADJUSTED_DIR, VOLUMED_K, output_dir))
+  run(cmd, 'compute_rolling_window_volumed')
+
+if logDo('compute_window_features'):
+  cmd = ('%s/compute_window_features.py --adjusted_dir=%s '
+         '--feature_base_dir=%s --computer=%s/compute_window_feature.py') % (
+      CODE_DIR, YAHOO_ADJUSTED_DIR, FEATURE_DIR, CODE_DIR)
+  run(cmd, 'compute_window_features')
 
 if logDo('compute_basic_features'):
   cmd = ('%s/compute_basic_features.py --processed_dir=%s --ticker_file=%s '
@@ -307,6 +307,15 @@ if logDo('compute_custom_features_mrx'):
          '--info_dir=%s --computer=%s/compute_custom_feature.py --use_mrx') % (
       CODE_DIR, FEATURE_DIR, SF1_TICKER_FILE, FEATURE_INFO_DIR, CODE_DIR)
   run(cmd, 'compute_custom_features_mrx')
+
+if logDo('compute_yahoo_volumed_perc'):
+  # TODO: move this to config.
+  input_dir = '%s/volumed_mean_%d' % (YAHOO_ADJUSTED_DIR, VOLUMED_K)
+  output_dir = '%s/volumed_mean_%d_perc' % (YAHOO_ADJUSTED_DIR, VOLUMED_K)
+  util.maybeMakeDir(output_dir)
+  cmd = ('%s/compute_rank_perc.py --input_dir=%s '
+         '--output_dir=%s' % (CODE_DIR, input_dir, output_dir))
+  run(cmd, 'compute_yahoo_volumed_perc')
 
 if logDo('compute_vert_perc_features'):
   cmd = ('%s/compute_vert_perc_features.py --sf1_input_dir=%s --price_input_dir=%s '
@@ -490,17 +499,6 @@ if logDo('get_yahoo_gain_label'):
       CODE_DIR, YAHOO_PROJECTED_DIR, PREDICTION_WINDOW, YAHOO_GAIN_LABEL_DIR)
   run(cmd, 'get_yahoo_gain_label')
 
-if logDo('adjust_yahoo'):
-  cmd = '%s/adjust_yahoo.py --yahoo_dir=%s --output_dir=%s' % (
-      CODE_DIR, YAHOO_PROJECTED_DIR, YAHOO_ADJUSTED_DIR)
-  run(cmd, 'adjust_yahoo')
-
-if logDo('compute_window_features'):
-  cmd = ('%s/compute_window_features.py --adjusted_dir=%s '
-         '--feature_base_dir=%s --computer=%s/compute_window_feature.py') % (
-      CODE_DIR, YAHOO_ADJUSTED_DIR, FEATURE_DIR, CODE_DIR)
-  run(cmd, 'compute_window_features')
-
 if logDo('process_market'):
   cmd = '%s/process_yahoo.py --raw_dir=%s --processed_dir=%s' % (
       CODE_DIR, YAHOO_MARKET_DIR, MARKET_PROCESSED_DIR)
@@ -516,7 +514,7 @@ if logDo('project_market'):
   cmd = ('%s/project_yahoo.py --raw_dir=%s --trading_day_file=%s '
          '--projected_dir=%s' % (
       CODE_DIR, YAHOO_MARKET_DIR, YAHOO_TRADING_DAY_FILE, MARKET_PROJECTED_DIR))
-  run(cmd, 'project_yahoo')
+  run(cmd, 'project_market')
 
 if logDo('get_market_gain'):
   # For market we only do one version of gain (without mininum raw price)
@@ -739,9 +737,9 @@ if logDo('compute_yahoo_volatility'):
   for k in VOLATILITY_K_LIST:
     volatility_dir = '%s_%d' % (YAHOO_VOLATILITY_PREFIX, k)
     util.maybeMakeDir(volatility_dir)
-    cmd = ('%s/compute_volatility.py --price_dir=%s --k=%d '
+    cmd = ('%s/compute_volatility.py --price_dir=%s/close --k=%d '
            '--volatility_dir=%s' % (
-        CODE_DIR, YAHOO_ADJPRICE_DIR, k, volatility_dir))
+        CODE_DIR, YAHOO_ADJUSTED_DIR, k, volatility_dir))
     run(cmd)
   markDone('compute_yahoo_volatility')
 
@@ -767,6 +765,6 @@ if logDo('compute_yahoo_volatility_perc'):
 
 for experiment in EXPERIMENTS:
   config_file = '%s/%s.json' % (CONFIG_DIR, experiment)
-  cmd = '%s/run_experiment.py --config=%s' % (CODE_DIR, config_file)
+  cmd = '%s/run_experiment_2.py --config=%s' % (CODE_DIR, config_file)
   run(cmd)
 

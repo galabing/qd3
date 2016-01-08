@@ -44,6 +44,9 @@ LOGADJVOLUME_K_LIST = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24,
 FILTER_VOLATILITY_K = 24  # This must in the list below.
 VOLATILITY_K_LIST = [24, 48]
 
+# Time window for computing volumed.
+VOLUMED_K = 5
+
 # For labels, we only predict a 12-day window, and we enforce
 # a minimum raw price and/or membership for all transactions.
 PREDICTION_WINDOW = 5
@@ -129,6 +132,9 @@ YAHOO_TRADING_DAY_FILE = '%s/trading_days' % YAHOO_DIR
 YAHOO_HOLE_DIR = '%s/hole' % YAHOO_DIR
 YAHOO_PROJECTED_DIR = '%s/projected' % YAHOO_DIR
 YAHOO_ADJUSTED_DIR = '%s/adjusted' % YAHOO_DIR
+
+YAHOO_DOW_PREFIX = '%s/trading_days_dow-' % YAHOO_DIR
+YAHOO_DOM_PREFIX = '%s/trading_days_dom-' % YAHOO_DIR
 
 MARKET_DIR = '%s/market' % RUN_DIR
 MARKET_PROCESSED_DIR = '%s/processed' % MARKET_DIR

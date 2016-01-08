@@ -32,11 +32,13 @@ def adjustYahoo(args):
     adjopens = [opens[i]*ratios[i] for i in range(len(dates))]
     adjhighs = [highs[i]*ratios[i] for i in range(len(dates))]
     adjlows = [lows[i]*ratios[i] for i in range(len(dates))]
+    volumed = [volumes[i]*adjcloses[i] for i in range(len(dates))]
     output(args.output_dir, 'open', ticker, dates, adjopens)
     output(args.output_dir, 'high', ticker, dates, adjhighs)
     output(args.output_dir, 'low', ticker, dates, adjlows)
     output(args.output_dir, 'close', ticker, dates, adjcloses)
     output(args.output_dir, 'volume', ticker, dates, volumes)
+    output(args.output_dir, 'volumed', ticker, dates, volumed)
 
 def main():
   parser = argparse.ArgumentParser()

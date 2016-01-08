@@ -1,4 +1,5 @@
 from config import SYMBOL_DIR
+import datetime
 import logging
 import math
 import os
@@ -78,6 +79,12 @@ def getPreviousYm(ym, k=1):
     m += 12
     y -= 1
   return '%02d-%02d' % (y, m)
+
+def getPreviousYmd(ymd, k):
+  assert k >= 0
+  date = datetime.datetime.strptime(ymd, '%Y-%m-%d')
+  date -= datetime.timedelta(k)
+  return date.strftime('%Y-%m-%d')
 
 ################
 ## Math utils ##

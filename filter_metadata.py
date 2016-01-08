@@ -11,6 +11,8 @@
                            --raw_price_dir=./price
                            --max_volatility=0.5
                            --volatility_dir=./volatility_perc
+                           --min_volumed=0.5
+                           --volumed_dir=./volumed_perc
                            --min_marketcap=2000000000
                            --marketcap_dir=./MARKETCAP-ND
                            --max_holes=0.01
@@ -26,6 +28,8 @@
                      price on the trading day (requires --raw_price_dir).
     --max_volatility: only keep tickers that with less volatility than the
                       threshold (requires --volatility_dir).
+    --min_volumed: only keep tickers that are trading above certain volume
+                   (requires --volumed_dir).
     --min_marketcap: only keep tickers with larger market cap than the
                      threshold (requires --marketcap_dir).
     --max_holes: only keep tickers with less holes than the threshold
@@ -48,6 +52,7 @@ import util
 
 MIN_RAW_PRICE = float('-Inf')
 MAX_VOLATILITY = float('Inf')
+MIN_VOLUMED = float('-Inf')
 MIN_MARKETCAP = float('-Inf')
 MAX_HOLES = float('Inf')
 
@@ -81,13 +86,15 @@ def isMember(membership, ticker, date):
   return False
 
 def filterMetadata(input_file, min_raw_price, raw_price_dir,
-                   max_volatility, volatility_dir, min_marketcap,
+                   max_volatility, volatility_dir,
+                   min_volumed, volumed_dir, min_marketcap,
                    marketcap_dir, max_holes, hole_dir,
                    membership_file, remove_neg_labels,
                    label_file, output_file):
   stats = {
     'min_raw_price': 0,
     'max_volatility': 0,
+    'min_volumed': 0,
     'min_marketcap': 0,
     'max_holes': 0,
     'membership': 0,
@@ -102,6 +109,7 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
   prev_ticker = None
   price = None  # for prev_ticker, date => price
   volatility = None  # for prev ticker, date => volatility
+  volumed = None  # for prev ticker, date => volumed
   marketcap = None  # for prev ticker, [dates, values]
   hole = None  # for prev ticker, [dates, holes]
   if membership_file is None:
@@ -127,6 +135,8 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
         price = util.readKeyValueDict('%s/%s' % (raw_price_dir, ticker))
       if volatility_dir is not None:
         volatility = util.readKeyValueDict('%s/%s' % (volatility_dir, ticker))
+      if volumed_dir is not None:
+        volumed = util.readKeyValueDict('%s/%s' % (volumed_dir, ticker))
       if marketcap_dir is not None:
         tmp = util.readKeyValueList('%s/%s' % (marketcap_dir, ticker))
         marketcap_dates = [t[0] for t in tmp]
@@ -139,15 +149,19 @@ def filterMetadata(input_file, min_raw_price, raw_price_dir,
         hole = (hole_dates, hole_values)
     # Maybe check price.
     if price is not None:
-      assert date in price, 'missing price for %s on %s' % (ticker, date)
-      if price[date] < min_raw_price:
+      #assert date in price, 'missing price for %s on %s' % (ticker, date)
+      if date not in price or price[date] < min_raw_price:
         stats['min_raw_price'] += 1
         continue
     # Maybe check volatility.
     if volatility is not None:
-      assert date in volatility, 'missing volatility for %s on %s' % (ticker, date)
-      if volatility[date] > max_volatility:
+      #assert date in volatility, 'missing volatility for %s on %s' % (ticker, date)
+      if date not in volatility or volatility[date] > max_volatility:
         stats['max_volatility'] += 1
+        continue
+    if volumed is not None:
+      if date not in volumed or volumed[date] < min_volumed:
+        stats['min_volumed'] += 1
         continue
     # Maybe check marketcap.
     if marketcap is not None:
@@ -185,6 +199,8 @@ def main():
   parser.add_argument('--raw_price_dir')
   parser.add_argument('--max_volatility', type=float, default=MAX_VOLATILITY)
   parser.add_argument('--volatility_dir')
+  parser.add_argument('--min_volumed', type=float, default=MIN_VOLUMED)
+  parser.add_argument('--volumed_dir')
   parser.add_argument('--min_marketcap', type=float, default=MIN_MARKETCAP)
   parser.add_argument('--marketcap_dir')
   parser.add_argument('--max_holes', type=float, default=MAX_HOLES)
@@ -204,6 +220,11 @@ def main():
         'must also specify --volatility_dir since --max_volatility is specified')
   else:
     assert args.volatility_dir is None
+  if args.min_volumed > MIN_VOLUMED:
+    assert args.volumed_dir is not None, (
+        'must also specify --volumed_dir since --min_volumed is specified')
+  else:
+    assert args.volumed_dir is None
   if args.min_marketcap > MIN_MARKETCAP:
     assert args.marketcap_dir is not None, (
         'must also specify --marketcap_dir since --min_marketcap is specified')
@@ -218,7 +239,8 @@ def main():
     assert args.label_file is not None, (
         'must also specify --label_file since --remove_neg_labels is specified')
   filterMetadata(args.input_file, args.min_raw_price, args.raw_price_dir,
-                 args.max_volatility, args.volatility_dir, args.min_marketcap,
+                 args.max_volatility, args.volatility_dir,
+                 args.min_volumed, args.volumed_dir, args.min_marketcap,
                  args.marketcap_dir, args.max_holes, args.hole_dir,
                  args.membership_file, args.remove_neg_labels,
                  args.label_file, args.output_file)

@@ -24,6 +24,7 @@ ITEMS = [
     ['ASSETS_EQUITY-ARQ', '{ASSETS-ARQ}/{EQUITY-ARQ}'],
 #    ['QUICKRATIO-ARQ', '({ASSETSC-ARQ} - {INVENTORY-ARQ}) / {LIABILITIESC-ARQ}'],
     ['CASHNEQ_ASSETS-ARQ', '{CASHNEQ-ARQ}/{ASSETS-ARQ}'],
+    [''],
 ]
 
 def shouldRun(feature_base_dir, info_dir, target):

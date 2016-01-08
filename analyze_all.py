@@ -249,9 +249,10 @@ def writeTopK(data, market, topk, output_file):
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--result_file', required=True)
-  parser.add_argument('--hold_period', type=int, required=True)
+  parser.add_argument('--hold_period', type=int, default=-1)
   parser.add_argument('--market_gain_file')
   parser.add_argument('--analyze_dir', required=True)
+  parser.add_argument('--skip_trans', action='store_true')
   args = parser.parse_args()
 
   data = readData(args.result_file)
@@ -267,11 +268,13 @@ def main():
     writeBuckets(data, buckets,
                  '%s/bucket-%d.tsv' % (args.analyze_dir, buckets))
 
-  for max_look, max_pick, max_hold in TRADE_CONFIGS:
-    output_file = '%s/trade-ml%d-mp%d-mh%d.tsv' % (
-        args.analyze_dir, max_look, max_pick, max_hold)
-    writeTrans(data, args.hold_period, max_look, max_pick, max_hold,
-               market, output_file)
+  if not args.skip_trans:
+    assert args.hold_period > 0, 'must specify --hold_period unless --skip_trans'
+    for max_look, max_pick, max_hold in TRADE_CONFIGS:
+      output_file = '%s/trade-ml%d-mp%d-mh%d.tsv' % (
+          args.analyze_dir, max_look, max_pick, max_hold)
+      writeTrans(data, args.hold_period, max_look, max_pick, max_hold,
+                 market, output_file)
 
   writeTopK(data, market, TOPK, '%s/top%d.tsv' % (args.analyze_dir, TOPK))
 
