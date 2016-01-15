@@ -5,6 +5,7 @@
     Example usage:
       ./compute_window_feature.py --value_dir=./adjusted/close
                                   --windows=0,4,8,12,16,20
+                                  --bonus=1
                                   --do_raw
                                   --do_fd
                                   --feature_dir=./features
@@ -57,7 +58,7 @@ def computeWindowFeature(args):
         for j in range(len(raws)):
           print >> raw_fps[j], '%s\t%f' % (dvalues[i][0], raws[j])
       if fd_fps:
-        derivatives = [(values[j] - values[j+1]) for j in range(len(windows)-1)]
+        derivatives = [(values[j] - values[j+1]) / (values[j+1] + args.bonus) for j in range(len(windows)-1)]
         derivatives = util.normalize(derivatives)
         assert len(derivatives) == len(fd_fps)
         for j in range(len(derivatives)):
@@ -73,6 +74,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--value_dir', required=True)
   parser.add_argument('--windows', required=True)
+  parser.add_argument('--bonus', type=float, required=True)
   parser.add_argument('--do_raw', action='store_true')
   parser.add_argument('--do_fd', action='store_true')
   parser.add_argument('--feature_dir', required=True)

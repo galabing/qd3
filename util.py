@@ -292,3 +292,13 @@ def readKeyValueDict(kv_file):
     kv[k] = float(v)
   return kv
 
+def readKeyListValueList(kv_file):
+  with open(kv_file, 'r') as fp:
+    lines = fp.read().splitlines()
+  ks, vs = [], []
+  for line in lines:
+    k, v = line.split('\t')
+    ks.append(k)
+    vs.append(float(v))
+  return ks, vs
+

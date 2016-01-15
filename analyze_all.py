@@ -44,8 +44,8 @@ def readMarketGains(market_gain_file):
   market = dict()  # yyyy-mm => gain
   for line in lines:
     date, gain = line.split('\t')
-    year, month, day = date.split('-')
-    date = '%s-%s' % (year, month)
+    #year, month, day = date.split('-')
+    #date = '%s-%s' % (year, month)
     assert date not in market
     market[date] = float(gain)
   return market
@@ -117,7 +117,7 @@ def writeBuckets(data, buckets, output_file):
   total_months = 0
   histograms = dict()  # year => histogram, months
   for date, items in data.iteritems():
-    year, m = date.split('-')
+    year, m, d = date.split('-')
     if year not in histograms:
       histograms[year] = [[0.0 for i in range(buckets)], 0]
     histograms[year][1] += 1

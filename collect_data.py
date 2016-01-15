@@ -125,17 +125,17 @@ def collectData(gain_dir, date_file, max_neg, min_pos, feature_base_dir,
       if not os.path.isfile(feature_file):
         skip_stats['feature_file'] += 1
         continue
-      items = util.readKeyValueList(feature_file)
-      for j in range(len(items)):
-        if items[j][0] == '*':
+      keys, values = util.readKeyListValueList(feature_file)
+      for j in range(len(keys)):
+        if keys[j] == '*':
           continue
-        ymd = items[j][0].split('-')
+        ymd = keys[j].split('-')
         if len(ymd) == 3:
           continue
         # Change yyyy-mm to yyyy-mm-01
         assert len(ymd) == 2
-        items[j][0] += '-01'
-      feature_items[i] = items
+        keys[j] += '-01'
+      feature_items[i] = [keys, values]
 
     for gain_date, gain in gains:
       if gain_date < min_date:
@@ -172,26 +172,26 @@ def collectData(gain_dir, date_file, max_neg, min_pos, feature_base_dir,
       features = [MISSING_VALUE for i in range(len(feature_list))]
       feature_count = 0
       for i in range(len(feature_list)):
-        if len(feature_items[i]) == 1 and feature_items[i][0][0] == '*':
+        keys, values = feature_items[i]
+        if len(keys) == 1 and keys[0] == '*':
           # undated feature, eg sector
           index = 0
         else:
           # dated feature, eg pgain
-          feature_dates = [item[0] for item in feature_items[i]]
-          index = bisect.bisect_right(feature_dates, gain_date) - 1
+          index = bisect.bisect_right(keys, gain_date) - 1
           if index < 0:
             skip_stats['index'] += 1
             continue
 
           gain_date_obj = datetime.datetime.strptime(gain_date, '%Y-%m-%d')
-          feature_date_obj = datetime.datetime.strptime(feature_dates[index],
+          feature_date_obj = datetime.datetime.strptime(keys[index],
                                                         '%Y-%m-%d')
           delta = (gain_date_obj - feature_date_obj).days
           if delta > window:
             skip_stats['window'] += 1
             continue
 
-        feature = feature_items[i][index][1]
+        feature = values[index]
         lower, upper = feature_ranges[feature_list[i]]
         if feature < lower:
           skip_stats['1_perc'] += 1
@@ -202,7 +202,7 @@ def collectData(gain_dir, date_file, max_neg, min_pos, feature_base_dir,
 
         if DEBUG:
           print 'feature %s: (%s, %f)' % (
-              feature_list[i], feature_items[i][index][0], feature)
+              feature_list[i], keys[index], feature)
 
         features[i] = feature
         feature_count += 1

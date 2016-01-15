@@ -135,14 +135,20 @@ def trainModel(data_file, label_file, weight_file, model_def, perc, imputer_stra
   imputer = imputer_wrapper.ImputerWrapper(strategy=imputer_strategy)
   X = imputer.fit_transform(X)
 
-  if perc < 1:
+  if perc > 0 and perc != 1:
     logging.info('sampling %f data for training' % perc)
-    m = int(X.shape[0] * perc)
-    index = numpy.random.permutation(X.shape[0])[:m]
-    X = X[index, :]
-    y = y[index]
-    if weight_file:
-      w = w[index]
+    if perc > 1:
+      m = int(perc)
+    else:
+      m = int(X.shape[0] * perc)
+    assert m > 0
+    if m < X.shape[0]:
+      logging.info('sampling %d data points for training' % m)
+      index = numpy.random.permutation(X.shape[0])[:m]
+      X = X[index, :]
+      y = y[index]
+      if weight_file:
+        w = w[index]
 
   model = eval(model_def)
   if weight_file:
@@ -186,7 +192,8 @@ def main():
                       help='string of model def; eg, "Model(alpha=0.5)"')
   parser.add_argument('--perc', type=float, default=1.0,
                       help='if < 1, will randomly sample specified perc '
-                           'of data for training')
+                           'of data for training; if > 1 will randomly '
+                           'sample specified count of data points')
   parser.add_argument('--imputer_strategy', default='zero',
                       help='strategy for filling in missing values')
   parser.add_argument('--model_file', required=True)
